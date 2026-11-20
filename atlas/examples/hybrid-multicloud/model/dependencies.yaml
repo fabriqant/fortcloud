@@ -1,0 +1,145 @@
+# Directed dependency graph — SOURCE OF TRUTH
+# Convention: `from` is the component THAT DEPENDS ON `to`.
+# Many inbound arrows to one node = large blast radius.
+# kind: data | control | identity | network | dns | secret | config
+version: 1
+dependencies:
+  - id: d-001
+    from: k8s-control
+    to: dns-global
+    kind: dns
+    required: true
+    description: Résolution des noms internes et externes du cluster.
+
+  - id: d-002
+    from: pg-core
+    to: dns-global
+    kind: dns
+    required: true
+    description: Résolution des endpoints de réplication.
+
+  - id: d-003
+    from: idp-oidc
+    to: dns-global
+    kind: dns
+    required: true
+    description: Publication des endpoints OIDC / discovery.
+
+  - id: d-004
+    from: payments-api
+    to: dns-global
+    kind: dns
+    required: true
+    description: Résolution publique de l'API externe.
+
+  - id: d-005
+    from: pg-core
+    to: network-hub
+    kind: network
+    required: true
+    description: Lien inter-sites pour la réplication vers le DC.
+
+  - id: d-006
+    from: k8s-control
+    to: network-hub
+    kind: network
+    required: true
+    description: Connectivité des workloads hybrides.
+
+  - id: d-007
+    from: etl-workers
+    to: network-hub
+    kind: network
+    required: true
+    description: Accès aux sources on-prem.
+
+  - id: d-008
+    from: k8s-control
+    to: idp-oidc
+    kind: identity
+    required: true
+    description: Authentification des utilisateurs et des service accounts.
+
+  - id: d-009
+    from: pg-core
+    to: idp-oidc
+    kind: identity
+    required: true
+    description: Contrôle d'accès via rôles fédérés.
+
+  - id: d-010
+    from: idp-oidc
+    to: vault-secrets
+    kind: secret
+    required: true
+    description: Stockage des clés de signature et des certificats.
+
+  - id: d-011
+    from: pg-core
+    to: vault-secrets
+    kind: secret
+    required: true
+    description: Récupération des identifiants de base de données.
+
+  - id: d-012
+    from: etl-workers
+    to: vault-secrets
+    kind: secret
+    required: true
+    description: Récupération des tokens de traitement.
+
+  - id: d-013
+    from: etl-workers
+    to: k8s-control
+    kind: control
+    required: true
+    description: Ordonnancement et redémarrage des pods.
+
+  - id: d-014
+    from: argocd
+    to: k8s-control
+    kind: control
+    required: true
+    description: Application des manifests GitOps.
+
+  - id: d-015
+    from: etl-workers
+    to: kafka-bus
+    kind: data
+    required: true
+    description: Consommation des événements entrants.
+
+  - id: d-016
+    from: kafka-bus
+    to: pg-core
+    kind: data
+    required: true
+    description: Capture des changements (CDC) depuis la base.
+
+  - id: d-017
+    from: etl-workers
+    to: obj-lake
+    kind: data
+    required: true
+    description: Écriture des données transformées dans le lac.
+
+  - id: d-018
+    from: etl-workers
+    to: payments-api
+    kind: data
+    required: true
+    description: Appel de l'API de paiement externe.
+
+  - id: d-019
+    from: pg-core
+    to: observability
+    kind: control
+    required: false
+    description: Export des métriques et alertes.
+
+  - id: d-020
+    from: etl-workers
+    to: observability
+    kind: control
+    required: false
+    description: Traces et logs de traitement.

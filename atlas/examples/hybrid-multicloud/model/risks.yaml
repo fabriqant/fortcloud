@@ -1,0 +1,120 @@
+# FMEA risk register — SOURCE OF TRUTH
+# likelihood: 1 (rare) to 5 (frequent)
+# impact    : 1 (low) to 5 (critical) business impact
+# Score is computed by the CLI: likelihood × impact.
+# status: open | in_progress | mitigated | accepted | closed
+version: 1
+risks:
+  - id: R-001
+    title: Fournisseur d'identité unique
+    components: [idp-oidc]
+    flows: [identity-auth, order-to-cash]
+    failure_mode: Indisponibilité du SaaS d'identité — plus aucun utilisateur ni service ne peut s'authentifier.
+    likelihood: 3
+    impact: 5
+    status: in_progress
+    owner: sec-team
+    mitigations:
+      - Cache de sessions locales côté plateforme.
+      - Comptes de break-glass documentés dans le runbook.
+    action: Fédérer un IdP de secours et tester le basculement.
+    target_date: "2026-12-15"
+
+  - id: R-002
+    title: DNS unique fournisseur
+    components: [dns-global]
+    flows: [order-to-cash, analytics-ingestion, identity-auth, deploy-pipeline]
+    failure_mode: Panne du fournisseur DNS — toutes les résolutions échouent, y compris en secours.
+    likelihood: 3
+    impact: 5
+    status: in_progress
+    owner: net-team
+    mitigations:
+      - TTL courts sur les enregistrements critiques.
+    action: Mettre en place un second fournisseur DNS anycast et tester une bascule complète.
+    target_date: "2026-12-20"
+
+  - id: R-003
+    title: Hub réseau inter-sites unique
+    components: [network-hub]
+    flows: [order-to-cash, analytics-ingestion]
+    failure_mode: Défaillance de l'appliance hub — rupture de la connectivité on-prem ↔ clouds.
+    likelihood: 2
+    impact: 5
+    status: open
+    owner: net-team
+    mitigations:
+      - Liens redondants vers le cloud.
+    action: Dupliquer le hub et activer BGP redondant.
+    target_date: "2026-12-31"
+
+  - id: R-004
+    title: Bus d'événements mono-région
+    components: [kafka-bus]
+    flows: [order-to-cash, analytics-ingestion]
+    failure_mode: Perte de la région eu-west-3 — plus de flux d'événements, replay impossible.
+    likelihood: 3
+    impact: 4
+    status: in_progress
+    owner: data-platform
+    mitigations:
+      - Rétention de 7 jours pour permettre un replay.
+    action: Répliquer les topics vers une région secondaire (MirrorMaker 2) et mesurer le lag.
+    target_date: "2026-12-10"
+
+  - id: R-005
+    title: Plan de contrôle Kubernetes mono-région
+    components: [k8s-control]
+    flows: [analytics-ingestion, identity-auth, deploy-pipeline]
+    failure_mode: Perte de la région eu-west-1 — aucun déploiement ni réordonnancement possible.
+    likelihood: 2
+    impact: 5
+    status: open
+    owner: platform
+    mitigations:
+      - Etcd sauvegardé toutes les 6 heures.
+    action: Prévoir un cluster de secours dans une autre région avec restauration d'etcd testée.
+    target_date: "2027-01-15"
+
+  - id: R-006
+    title: Orchestrateur GitOps en instance unique
+    components: [argocd]
+    flows: [deploy-pipeline]
+    failure_mode: Panne de l'instance Argo CD — gel des déploiements.
+    likelihood: 3
+    impact: 2
+    status: in_progress
+    owner: platform
+    mitigations:
+      - Sauvegarde quotidienne.
+    action: Passer à 2 replicas et restaurer depuis Git en moins de 8h.
+    target_date: "2026-11-30"
+
+  - id: R-007
+    title: API de paiement externe indisponible
+    components: [payments-api]
+    flows: [order-to-cash]
+    failure_mode: Panne ou dégradation du tiers — les paiements échouent et les commandes sont bloquées.
+    likelihood: 4
+    impact: 4
+    status: in_progress
+    owner: payments-team
+    mitigations:
+      - Circuit breaker, timeout court et retry avec backoff.
+      - File d'attente locale pour rejouer les paiements.
+    action: Négocier un SLA contractuel et un second processeur de paiement.
+    target_date: "2026-11-30"
+
+  - id: R-008
+    title: Restauration analytique non validée
+    components: [obj-lake]
+    flows: [analytics-ingestion]
+    failure_mode: Le backup existe mais personne n'a vérifié qu'il restaure dans le RTO annoncé.
+    likelihood: 3
+    impact: 3
+    status: open
+    owner: data-platform
+    mitigations:
+      - Backup immuable avec rétention 90 jours.
+    action: Automatiser un test de restauration trimestriel et publier le résultat.
+    target_date: "2026-12-05"

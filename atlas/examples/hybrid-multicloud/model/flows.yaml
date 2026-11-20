@@ -1,0 +1,77 @@
+# Business flows and availability targets — SOURCE OF TRUTH
+# availability_target: target availability (success SLI)
+# rto: maximum time to restore; rpo: maximum acceptable data loss
+# Accepted rto/rpo format: 0 or <number><s|m|h|d>
+version: 1
+flows:
+  - id: order-to-cash
+    name: Commande jusqu'à encaissement
+    description: Réception de la commande, validation, débit et écriture comptable.
+    criticality: P0
+    owner: commerce-team
+    availability_target: 99.95%
+    rto: 30m
+    rpo: 5m
+    strategy: Multi-AZ + réplication asynchrone vers DC secondaire + backups immuables + circuit breaker sur l'API de paiement.
+    components: [pg-core, kafka-bus, etl-workers, idp-oidc, payments-api, dns-global, network-hub, vault-secrets]
+    steps:
+      - Commande reçue et persistée dans pg-core.
+      - Événement publié sur kafka-bus et consommé par etl-workers.
+      - Authentification via idp-oidc et secrets via vault-secrets.
+      - Appel de payments-api avec timeout et circuit breaker.
+      - Écriture comptable dans pg-core et réplication vers le DC.
+    external_dependencies: [payments-api]
+    last_restore_test: "2026-10-12"
+    notes: Le RPO de 5m suppose une latence de réplication mesurée en continu.
+
+  - id: analytics-ingestion
+    name: Ingestion analytique
+    description: Alimentation du lac de données pour les tableaux de bord et le reporting.
+    criticality: P1
+    owner: data-platform
+    availability_target: 99.50%
+    rto: 4h
+    rpo: 1h
+    strategy: Replay des événements Kafka + réconciliation depuis pg-core ; perte acceptable limitée au lac.
+    components: [kafka-bus, etl-workers, obj-lake, k8s-control, network-hub]
+    steps:
+      - ÉvénementsKafka consommés par etl-workers.
+      - Transformations appliquées.
+      - Résultats écrits dans obj-lake.
+    external_dependencies: []
+    last_restore_test: "2026-08-14"
+    notes: Test de restauration datant de plus de 90 jours — à refaire.
+
+  - id: identity-auth
+    name: Authentification des utilisateurs
+    description: connexion des utilisateurs internes et des services aux plateformes.
+    criticality: P0
+    owner: sec-team
+    availability_target: 99.99%
+    rto: 15m
+    rpo: "0"
+    strategy: Sessions en cache local + IdP de secours en cours de déploiement ; RPO 0 car l'identité est sans état critique côté plateforme.
+    components: [idp-oidc, vault-secrets, dns-global, k8s-control]
+    steps:
+      - Redirection vers idp-oidc.
+      - Vérification du token et des droits.
+      - Récupération des secrets via vault-secrets.
+    external_dependencies: [idp-oidc]
+    last_restore_test: "2026-11-02"
+
+  - id: deploy-pipeline
+    name: Chaîne de déploiement
+    description: Passage du code source à la production via GitOps.
+    criticality: P2
+    owner: platform
+    availability_target: 99.00%
+    rto: 8h
+    rpo: 24h
+    strategy: Re-apply des manifests depuis le dépôt Git ; aucune perte de données métier.
+    components: [argocd, k8s-control, obj-lake]
+    steps:
+      - Commit Git détecté par argocd.
+      - Manifests appliqués sur k8s-control.
+      - Artefacts relus depuis obj-lake.
+    external_dependencies: []
+    last_restore_test: "2026-07-01"

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resilience.local/schema/dependency.schema.json",
+  "title": "Graphe des dépendances",
+  "type": "object",
+  "required": ["version", "dependencies"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "dependencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "from", "to", "kind", "required", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "from": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "to": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "kind": { "enum": ["data", "control", "identity", "network", "dns", "secret", "config"] },
+          "required": { "type": "boolean" },
+          "description": { "type": "string", "minLength": 3 }
+        }
+      }
+    }
+  }
+}

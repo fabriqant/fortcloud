@@ -1,0 +1,151 @@
+# Environments, identities and grants — SOURCE OF TRUTH
+# classification : public | internal | confidential | restricted
+# type           : human | service | ci
+# Every grant is scoped to one environment and has an expiry date.
+version: 1
+environments:
+  - id: dev
+    name: Développement
+    classification: internal
+    owner: platform-team
+
+  - id: staging
+    name: Préproduction
+    classification: confidential
+    owner: platform-team
+
+  - id: prod
+    name: Production
+    classification: restricted
+    owner: platform-team
+
+principals:
+  - id: alice
+    name: Alice Martin
+    type: human
+    owner: sec-team
+    environments: [dev, staging, prod]
+
+  - id: ci-deploy
+    name: Deployment runner — production
+    type: ci
+    owner: platform-team
+    environments: [prod]
+
+  - id: ci-staging
+    name: Deployment runner — préproduction
+    type: ci
+    owner: platform-team
+    environments: [staging]
+
+  - id: ci-legacy
+    name: Runner historique
+    type: ci
+    owner: platform-team
+    environments: [dev, prod]
+    notes: Legacy identity still spanning two environments.
+
+  - id: svc-checkout
+    name: Service commande
+    type: service
+    owner: commerce-team
+    environments: [prod]
+
+  - id: svc-reporting
+    name: Service analytique
+    type: service
+    owner: analytics-team
+    environments: [staging]
+
+grants:
+  - id: grant-alice-dev
+    principal: alice
+    role: developer
+    environment: dev
+    permissions: [read:code, write:config, deploy:create]
+    resources: [proj/dev/checkout/*]
+    expires: "2027-06-30"
+    approval: team-lead
+
+  - id: grant-alice-prod-read
+    principal: alice
+    role: viewer
+    environment: prod
+    permissions: [read:logs, read:metrics]
+    resources: [proj/prod/observability/*]
+    expires: "2026-12-31"
+    approval: change-board
+
+  - id: grant-ci-prod-deploy
+    principal: ci-deploy
+    role: deployer
+    environment: prod
+    permissions: [deploy:create, deploy:rollback, secrets:read, read:logs]
+    resources: [proj/prod/checkout/*]
+    expires: "2027-06-30"
+    approval: change-board
+
+  - id: grant-ci-staging-deploy
+    principal: ci-staging
+    role: deployer
+    environment: staging
+    permissions: [deploy:create, read:logs]
+    resources: [proj/staging/*]
+    expires: "2027-06-30"
+    approval: platform-team
+
+  - id: grant-ci-legacy-dev
+    principal: ci-legacy
+    role: viewer
+    environment: dev
+    permissions: [read:logs]
+    resources: [proj/dev/*]
+    expires: "2027-06-30"
+    approval: platform-team
+
+  - id: grant-svc-checkout
+    principal: svc-checkout
+    role: runtime
+    environment: prod
+    permissions: [secrets:read, read:config]
+    resources: [proj/prod/checkout/config/*]
+    expires: "2027-06-30"
+    approval: sec-team
+
+  - id: grant-svc-reporting
+    principal: svc-reporting
+    role: runtime
+    environment: staging
+    permissions: [secrets:read, read:config]
+    resources: [proj/staging/reporting/*]
+    expires: "2027-06-30"
+    approval: sec-team
+
+  - id: grant-alice-admin
+    principal: alice
+    role: admin
+    environment: dev
+    permissions: [read:code, write:config, iam:grant, secrets:read]
+    resources: [proj/dev/admin/*]
+    expires: "2026-12-31"
+    approval: change-board
+    notes: Elevated role is acceptable when time-bound and approved.
+
+  - id: grant-alice-overprivileged
+    principal: alice
+    role: developer
+    environment: staging
+    permissions:
+      - read:code
+      - write:code
+      - read:config
+      - write:config
+      - deploy:create
+      - deploy:rollback
+      - secrets:read
+      - iam:read
+      - audit:read
+    resources: [proj/staging/*]
+    expires: "2027-06-30"
+    approval: change-board
+    notes: Too many permissions on a single grant.

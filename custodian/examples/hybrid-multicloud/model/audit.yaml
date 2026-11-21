@@ -1,0 +1,75 @@
+# Sensitive operations and their log sinks — SOURCE OF TRUTH
+# Every operation must be logged into a declared, durable sink with evidence.
+version: 1
+sinks:
+  - id: sink-siem
+    name: SIEM centralisé
+    type: siem
+    destination: https://siem.example.com/events
+    retention_days: 365
+    immutable: true
+    owner: sec-team
+
+  - id: sink-archive
+    name: Archive d'audit
+    type: object-storage
+    destination: s3://audit-logs/custodian/
+    retention_days: 2555
+    immutable: true
+    owner: sec-team
+
+operations:
+  - id: op-grant-change
+    name: Attribution et révocation de privilèges
+    kind: grant_change
+    environment: prod
+    logged: true
+    sink: sink-siem
+    evidence: https://ci.example.com/custodian/grant-118
+    last_evidence: "2026-11-18"
+    result: passed
+    owner: sec-team
+
+  - id: op-secret-access
+    name: Lecture des secrets de production
+    kind: secret_access
+    environment: prod
+    logged: true
+    sink: sink-siem
+    evidence: https://ci.example.com/custodian/secret-access-118
+    last_evidence: "2026-11-18"
+    result: passed
+    owner: sec-team
+
+  - id: op-deploy
+    name: Déploiements en production
+    kind: deploy
+    environment: prod
+    logged: true
+    sink: sink-siem
+    evidence: https://ci.example.com/custodian/deploy-119
+    last_evidence: "2026-11-19"
+    result: passed
+    owner: platform-team
+
+  - id: op-pipeline-change
+    name: Modification des pipelines
+    kind: pipeline_change
+    environment: prod
+    logged: true
+    sink: sink-archive
+    evidence: https://ci.example.com/custodian/pipeline-117
+    last_evidence: "2026-11-17"
+    result: passed
+    owner: platform-team
+
+  - id: op-infra-change
+    name: Changements d'infrastructure en préproduction
+    kind: infra_change
+    environment: staging
+    logged: true
+    sink: sink-archive
+    evidence: https://ci.example.com/custodian/infra-116
+    last_evidence: "2026-11-16"
+    result: passed
+    owner: platform-team

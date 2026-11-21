@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resilience.local/schema/audit.schema.json",
+  "title": "Journalisation des opérations sensibles",
+  "type": "object",
+  "required": ["version", "sinks", "operations"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "sinks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "type", "destination", "retention_days", "immutable", "owner"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 2 },
+          "type": { "enum": ["siem", "object-storage", "log-service"] },
+          "destination": { "type": "string", "minLength": 2 },
+          "retention_days": { "type": "integer", "minimum": 1 },
+          "immutable": { "type": "boolean" },
+          "owner": { "type": "string", "minLength": 2 }
+        }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "kind", "environment", "logged", "result", "owner"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 2 },
+          "kind": { "enum": ["grant_change", "secret_access", "deploy", "pipeline_change", "infra_change"] },
+          "environment": { "type": "string", "minLength": 2 },
+          "logged": { "type": "boolean" },
+          "sink": { "type": "string", "minLength": 2 },
+          "evidence": { "type": "string" },
+          "last_evidence": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "result": { "enum": ["passed", "partial", "failed"] },
+          "owner": { "type": "string", "minLength": 2 },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

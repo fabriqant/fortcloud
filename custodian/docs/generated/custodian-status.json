@@ -1,0 +1,343 @@
+{
+  "tool": "fortcloud-custodian",
+  "version": "0.1.0",
+  "generated_on": "2026-11-21",
+  "summary": {
+    "environments": 3,
+    "principals": 6,
+    "grants": 9,
+    "secrets": 6,
+    "pipelines": 4,
+    "sinks": 2,
+    "operations": 5,
+    "restricted_environments": 1,
+    "entities_at_risk": 5
+  },
+  "grants": [
+    {
+      "id": "grant-alice-admin",
+      "principal": "alice",
+      "principal_type": "human",
+      "environment": "dev",
+      "classification": "internal",
+      "role": "admin",
+      "permission_count": 4,
+      "expires": "2026-12-31",
+      "days_remaining": 40,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "grant-alice-dev",
+      "principal": "alice",
+      "principal_type": "human",
+      "environment": "dev",
+      "classification": "internal",
+      "role": "developer",
+      "permission_count": 3,
+      "expires": "2027-06-30",
+      "days_remaining": 221,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "grant-alice-overprivileged",
+      "principal": "alice",
+      "principal_type": "human",
+      "environment": "staging",
+      "classification": "confidential",
+      "role": "developer",
+      "permission_count": 9,
+      "expires": "2027-06-30",
+      "days_remaining": 221,
+      "status": "AT RISK",
+      "issues": [
+        "9 permissions exceed the maximum of 8"
+      ]
+    },
+    {
+      "id": "grant-alice-prod-read",
+      "principal": "alice",
+      "principal_type": "human",
+      "environment": "prod",
+      "classification": "restricted",
+      "role": "viewer",
+      "permission_count": 2,
+      "expires": "2026-12-31",
+      "days_remaining": 40,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "grant-ci-legacy-dev",
+      "principal": "ci-legacy",
+      "principal_type": "ci",
+      "environment": "dev",
+      "classification": "internal",
+      "role": "viewer",
+      "permission_count": 1,
+      "expires": "2027-06-30",
+      "days_remaining": 221,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "grant-ci-prod-deploy",
+      "principal": "ci-deploy",
+      "principal_type": "ci",
+      "environment": "prod",
+      "classification": "restricted",
+      "role": "deployer",
+      "permission_count": 4,
+      "expires": "2027-06-30",
+      "days_remaining": 221,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "grant-ci-staging-deploy",
+      "principal": "ci-staging",
+      "principal_type": "ci",
+      "environment": "staging",
+      "classification": "confidential",
+      "role": "deployer",
+      "permission_count": 2,
+      "expires": "2027-06-30",
+      "days_remaining": 221,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "grant-svc-checkout",
+      "principal": "svc-checkout",
+      "principal_type": "service",
+      "environment": "prod",
+      "classification": "restricted",
+      "role": "runtime",
+      "permission_count": 2,
+      "expires": "2027-06-30",
+      "days_remaining": 221,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "grant-svc-reporting",
+      "principal": "svc-reporting",
+      "principal_type": "service",
+      "environment": "staging",
+      "classification": "confidential",
+      "role": "runtime",
+      "permission_count": 2,
+      "expires": "2027-06-30",
+      "days_remaining": 221,
+      "status": "OK",
+      "issues": []
+    }
+  ],
+  "secrets": [
+    {
+      "id": "sec-checkout-api",
+      "store": "vault",
+      "environments": [
+        "prod"
+      ],
+      "age_days": 67,
+      "rotation_days": 90,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "sec-checkout-db",
+      "store": "vault",
+      "environments": [
+        "prod"
+      ],
+      "age_days": 51,
+      "rotation_days": 90,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "sec-ci-token",
+      "store": "vault",
+      "environments": [
+        "prod"
+      ],
+      "age_days": 37,
+      "rotation_days": 180,
+      "status": "AT RISK",
+      "issues": [
+        "rotation policy of 180 days exceeds 90 days"
+      ]
+    },
+    {
+      "id": "sec-legacy-token",
+      "store": "k8s-secret",
+      "environments": [
+        "staging"
+      ],
+      "age_days": 81,
+      "rotation_days": 90,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "sec-reporting-export-key",
+      "store": "gcp-secret-manager",
+      "environments": [
+        "staging"
+      ],
+      "age_days": 265,
+      "rotation_days": 90,
+      "status": "AT RISK",
+      "issues": [
+        "last rotated 265 days ago (policy: 90 days)"
+      ]
+    },
+    {
+      "id": "sec-staging-db",
+      "store": "aws-secrets-manager",
+      "environments": [
+        "staging"
+      ],
+      "age_days": 20,
+      "rotation_days": 90,
+      "status": "OK",
+      "issues": []
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "pipe-checkout-prod",
+      "environment": "prod",
+      "review_required": true,
+      "approvers": 2,
+      "tests": [
+        "unit",
+        "integration",
+        "security",
+        "e2e"
+      ],
+      "rollback_enabled": true,
+      "rollback_automated": true,
+      "rollback_age_days": 6,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "pipe-checkout-staging",
+      "environment": "staging",
+      "review_required": true,
+      "approvers": 1,
+      "tests": [
+        "unit",
+        "integration",
+        "security"
+      ],
+      "rollback_enabled": true,
+      "rollback_automated": true,
+      "rollback_age_days": 20,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "pipe-legacy-prod",
+      "environment": "prod",
+      "review_required": true,
+      "approvers": 2,
+      "tests": [
+        "unit",
+        "integration",
+        "security"
+      ],
+      "rollback_enabled": true,
+      "rollback_automated": false,
+      "rollback_age_days": 11,
+      "status": "AT RISK",
+      "issues": [
+        "rollback is not automated for a restricted environment"
+      ]
+    },
+    {
+      "id": "pipe-reporting-prod",
+      "environment": "prod",
+      "review_required": true,
+      "approvers": 1,
+      "tests": [
+        "unit",
+        "integration",
+        "security"
+      ],
+      "rollback_enabled": true,
+      "rollback_automated": true,
+      "rollback_age_days": 324,
+      "status": "AT RISK",
+      "issues": [
+        "1 approver(s) for a restricted environment (minimum 2)",
+        "rollback verification is 324 days old (max 90)"
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op-deploy",
+      "kind": "deploy",
+      "environment": "prod",
+      "logged": true,
+      "sink": "sink-siem",
+      "evidence_age_days": 2,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "op-grant-change",
+      "kind": "grant_change",
+      "environment": "prod",
+      "logged": true,
+      "sink": "sink-siem",
+      "evidence_age_days": 3,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "op-infra-change",
+      "kind": "infra_change",
+      "environment": "staging",
+      "logged": true,
+      "sink": "sink-archive",
+      "evidence_age_days": 5,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "op-pipeline-change",
+      "kind": "pipeline_change",
+      "environment": "prod",
+      "logged": true,
+      "sink": "sink-archive",
+      "evidence_age_days": 4,
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "op-secret-access",
+      "kind": "secret_access",
+      "environment": "prod",
+      "logged": true,
+      "sink": "sink-siem",
+      "evidence_age_days": 3,
+      "status": "OK",
+      "issues": []
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "principal ci-legacy: CI principal spans 2 environments — use one identity per environment",
+    "grant grant-alice-overprivileged: 9 permissions exceed the maximum of 8",
+    "secret sec-reporting-export-key: last rotated 265 days ago (policy: 90 days)",
+    "secret sec-ci-token: rotation policy of 180 days exceeds 90 days",
+    "pipeline pipe-reporting-prod: 1 approver(s) for a restricted environment (minimum 2)",
+    "pipeline pipe-reporting-prod: rollback verification is 324 days old (max 90)",
+    "pipeline pipe-legacy-prod: rollback is not automated for a restricted environment"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resilience.local/schema/access.schema.json",
+  "title": "Environnements, identités et privilèges",
+  "type": "object",
+  "required": ["version", "environments", "principals", "grants"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "environments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "classification", "owner"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 2 },
+          "classification": { "enum": ["public", "internal", "confidential", "restricted"] },
+          "owner": { "type": "string", "minLength": 2 }
+        }
+      }
+    },
+    "principals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "type", "owner", "environments"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 2 },
+          "type": { "enum": ["human", "service", "ci"] },
+          "owner": { "type": "string", "minLength": 2 },
+          "environments": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 2 }
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "grants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "principal", "role", "environment", "permissions", "resources"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "principal": { "type": "string", "minLength": 2 },
+          "role": { "type": "string", "minLength": 2 },
+          "environment": { "type": "string", "minLength": 2 },
+          "permissions": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 2 }
+          },
+          "resources": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "expires": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "approval": { "type": "string", "minLength": 2 },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

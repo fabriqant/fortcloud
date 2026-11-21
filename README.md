@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
 
-Fortcloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. Today it contains **Atlas**, **Failover**, **Ark** and **Ballast**; the other tools are planned and will live in their own folders with their own package, CLI, model, tests and documentation.
+Fortcloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. Today it contains **Atlas**, **Failover**, **Ark**, **Ballast** and **Vitals**; the other tools are planned and will live in their own folders with their own package, CLI, model, tests and documentation.
 
 The common thread is simple: **no backend, no agent, no platform to adopt** — just versioned files, a CLI and CI checks.
 
@@ -18,11 +18,11 @@ The common thread is simple: **no backend, no agent, no platform to adopt** — 
 | 2 | Eliminate single points of failure | **Fortcloud Failover** | [`failover/`](failover/README.md) | **Available — v0.1.0** | *Design out the single point of failure.* |
 | 3 | Protect data and prove restoration | **Fortcloud Ark** | [`ark/`](ark/README.md) | **Available — v0.1.0** | *Restore is a feature, not a hope.* |
 | 4 | Keep request paths stable under failure | **Fortcloud Ballast** | [`ballast/`](ballast/README.md) | **Available — v0.1.0** | *Keep workloads steady when parts fail.* |
-| 5 | Service and data quality monitoring | Fortcloud Vitals | `vitals/` | Planned | *Health and data quality, one signal.* |
+| 5 | Service and data quality monitoring | **Fortcloud Vitals** | [`vitals/`](vitals/README.md) | **Available — v0.1.0** | *Health and data quality, one signal.* |
 | 6 | Secure access and changes | Fortcloud Custodian | `custodian/` | Planned | *Guard access. Prove every change.* |
 | 7 | Exercise failure scenarios | Fortcloud Crucible | `crucible/` | Planned | *Rehearse the outage before it happens.* |
 
-Each tool can be adopted alone. Atlas, Failover, Ark and Ballast are separate packages with **independent models** and separate CLIs. They answer different questions:
+Each tool can be adopted alone. Atlas, Failover, Ark, Ballast and Vitals are separate packages with **independent models** and separate CLIs. They answer different questions:
 
 | Tool | Question |
 |---|---|
@@ -30,6 +30,7 @@ Each tool can be adopted alone. Atlas, Failover, Ark and Ballast are separate pa
 | Failover | Can we switch to the standby within the RTO? |
 | Ark | Can we restore the data within the RTO/RPO, with evidence? |
 | Ballast | Can the request chain still meet its latency budget when a dependency fails? |
+| Vitals | Can we see a breach early enough, with credible SLOs and data quality? |
 
 ## Repository layout
 
@@ -62,11 +63,19 @@ fortcloud-io/
 │   ├── examples/
 │   ├── docs/
 │   └── tests/
-└── ballast/
+├── ballast/
+│   ├── README.md
+│   ├── pyproject.toml          # package: fortcloud-ballast, CLI: fortcloud-ballast
+│   ├── schema/
+│   ├── src/fortcloud_ballast/
+│   ├── examples/
+│   ├── docs/
+│   └── tests/
+└── vitals/
     ├── README.md
-    ├── pyproject.toml          # package: fortcloud-ballast, CLI: fortcloud-ballast
+    ├── pyproject.toml          # package: fortcloud-vitals, CLI: fortcloud-vitals
     ├── schema/
-    ├── src/fortcloud_ballast/
+    ├── src/fortcloud_vitals/
     ├── examples/
     ├── docs/
     └── tests/
@@ -124,6 +133,17 @@ fortcloud-ballast check
 
 This writes a timeout budget report, a resilience policy matrix, a remediation plan and a machine-readable status. Read the [Ballast README](ballast/README.md).
 
+## Continue with Vitals
+
+```bash
+cd fortcloud-io/vitals
+python -m pip install -e .
+
+fortcloud-vitals check
+```
+
+This writes an SLO dashboard, a signal catalog, a quality plan and a machine-readable status. Read the [Vitals README](vitals/README.md).
+
 ## Design principles
 
 1. **The model is the source of truth.** Four small YAML files per tool, reviewed in PRs, validated in CI.
@@ -139,14 +159,14 @@ This writes a timeout budget report, a resilience policy matrix, a remediation p
 - [x] **Failover** — coverage matrix, remediation plan, drill checklist, CI status.
 - [x] **Ark** — backup coverage, restore evidence, recovery plan, CI status.
 - [x] **Ballast** — timeout budgets, policy matrix, resilience plan, CI status.
-- [ ] **Vitals** — service health and data quality signals tied to SLOs.
+- [x] **Vitals** — SLO dashboard, signal catalog, error budgets, quality plan, CI status.
 - [ ] **Custodian** — least-privilege access and change verification for IaC and pipelines.
 - [ ] **Crucible** — failure-scenario drills with measured RTO versus declared RTO.
 
 ## Contributing
 
-See the `CONTRIBUTING.md` of each tool ([Atlas](atlas/CONTRIBUTING.md), [Failover](failover/CONTRIBUTING.md), [Ark](ark/CONTRIBUTING.md), [Ballast](ballast/CONTRIBUTING.md)) for the development workflow. New tools should follow the same layout: a folder named after the tool, its own `pyproject.toml`, model, CLI, tests and docs, plus a job at the repository root.
+See the `CONTRIBUTING.md` of each tool ([Atlas](atlas/CONTRIBUTING.md), [Failover](failover/CONTRIBUTING.md), [Ark](ark/CONTRIBUTING.md), [Ballast](ballast/CONTRIBUTING.md), [Vitals](vitals/CONTRIBUTING.md)) for the development workflow. New tools should follow the same layout: a folder named after the tool, its own `pyproject.toml`, model, CLI, tests and docs, plus a job at the repository root.
 
 ## License
 
-The tools are MIT licensed — see [Atlas](atlas/LICENSE), [Failover](failover/LICENSE), [Ark](ark/LICENSE) and [Ballast](ballast/LICENSE).
+The tools are MIT licensed — see [Atlas](atlas/LICENSE), [Failover](failover/LICENSE), [Ark](ark/LICENSE), [Ballast](ballast/LICENSE) and [Vitals](vitals/LICENSE).

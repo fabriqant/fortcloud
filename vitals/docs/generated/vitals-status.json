@@ -1,0 +1,207 @@
+{
+  "tool": "fortcloud-vitals",
+  "version": "0.1.0",
+  "generated_on": "2026-11-21",
+  "summary": {
+    "services": 4,
+    "signals": 7,
+    "objectives": 7,
+    "checks": 7,
+    "p0_services": 2,
+    "objectives_at_risk": 3
+  },
+  "objectives": [
+    {
+      "id": "slo-auth-avail",
+      "service": "identity-auth",
+      "signal": "sig-auth-availability",
+      "kind": "availability",
+      "target": 99.99,
+      "alert_threshold": 99.995,
+      "window_ms": 2592000000,
+      "error_budget_ms": 259200,
+      "budget_used_at_alert": 0.5,
+      "margin_ratio": null,
+      "status": "OK",
+      "issues": [],
+      "last_check": "2026-11-18",
+      "last_result": "passed"
+    },
+    {
+      "id": "slo-auth-completeness",
+      "service": "identity-auth",
+      "signal": "sig-auth-completeness",
+      "kind": "completeness",
+      "target": 99.5,
+      "alert_threshold": 99.6,
+      "window_ms": 2592000000,
+      "error_budget_ms": 12960000,
+      "budget_used_at_alert": 0.8,
+      "margin_ratio": null,
+      "status": "AT RISK",
+      "issues": [
+        "alert fires after 80% of the error budget is spent (max 50%)"
+      ],
+      "last_check": "2026-07-15",
+      "last_result": "partial"
+    },
+    {
+      "id": "slo-catalog-avail",
+      "service": "catalog-browse",
+      "signal": "sig-catalog-availability",
+      "kind": "availability",
+      "target": 99.9,
+      "alert_threshold": 99.95,
+      "window_ms": 2592000000,
+      "error_budget_ms": 2592000,
+      "budget_used_at_alert": 0.5,
+      "margin_ratio": null,
+      "status": "AT RISK",
+      "issues": [
+        "signal interval 15m is too coarse (max 4m19s)"
+      ],
+      "last_check": "2026-11-18",
+      "last_result": "passed"
+    },
+    {
+      "id": "slo-checkout-avail",
+      "service": "checkout",
+      "signal": "sig-checkout-availability",
+      "kind": "availability",
+      "target": 99.9,
+      "alert_threshold": 99.95,
+      "window_ms": 2592000000,
+      "error_budget_ms": 2592000,
+      "budget_used_at_alert": 0.5,
+      "margin_ratio": null,
+      "status": "OK",
+      "issues": [],
+      "last_check": "2026-11-18",
+      "last_result": "passed"
+    },
+    {
+      "id": "slo-checkout-freshness",
+      "service": "checkout",
+      "signal": "sig-checkout-freshness",
+      "kind": "freshness",
+      "target": "5m",
+      "alert_threshold": "4m",
+      "window_ms": 2592000000,
+      "error_budget_ms": null,
+      "budget_used_at_alert": null,
+      "margin_ratio": 0.2,
+      "status": "OK",
+      "issues": [],
+      "last_check": "2026-10-10",
+      "last_result": "passed"
+    },
+    {
+      "id": "slo-checkout-latency",
+      "service": "checkout",
+      "signal": "sig-checkout-latency",
+      "kind": "latency",
+      "target": "300ms",
+      "alert_threshold": "240ms",
+      "window_ms": 2592000000,
+      "error_budget_ms": null,
+      "budget_used_at_alert": null,
+      "margin_ratio": 0.2,
+      "status": "OK",
+      "issues": [],
+      "last_check": "2026-11-18",
+      "last_result": "passed"
+    },
+    {
+      "id": "slo-reporting-validity",
+      "service": "reporting",
+      "signal": "sig-reporting-validity",
+      "kind": "validity",
+      "target": 99.0,
+      "alert_threshold": 99.5,
+      "window_ms": 1209600000,
+      "error_budget_ms": 12096000,
+      "budget_used_at_alert": 0.5,
+      "margin_ratio": null,
+      "status": "AT RISK",
+      "issues": [
+        "signal interval 1h is too coarse (max 20m10s)"
+      ],
+      "last_check": "2026-11-18",
+      "last_result": "failed"
+    }
+  ],
+  "signals": [
+    {
+      "id": "sig-auth-availability",
+      "kind": "availability",
+      "source": "datadog",
+      "interval_ms": 15000,
+      "objectives": 1,
+      "status": "OK"
+    },
+    {
+      "id": "sig-auth-completeness",
+      "kind": "completeness",
+      "source": "sql",
+      "interval_ms": 300000,
+      "objectives": 1,
+      "status": "OK"
+    },
+    {
+      "id": "sig-catalog-availability",
+      "kind": "availability",
+      "source": "cloudwatch",
+      "interval_ms": 900000,
+      "objectives": 1,
+      "status": "OK"
+    },
+    {
+      "id": "sig-checkout-availability",
+      "kind": "availability",
+      "source": "prometheus",
+      "interval_ms": 30000,
+      "objectives": 1,
+      "status": "OK"
+    },
+    {
+      "id": "sig-checkout-freshness",
+      "kind": "freshness",
+      "source": "sql",
+      "interval_ms": 60000,
+      "objectives": 1,
+      "status": "OK"
+    },
+    {
+      "id": "sig-checkout-latency",
+      "kind": "latency",
+      "source": "prometheus",
+      "interval_ms": 15000,
+      "objectives": 1,
+      "status": "OK"
+    },
+    {
+      "id": "sig-reporting-validity",
+      "kind": "validity",
+      "source": "sql",
+      "interval_ms": 3600000,
+      "objectives": 1,
+      "status": "OK"
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "objective slo-auth-completeness: alert fires after 80% of the error budget is spent (max 50%)",
+    "objective slo-catalog-avail: signal interval 15m is too coarse (max 4m19s)",
+    "objective slo-reporting-validity: signal interval 1h is too coarse (max 20m10s)",
+    "check chk-auth-completeness: last check is 129 days old (max 90)",
+    "check chk-auth-completeness: result is 'partial'",
+    "check chk-catalog-avail: no runbook",
+    "check chk-reporting-validity: result is 'failed'"
+  ],
+  "services": {
+    "checkout": "P0",
+    "identity-auth": "P0",
+    "catalog-browse": "P1",
+    "reporting": "P2"
+  }
+}

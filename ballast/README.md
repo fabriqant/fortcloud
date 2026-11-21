@@ -10,7 +10,7 @@
 
 Fortcloud Ballast turns a hand-maintained YAML model of your outbound dependencies and resilience policies into a **timeout budget report**, a **policy matrix**, a **remediation plan** and a **machine-readable CI status**. It catches the failures that only appear under load: a retry storm, a call chain that cannot fit in the latency budget, a missing circuit breaker, or one slow dependency starving every other call.
 
-[← Back to the Fortcloud-io family README](../README.md) · [Previous tool: Fortcloud Ark](../ark/README.md)
+[← Back to the Fortcloud-io family README](../README.md) · [Previous tool: Fortcloud Ark](../ark/README.md) · [Next tool: Fortcloud Vitals](../vitals/README.md) — health and data quality, one signal.
 
 > **Where the code lives:** this tool is the `ballast/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas, Failover or Ark at runtime. The GitHub Actions workflow stays at the repository root.
 

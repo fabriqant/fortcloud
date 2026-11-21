@@ -136,10 +136,15 @@ export function ImportView({
     <div className="space-y-5">
       <div className="flex items-start gap-2 rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        <p>
-          Imports are never applied automatically. Stage YAML, review the diff, then accept it.
-          The console never receives cloud credentials.
-        </p>
+        <div>
+          <p>
+            Imports are never applied automatically. Stage YAML, review the diff, then accept it.
+            The console never receives cloud credentials.
+          </p>
+          <p className="mt-1.5 font-mono text-[10px] text-sky-800">
+            Local AWS connector: python -m connectors.aws --profile &lt;profile&gt; --region &lt;region&gt;
+          </p>
+        </div>
       </div>
 
       {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-700">{error}</p>}

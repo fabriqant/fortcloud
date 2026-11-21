@@ -1,0 +1,4 @@
+# Optional dependency for the local AWS inventory connector.
+# It is intentionally absent from web/requirements.txt: the console API never
+# imports cloud SDKs or handles credentials.
+boto3>=1.34

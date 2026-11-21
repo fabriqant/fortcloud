@@ -226,13 +226,17 @@ def list_schemas(tool_id: str) -> dict[str, str]:
 
 @app.post("/api/atlas/inventory")
 def propose_inventory(request: InventoryRequest) -> dict:
-    """Reserved for the optional AWS/IaC inventory importer (next iteration)."""
+    """Describe the local connector; the console itself never reads a cloud account."""
+    tool = registry.get_tool("atlas")
     return {
-        "available": False,
+        "direct_access": False,
         "source": request.source,
+        "connector": "python -m connectors.aws --profile <profile> --region <region>",
+        "imports_dir": str(tool.workspace_dir / "imports"),
         "message": (
-            "Inventory import is not part of this prototype. The importer will propose YAML "
-            "for review before any model file is written."
+            "The console does not connect to clouds. Run the local read-only connector where "
+            "your AWS profile is configured. It writes a proposal to the imports folder; review "
+            "it in the Import tab before accepting it."
         ),
     }
 

@@ -260,8 +260,11 @@ jobs:
       - name: Install API dependencies
         run: python -m pip install -r requirements.txt
 
-      - name: API tests
+      - name: API and connector tests
         run: python -m pytest tests -q
+
+      - name: Connector CLI smoke test
+        run: python -m connectors.aws --help
 
       - name: Install UI dependencies
         run: npm ci

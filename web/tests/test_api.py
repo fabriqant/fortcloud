@@ -143,5 +143,14 @@ def test_import_stage_diff_accept_and_discard():
     assert client.get("/api/atlas/imports").json() == []
 
 
+def test_inventory_endpoint_describes_the_local_connector():
+    payload = client.post("/api/atlas/inventory", json={"source": "aws"}).json()
+    assert payload["direct_access"] is False
+    assert payload["source"] == "aws"
+    assert "connectors.aws" in payload["connector"]
+    assert Path(payload["imports_dir"]).parts[-2:] == ("atlas", "imports")
+    assert "review" in payload["message"].lower()
+
+
 def test_unknown_tool():
     assert client.get("/api/unknown/model").status_code == 404

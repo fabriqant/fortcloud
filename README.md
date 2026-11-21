@@ -22,7 +22,7 @@ The common thread is simple: **no backend, no agent, no platform to adopt** — 
 | 6 | Secure access and changes | **Fortcloud Custodian** | [`custodian/`](custodian/README.md) | **Available — v0.1.0** | *Guard access. Prove every change.* |
 | 7 | Exercise failure scenarios | **Fortcloud Crucible** | [`crucible/`](crucible/README.md) | **Available — v0.1.0** | *Rehearse the outage before it happens.* |
 
-All seven tools are also available through one optional **web console** prototype: [`web/`](web/README.md) — a local FastAPI + React interface with dashboards, graphs and tables. It consumes the tools; it does not change them.
+All seven tools are also available through one optional **web console** prototype: [`web/`](web/README.md) — a local FastAPI + React interface with guided forms, a YAML editor, dashboards, staged import review and generated artifacts. It consumes the tools; it does not change them. An optional local read-only AWS connector can propose an Atlas inventory, but no credentials reach the console.
 
 Each tool can be adopted alone. All seven are separate packages with **independent models** and separate CLIs. They answer different questions:
 
@@ -43,7 +43,7 @@ fortcloud-io/
 ├── .github/
 │   └── workflows/ci.yml        # one workflow, one job per tool, one for the web console
 ├── README.md                   # this file — family overview
-├── web/                        # optional local web console (FastAPI + React)
+├── web/                        # optional local web console (FastAPI + React) and connectors
 ├── atlas/
 │   ├── README.md
 │   ├── pyproject.toml          # package: fortcloud-atlas, CLI: fortcloud-atlas
@@ -186,6 +186,18 @@ fortcloud-crucible check
 ```
 
 This writes a scenario plan, a roles matrix, a communication plan, a verification report and a machine-readable status. Read the [Crucible README](crucible/README.md).
+
+## Web console (optional)
+
+A local FastAPI + React console gives all seven tools one interface with guided forms, a YAML editor, dashboards and generated artifacts. It imports the tool packages in-process; it is not an eighth tool.
+
+```bash
+python -m pip install -r web/requirements.txt
+cd web/ui && npm install && npm run build && cd ../..
+python -m uvicorn api.main:app --app-dir web --host 127.0.0.1 --port 8000
+```
+
+Open <http://127.0.0.1:8000>. See the [web console README](web/README.md) for the staged import workflow and the optional local read-only AWS connector.
 
 ## Design principles
 

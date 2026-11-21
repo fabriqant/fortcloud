@@ -116,7 +116,7 @@ This validates the example model and writes:
 - `docs/generated/dependency-graph.md` — the Mermaid dependency graph,
 - `docs/generated/resilience-report.md` — SPOFs, RTO/RPO matrix and FMEA risk register.
 
-Read the [Atlas README](atlas/README.md) for the CLI, the model format and the full documentation index.
+Read the [Atlas README](atlas/README.md) for the CLI, the model format and the full documentation index. If the terminology is new, start with [Atlas explained simply](atlas/docs/explained.md) — a plain-language walkthrough with a glossary.
 
 ## Continue with Failover
 

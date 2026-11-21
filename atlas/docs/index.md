@@ -37,6 +37,7 @@ Atlas is the mapping layer. It is intentionally standalone — no backend, no ag
 
 ## Read next
 
+- [Explained simply — how it works and glossary](explained.md) — best starting point for newcomers
 - [Quickstart](quickstart.md)
 - [Concepts, SPOF rules, FMEA and RTO/RPO](concepts.md)
 - [Service levels and error budgets](guides/service-levels.md)

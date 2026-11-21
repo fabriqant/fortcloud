@@ -219,6 +219,7 @@ fortcloud-io/
 ## Documentation
 
 - [Overview](docs/index.md)
+- [Explained simply — how it works and glossary](docs/explained.md) — start here if the terminology is new
 - [Quickstart](docs/quickstart.md)
 - [Concepts — SPOF, FMEA, RTO/RPO](docs/concepts.md)
 - [Service levels and error budgets](docs/guides/service-levels.md)

@@ -236,3 +236,43 @@ jobs:
         with:
           name: fortcloud-crucible-drills
           path: crucible/artifacts
+
+  web-console-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: web/requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/ui/package-lock.json
+
+      - name: Install API dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: API tests
+        run: python -m pytest tests -q
+
+      - name: Install UI dependencies
+        run: npm ci
+        working-directory: web/ui
+
+      - name: Build UI
+        run: npm run build
+        working-directory: web/ui
+
+      - name: Publish UI build
+        uses: actions/upload-artifact@v4
+        with:
+          name: fortcloud-console-ui
+          path: web/ui/dist

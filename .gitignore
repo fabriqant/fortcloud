@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# Web console: generated state, never committed
+web/workspaces/
+web/ui/node_modules/
+web/ui/dist/
+web/ui/.vite/
+web/ui/*.tsbuildinfo
+
+# Local tool artifacts produced by CI-style runs
+artifacts/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,46 @@
+import type {
+  ArtifactInfo,
+  ArtifactPayload,
+  ModelPayload,
+  RunResult,
+  ToolInfo,
+  ViewData,
+} from "./types";
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`/api${path}`, {
+    ...init,
+    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+  });
+  if (!response.ok) {
+    let detail = response.statusText;
+    try {
+      const payload = await response.json();
+      detail = payload.detail ?? detail;
+    } catch {
+      // keep the HTTP status text
+    }
+    throw new Error(detail);
+  }
+  return response.json() as Promise<T>;
+}
+
+export const api = {
+  tools: () => request<ToolInfo[]>("/tools"),
+  model: (tool: string) => request<ModelPayload>(`/${tool}/model`),
+  saveFile: (tool: string, file: string, content: string) =>
+    request<{ ok: boolean }>(`/${tool}/model/${encodeURIComponent(file)}`, {
+      method: "PUT",
+      body: JSON.stringify({ content }),
+    }),
+  reset: (tool: string) => request<ModelPayload>(`/${tool}/model/reset`, { method: "POST" }),
+  validate: (tool: string, strict: boolean) =>
+    request<RunResult>(`/${tool}/validate?strict=${strict}`, { method: "POST" }),
+  check: (tool: string, strict: boolean) =>
+    request<RunResult>(`/${tool}/check?strict=${strict}`, { method: "POST" }),
+  data: (tool: string) => request<ViewData>(`/${tool}/data`),
+  artifacts: (tool: string) => request<ArtifactInfo[]>(`/${tool}/artifacts`),
+  artifact: (tool: string, name: string) =>
+    request<ArtifactPayload>(`/${tool}/artifacts/${encodeURIComponent(name)}`),
+  schemas: (tool: string) => request<Record<string, string>>(`/${tool}/schemas`),
+};

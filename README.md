@@ -22,6 +22,8 @@ The common thread is simple: **no backend, no agent, no platform to adopt** — 
 | 6 | Secure access and changes | **Fortcloud Custodian** | [`custodian/`](custodian/README.md) | **Available — v0.1.0** | *Guard access. Prove every change.* |
 | 7 | Exercise failure scenarios | **Fortcloud Crucible** | [`crucible/`](crucible/README.md) | **Available — v0.1.0** | *Rehearse the outage before it happens.* |
 
+All seven tools are also available through one optional **web console** prototype: [`web/`](web/README.md) — a local FastAPI + React interface with dashboards, graphs and tables. It consumes the tools; it does not change them.
+
 Each tool can be adopted alone. All seven are separate packages with **independent models** and separate CLIs. They answer different questions:
 
 | Tool | Question |
@@ -39,8 +41,9 @@ Each tool can be adopted alone. All seven are separate packages with **independe
 ```text
 fortcloud-io/
 ├── .github/
-│   └── workflows/ci.yml        # one workflow, one job per tool
+│   └── workflows/ci.yml        # one workflow, one job per tool, one for the web console
 ├── README.md                   # this file — family overview
+├── web/                        # optional local web console (FastAPI + React)
 ├── atlas/
 │   ├── README.md
 │   ├── pyproject.toml          # package: fortcloud-atlas, CLI: fortcloud-atlas

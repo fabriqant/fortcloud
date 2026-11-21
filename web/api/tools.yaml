@@ -1,0 +1,140 @@
+tools:
+  - id: atlas
+    name: Fortcloud Atlas
+    tagline: Map every dependency. See every risk.
+    description: Dependency map, blast radius and risk register for hybrid and multi-cloud systems.
+    accent: red
+    icon: network
+    artifacts:
+      - name: dependency-graph.md
+        label: Dependency graph
+        kind: mermaid
+      - name: resilience-report.md
+        label: Resilience report
+        kind: markdown
+
+  - id: failover
+    name: Fortcloud Failover
+    tagline: Design out the single point of failure.
+    description: Failover strategies, switchover budgets and drill evidence.
+    accent: orange
+    icon: shuffle
+    artifacts:
+      - name: failover-matrix.md
+        label: Failover matrix
+        kind: markdown
+      - name: failover-plan.md
+        label: Failover plan
+        kind: markdown
+      - name: drill-scenarios.md
+        label: Drill scenarios
+        kind: markdown
+      - name: failover-status.json
+        label: Status
+        kind: json
+
+  - id: ark
+    name: Fortcloud Ark
+    tagline: Prove that your backups restore.
+    description: Backup coverage, restore evidence and recovery targets.
+    accent: amber
+    icon: archive
+    artifacts:
+      - name: backup-coverage.md
+        label: Backup coverage
+        kind: markdown
+      - name: restore-evidence.md
+        label: Restore evidence
+        kind: markdown
+      - name: recovery-plan.md
+        label: Recovery plan
+        kind: markdown
+      - name: restore-status.json
+        label: Status
+        kind: json
+
+  - id: ballast
+    name: Fortcloud Ballast
+    tagline: Keep latency budgets honest.
+    description: Timeout budgets, retry policies and bulkhead isolation.
+    accent: blue
+    icon: gauge
+    artifacts:
+      - name: timeout-budget.md
+        label: Timeout budget
+        kind: markdown
+      - name: policy-matrix.md
+        label: Policy matrix
+        kind: markdown
+      - name: resilience-plan.md
+        label: Resilience plan
+        kind: markdown
+      - name: ballast-status.json
+        label: Status
+        kind: json
+
+  - id: vitals
+    name: Fortcloud Vitals
+    tagline: Measure what "working" means.
+    description: SLOs, signals, error budgets and verification checks.
+    accent: green
+    icon: activity
+    artifacts:
+      - name: slo-dashboard.md
+        label: SLO dashboard
+        kind: markdown
+      - name: signal-catalog.md
+        label: Signal catalog
+        kind: markdown
+      - name: quality-plan.md
+        label: Quality plan
+        kind: markdown
+      - name: vitals-status.json
+        label: Status
+        kind: json
+
+  - id: custodian
+    name: Fortcloud Custodian
+    tagline: Make access and change auditable.
+    description: Access matrix, secrets inventory, change control and audit trail.
+    accent: violet
+    icon: shield
+    artifacts:
+      - name: access-matrix.md
+        label: Access matrix
+        kind: markdown
+      - name: secret-inventory.md
+        label: Secret inventory
+        kind: markdown
+      - name: change-control.md
+        label: Change control
+        kind: markdown
+      - name: audit-trail.md
+        label: Audit trail
+        kind: markdown
+      - name: custodian-status.json
+        label: Status
+        kind: json
+
+  - id: crucible
+    name: Fortcloud Crucible
+    tagline: Rehearse the outage before it happens.
+    description: Drill scenarios, roles, communication and verification evidence.
+    accent: pink
+    icon: flask
+    artifacts:
+      - name: scenario-plan.md
+        label: Scenario plan
+        kind: markdown
+      - name: roles-matrix.md
+        label: Roles matrix
+        kind: markdown
+      - name: communication-plan.md
+        label: Communication plan
+        kind: markdown
+      - name: verification-report.md
+        label: Verification report
+        kind: markdown
+      - name: crucible-status.json
+        label: Status
+        kind: json

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resilience.local/schema/verification.schema.json",
+  "title": "Vérification service/données et signatures",
+  "type": "object",
+  "required": ["version", "checks", "signoffs"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "scenario", "kind", "metric", "expected", "result", "owner"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "scenario": { "type": "string", "minLength": 2 },
+          "kind": { "enum": ["service", "data"] },
+          "metric": { "type": "string", "minLength": 2 },
+          "expected": { "type": "string", "minLength": 1 },
+          "result": { "enum": ["passed", "failed", "pending"] },
+          "evidence": { "type": "string" },
+          "owner": { "type": "string", "minLength": 2 },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "signoffs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["scenario", "person", "role", "date", "decision"],
+        "additionalProperties": false,
+        "properties": {
+          "scenario": { "type": "string", "minLength": 2 },
+          "person": { "type": "string", "minLength": 2 },
+          "role": { "enum": ["verifier", "approver", "owner"] },
+          "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "decision": { "enum": ["approved", "rejected"] },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

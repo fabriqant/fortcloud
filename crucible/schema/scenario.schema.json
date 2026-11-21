@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resilience.local/schema/scenario.schema.json",
+  "title": "Scénarios de panne et responsabilités",
+  "type": "object",
+  "required": ["version", "participants", "scenarios"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "participants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "team"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 2 },
+          "team": { "type": "string", "minLength": 2 },
+          "contact": { "type": "string" }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "kind", "environment", "system", "scheduled", "status", "target_rto", "target_rpo", "duration", "blast_radius", "channel", "owner", "assignments"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 2 },
+          "kind": { "enum": ["restore", "failover", "recovery"] },
+          "environment": { "type": "string", "minLength": 2 },
+          "system": { "type": "string", "minLength": 2 },
+          "scheduled": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "status": { "enum": ["planned", "running", "passed", "failed"] },
+          "target_rto": { "type": "string", "pattern": "^(0|([0-9]+(ms|s|m|h|d))+)$" },
+          "target_rpo": { "type": "string", "pattern": "^(0|([0-9]+(ms|s|m|h|d))+)$" },
+          "duration": { "type": "string", "pattern": "^(0|([0-9]+(ms|s|m|h|d))+)$" },
+          "blast_radius": { "enum": ["contained", "limited", "broad"] },
+          "channel": { "type": "string", "minLength": 2 },
+          "owner": { "type": "string", "minLength": 2 },
+          "assignments": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["person", "role"],
+              "additionalProperties": false,
+              "properties": {
+                "person": { "type": "string", "minLength": 2 },
+                "role": { "enum": ["coordinator", "operator", "communicator", "verifier", "observer", "approver"] }
+              }
+            }
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

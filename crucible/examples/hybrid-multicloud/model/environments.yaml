@@ -1,0 +1,31 @@
+# Exercise environments — SOURCE OF TRUTH
+# isolation : full | partial | shared
+# data      : synthetic | masked | production
+# A controlled environment is isolated, non-production and approved.
+version: 1
+environments:
+  - id: sandbox
+    name: Bac à sable isolé
+    isolation: full
+    data: synthetic
+    owner: platform-team
+    approved: true
+    approved_by: change-board
+    notes: The only place where a new scenario may run for the first time.
+
+  - id: staging
+    name: Préproduction à données masquées
+    isolation: partial
+    data: masked
+    owner: platform-team
+    approved: true
+    approved_by: change-board
+
+  - id: prod
+    name: Production
+    isolation: shared
+    data: production
+    owner: platform-team
+    approved: true
+    approved_by: change-board
+    notes: Requires a passed rehearsal of the same kind in a controlled environment.

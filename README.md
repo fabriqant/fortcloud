@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
 
-Fortcloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. Today it contains **Atlas**, **Failover**, **Ark**, **Ballast**, **Vitals** and **Custodian**; the other tools are planned and will live in their own folders with their own package, CLI, model, tests and documentation.
+Fortcloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. It contains all seven tools — **Atlas**, **Failover**, **Ark**, **Ballast**, **Vitals**, **Custodian** and **Crucible** — each in its own folder with its own package, CLI, model, tests and documentation.
 
 The common thread is simple: **no backend, no agent, no platform to adopt** — just versioned files, a CLI and CI checks.
 
@@ -20,9 +20,9 @@ The common thread is simple: **no backend, no agent, no platform to adopt** — 
 | 4 | Keep request paths stable under failure | **Fortcloud Ballast** | [`ballast/`](ballast/README.md) | **Available — v0.1.0** | *Keep workloads steady when parts fail.* |
 | 5 | Service and data quality monitoring | **Fortcloud Vitals** | [`vitals/`](vitals/README.md) | **Available — v0.1.0** | *Health and data quality, one signal.* |
 | 6 | Secure access and changes | **Fortcloud Custodian** | [`custodian/`](custodian/README.md) | **Available — v0.1.0** | *Guard access. Prove every change.* |
-| 7 | Exercise failure scenarios | Fortcloud Crucible | `crucible/` | Planned | *Rehearse the outage before it happens.* |
+| 7 | Exercise failure scenarios | **Fortcloud Crucible** | [`crucible/`](crucible/README.md) | **Available — v0.1.0** | *Rehearse the outage before it happens.* |
 
-Each tool can be adopted alone. Atlas, Failover, Ark, Ballast, Vitals and Custodian are separate packages with **independent models** and separate CLIs. They answer different questions:
+Each tool can be adopted alone. All seven are separate packages with **independent models** and separate CLIs. They answer different questions:
 
 | Tool | Question |
 |---|---|
@@ -32,6 +32,7 @@ Each tool can be adopted alone. Atlas, Failover, Ark, Ballast, Vitals and Custod
 | Ballast | Can the request chain still meet its latency budget when a dependency fails? |
 | Vitals | Can we see a breach early enough, with credible SLOs and data quality? |
 | Custodian | Is access least-privileged, are secrets safe, and can every change be reviewed, reversed and audited? |
+| Crucible | Have we actually rehearsed restore, failover and recovery, with roles, communication and verified results? |
 
 ## Repository layout
 
@@ -80,11 +81,19 @@ fortcloud-io/
 │   ├── examples/
 │   ├── docs/
 │   └── tests/
-└── custodian/
+├── custodian/
+│   ├── README.md
+│   ├── pyproject.toml          # package: fortcloud-custodian, CLI: fortcloud-custodian
+│   ├── schema/
+│   ├── src/fortcloud_custodian/
+│   ├── examples/
+│   ├── docs/
+│   └── tests/
+└── crucible/
     ├── README.md
-    ├── pyproject.toml          # package: fortcloud-custodian, CLI: fortcloud-custodian
+    ├── pyproject.toml          # package: fortcloud-crucible, CLI: fortcloud-crucible
     ├── schema/
-    ├── src/fortcloud_custodian/
+    ├── src/fortcloud_crucible/
     ├── examples/
     ├── docs/
     └── tests/
@@ -164,6 +173,17 @@ fortcloud-custodian check
 
 This writes an access matrix, a secret inventory, a change-control report, an audit trail and a machine-readable status. Read the [Custodian README](custodian/README.md).
 
+## Finish with Crucible
+
+```bash
+cd fortcloud-io/crucible
+python -m pip install -e .
+
+fortcloud-crucible check
+```
+
+This writes a scenario plan, a roles matrix, a communication plan, a verification report and a machine-readable status. Read the [Crucible README](crucible/README.md).
+
 ## Design principles
 
 1. **The model is the source of truth.** Four small YAML files per tool, reviewed in PRs, validated in CI.
@@ -171,7 +191,8 @@ This writes an access matrix, a secret inventory, a change-control report, an au
 3. **CI-friendly.** Every CLI command returns `0` or `1`; `--strict` escalates warnings.
 4. **Hybrid / multi-cloud aware.** Redundancy is measured across instances, zones, regions and providers — a single IdP or DNS still counts as a SPOF.
 5. **Standalone by default.** A tool must be installable and usable without the rest of the family.
-6. **Evidence over claims.** An RTO is only credible if a dated restore test — or a dated, successful failover drill — exists.
+6. **Evidence over claims.** An RTO is only credible if a dated restore test — or a dated, successful failover drill — exists, with service and data verification and a named verifier.
+7. **Rehearse before production.** A failed drill in an isolated environment is a lesson; the first attempt in production is an incident.
 
 ## Roadmap
 
@@ -181,12 +202,12 @@ This writes an access matrix, a secret inventory, a change-control report, an au
 - [x] **Ballast** — timeout budgets, policy matrix, resilience plan, CI status.
 - [x] **Vitals** — SLO dashboard, signal catalog, error budgets, quality plan, CI status.
 - [x] **Custodian** — least privilege, environment separation, secret protection, change control and audit trail.
-- [ ] **Crucible** — failure-scenario drills with measured RTO versus declared RTO.
+- [x] **Crucible** — controlled-first restore/failover/recovery drills, roles, communication, verification and CI status.
 
 ## Contributing
 
-See the `CONTRIBUTING.md` of each tool ([Atlas](atlas/CONTRIBUTING.md), [Failover](failover/CONTRIBUTING.md), [Ark](ark/CONTRIBUTING.md), [Ballast](ballast/CONTRIBUTING.md), [Vitals](vitals/CONTRIBUTING.md), [Custodian](custodian/CONTRIBUTING.md)) for the development workflow. New tools should follow the same layout: a folder named after the tool, its own `pyproject.toml`, model, CLI, tests and docs, plus a job at the repository root.
+See the `CONTRIBUTING.md` of each tool ([Atlas](atlas/CONTRIBUTING.md), [Failover](failover/CONTRIBUTING.md), [Ark](ark/CONTRIBUTING.md), [Ballast](ballast/CONTRIBUTING.md), [Vitals](vitals/CONTRIBUTING.md), [Custodian](custodian/CONTRIBUTING.md), [Crucible](crucible/CONTRIBUTING.md)) for the development workflow. New tools should follow the same layout: a folder named after the tool, its own `pyproject.toml`, model, CLI, tests and docs, plus a job at the repository root.
 
 ## License
 
-The tools are MIT licensed — see [Atlas](atlas/LICENSE), [Failover](failover/LICENSE), [Ark](ark/LICENSE), [Ballast](ballast/LICENSE), [Vitals](vitals/LICENSE) and [Custodian](custodian/LICENSE).
+The tools are MIT licensed — see [Atlas](atlas/LICENSE), [Failover](failover/LICENSE), [Ark](ark/LICENSE), [Ballast](ballast/LICENSE), [Vitals](vitals/LICENSE), [Custodian](custodian/LICENSE) and [Crucible](crucible/LICENSE).

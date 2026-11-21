@@ -1,0 +1,39 @@
+# Who is told, where and how often — SOURCE OF TRUTH
+# notify : start | update | end
+version: 1
+channels:
+  - id: war-room
+    name: Salon d'exercice
+    type: slack
+    audience: internal
+    owner: communications
+
+  - id: exec-bridge
+    name: Pont de direction
+    type: bridge
+    audience: external
+    owner: communications
+    approval: comms-lead
+
+stakeholders:
+  - id: support
+    name: Support client
+    channel: war-room
+    notify: [start, update, end]
+
+  - id: leadership
+    name: Direction
+    channel: exec-bridge
+    notify: [start, end]
+    notes: No periodic update — the gap is intentional.
+
+  - id: data-team
+    name: Équipe données
+    channel: war-room
+    notify: [start, update, end]
+
+plan:
+  updates_every: 30m
+  escalation: sec-team
+  go_no_go: change-board
+  owner: communications

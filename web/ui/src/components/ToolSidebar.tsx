@@ -1,9 +1,13 @@
 import {
   Activity,
   Archive,
+  BookOpen,
   Boxes,
+  ExternalLink,
   FlaskConical,
   Gauge,
+  Github,
+  Mail,
   Network,
   ShieldCheck,
   Shuffle,
@@ -31,6 +35,26 @@ export function ToolSidebar({
   activeId: string;
   onSelect: (id: string) => void;
 }) {
+  const docsUrl = activeId
+    ? `https://github.com/fabriqant/fortcloud-io/blob/main/${activeId}/README.md`
+    : "https://github.com/fabriqant/fortcloud-io#readme";
+
+  const links = [
+    { label: "Documentation", href: docsUrl, icon: BookOpen, external: true },
+    {
+      label: "GitHub repository",
+      href: "https://github.com/fabriqant/fortcloud-io",
+      icon: Github,
+      external: true,
+    },
+    {
+      label: "fabriqant@gmail.com",
+      href: "mailto:fabriqant@gmail.com",
+      icon: Mail,
+      external: false,
+    },
+  ];
+
   return (
     <aside className="flex w-[268px] shrink-0 flex-col border-r border-slate-200 bg-slate-950 text-slate-300">
       <div className="border-b border-slate-800 px-5 py-5">
@@ -40,7 +64,7 @@ export function ToolSidebar({
           </div>
           <div>
             <p className="text-sm font-bold tracking-[0.18em] text-white">FORTCLOUD</p>
-            <p className="text-[10px] uppercase tracking-widest text-slate-500">Resilience console</p>
+            <p className="text-[10px] tracking-[0.18em] text-slate-500">by fabriqant</p>
           </div>
         </div>
       </div>
@@ -84,13 +108,31 @@ export function ToolSidebar({
       </nav>
 
       <div className="border-t border-slate-800 px-5 py-4">
-        <div className="flex items-center gap-2 text-[11px] text-slate-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />
-          Local mode · no cloud access
+        <div className="space-y-0.5">
+          {links.map(({ label, href, icon: Icon, external }) => (
+            <a
+              key={label}
+              href={href}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noreferrer" : undefined}
+              className="group flex items-center gap-2 rounded-md px-2 py-1.5 text-[11px] text-slate-400 transition hover:bg-slate-900 hover:text-white"
+            >
+              <Icon className="h-3.5 w-3.5 shrink-0 text-slate-500 group-hover:text-sky-400" />
+              <span className="min-w-0 flex-1 truncate">{label}</span>
+              {external && <ExternalLink className="h-3 w-3 shrink-0 text-slate-600 group-hover:text-slate-400" />}
+            </a>
+          ))}
         </div>
-        <p className="mt-1.5 text-[10px] leading-relaxed text-slate-600">
-          Models stay in <span className="font-mono text-slate-500">web/workspaces/</span>
-        </p>
+
+        <div className="mt-3 border-t border-slate-800 pt-3">
+          <div className="flex items-center gap-2 text-[11px] text-slate-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />
+            Local mode · no cloud access
+          </div>
+          <p className="mt-1.5 text-[10px] leading-relaxed text-slate-600">
+            Models stay in <span className="font-mono text-slate-500">web/workspaces/</span>
+          </p>
+        </div>
       </div>
     </aside>
   );

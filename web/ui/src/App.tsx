@@ -339,6 +339,12 @@ export default function App() {
                 </Tabs.Content>
 
                 <Tabs.Content value="model" className="animate-fade-in outline-none">
+                  <div className="mb-4 rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
+                    Edit a YAML file below, then select <span className="font-semibold">Save</span>. The model
+                    changes only after <span className="font-semibold">Check</span> regenerates the artifacts.
+                    Use <span className="font-semibold">Reset</span> to restore the bundled example as a
+                    starting template.
+                  </div>
                   <div className="mb-4 flex flex-wrap gap-2">
                     {Object.keys(model?.files ?? {}).map((filename) => (
                       <button

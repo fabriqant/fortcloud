@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .app-sidebar {
+    height: 100vh;
+    height: 100dvh;
+  }
+}
+
 @layer base {
   html,
   body,

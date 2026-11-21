@@ -56,8 +56,8 @@ export function ToolSidebar({
   ];
 
   return (
-    <aside className="flex w-[268px] shrink-0 flex-col border-r border-slate-200 bg-slate-950 text-slate-300">
-      <div className="border-b border-slate-800 px-5 py-5">
+    <aside className="app-sidebar sticky top-0 flex w-[268px] shrink-0 flex-col border-r border-slate-200 bg-slate-950 text-slate-300">
+      <div className="shrink-0 border-b border-slate-800 px-5 py-5">
         <div className="flex items-center gap-2.5">
           <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-sky-400 to-indigo-600 text-sm font-black text-white">
             F
@@ -107,7 +107,7 @@ export function ToolSidebar({
         })}
       </nav>
 
-      <div className="border-t border-slate-800 px-5 py-4">
+      <div className="shrink-0 border-t border-slate-800 px-5 py-4">
         <div className="space-y-0.5">
           {links.map(({ label, href, icon: Icon, external }) => (
             <a

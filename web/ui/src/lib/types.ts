@@ -1,3 +1,5 @@
+export type Catalog = Record<string, string[]>;
+
 export interface ArtifactInfo {
   name: string;
   label: string;

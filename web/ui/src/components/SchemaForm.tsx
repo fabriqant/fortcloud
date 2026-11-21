@@ -1,4 +1,6 @@
+import { useId } from "react";
 import { Plus, Trash2 } from "lucide-react";
+import type { Catalog } from "../lib/types";
 import { cn } from "../lib/utils";
 
 export interface Schema {
@@ -35,6 +37,29 @@ function allowsNull(schema: Schema): boolean {
 
 function labelFor(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+const SUGGESTION_CATEGORIES: Record<string, string> = {
+  owner: "owners",
+  owners: "owners",
+  team: "teams",
+  teams: "teams",
+  region: "regions",
+  regions: "regions",
+  zone: "zones",
+  zones: "zones",
+  provider: "providers",
+  providers: "providers",
+  environment: "environments",
+  environments: "environments",
+  service: "services",
+  services: "services",
+};
+
+function suggestionsFor(name: string, catalog?: Catalog): string[] {
+  const key = name.replace(/-\d+$/, "").toLowerCase();
+  const category = SUGGESTION_CATEGORIES[key];
+  return category ? catalog?.[category] ?? [] : [];
 }
 
 function blankFor(schema: Schema): unknown {
@@ -88,16 +113,19 @@ function PrimitiveField({
   schema,
   value,
   required,
+  suggestions = [],
   onChange,
 }: {
   name: string;
   schema: Schema;
   value: unknown;
   required: boolean;
+  suggestions?: string[];
   onChange: (value: unknown) => void;
 }) {
   const type = schemaType(schema);
   const label = schema.title ?? labelFor(name);
+  const listId = useId();
   const inputClass =
     "w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] text-slate-800 outline-none focus:border-slate-400";
 
@@ -159,13 +187,23 @@ function PrimitiveField({
     );
   } else {
     control = (
-      <input
-        type="text"
-        className={cn(inputClass, "font-mono")}
-        value={value === undefined || value === null ? "" : String(value)}
-        placeholder={schema.pattern ? "Must match the schema pattern" : undefined}
-        onChange={(event) => onChange(event.target.value)}
-      />
+      <>
+        <input
+          type="text"
+          list={suggestions.length ? listId : undefined}
+          className={cn(inputClass, "font-mono")}
+          value={value === undefined || value === null ? "" : String(value)}
+          placeholder={schema.pattern ? "Must match the schema pattern" : undefined}
+          onChange={(event) => onChange(event.target.value)}
+        />
+        {suggestions.length > 0 && (
+          <datalist id={listId}>
+            {suggestions.map((option) => (
+              <option key={option} value={option} />
+            ))}
+          </datalist>
+        )}
+      </>
     );
   }
 
@@ -182,10 +220,12 @@ function PrimitiveField({
 function Fields({
   schema,
   value,
+  catalog,
   onChange,
 }: {
   schema: Schema;
   value: unknown;
+  catalog?: Catalog;
   onChange: (value: Record<string, unknown>) => void;
 }) {
   const record = isRecord(value) ? value : {};
@@ -198,6 +238,7 @@ function Fields({
           schema={child}
           value={record[key]}
           required={(schema.required ?? []).includes(key)}
+          catalog={catalog}
           onChange={(next) => onChange({ ...record, [key]: next })}
         />
       ))}
@@ -210,12 +251,14 @@ function Field({
   schema,
   value,
   required,
+  catalog,
   onChange,
 }: {
   name: string;
   schema: Schema;
   value: unknown;
   required: boolean;
+  catalog?: Catalog;
   onChange: (value: unknown) => void;
 }) {
   const type = schemaType(schema);
@@ -230,6 +273,7 @@ function Field({
         <Fields
           schema={schema}
           value={value}
+          catalog={catalog}
           onChange={(next) => onChange(next)}
         />
       </div>
@@ -268,7 +312,7 @@ function Field({
                 </button>
               </div>
               {schemaType(itemSchema) === "object" ? (
-                <Fields schema={itemSchema} value={item} onChange={(next) => {
+                <Fields schema={itemSchema} value={item} catalog={catalog} onChange={(next) => {
                   const copy = [...items];
                   copy[index] = next;
                   onChange(copy);
@@ -279,6 +323,7 @@ function Field({
                   schema={itemSchema}
                   value={item}
                   required
+                  suggestions={suggestionsFor(name, catalog)}
                   onChange={(next) => {
                     const copy = [...items];
                     copy[index] = next;
@@ -295,22 +340,31 @@ function Field({
   }
 
   return (
-    <PrimitiveField name={name} schema={schema} value={value} required={required} onChange={onChange} />
+    <PrimitiveField
+      name={name}
+      schema={schema}
+      value={value}
+      required={required}
+      suggestions={suggestionsFor(name, catalog)}
+      onChange={onChange}
+    />
   );
 }
 
 export function SchemaForm({
   schema,
   value,
+  catalog,
   onChange,
 }: {
   schema: Schema;
   value: Record<string, unknown>;
+  catalog?: Catalog;
   onChange: (value: Record<string, unknown>) => void;
 }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-card">
-      <Fields schema={schema} value={value} onChange={(next) => onChange(next)} />
+      <Fields schema={schema} value={value} catalog={catalog} onChange={(next) => onChange(next)} />
     </div>
   );
 }

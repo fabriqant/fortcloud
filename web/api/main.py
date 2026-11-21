@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import registry, runner, structured, workspaces
+from . import catalog, registry, runner, structured, workspaces
 
 app = FastAPI(
     title="Fortcloud Console API",
@@ -47,6 +47,15 @@ class InventoryRequest(BaseModel):
     profile: str | None = None
 
 
+class CatalogValue(BaseModel):
+    category: str
+    value: str
+
+
+class CatalogRename(CatalogValue):
+    new_value: str
+
+
 def _tool(tool_id: str) -> registry.Tool:
     try:
         return registry.get_tool(tool_id)
@@ -62,6 +71,39 @@ def health() -> dict:
 @app.get("/api/tools")
 def tools() -> list[dict]:
     return [registry.public_tool(tool) for tool in registry.load_tools()]
+
+
+@app.get("/api/catalog")
+def get_catalog() -> dict[str, list[str]]:
+    """Reusable reference values offered as suggestions in guided forms."""
+    return catalog.list_values()
+
+
+@app.post("/api/catalog")
+def add_catalog_value(payload: CatalogValue) -> dict:
+    try:
+        added = catalog.add_value(payload.category, payload.value)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"ok": True, "added": added}
+
+
+@app.patch("/api/catalog")
+def rename_catalog_value(payload: CatalogRename) -> dict:
+    try:
+        renamed = catalog.rename_value(payload.category, payload.value, payload.new_value)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"ok": True, "renamed": renamed}
+
+
+@app.delete("/api/catalog")
+def remove_catalog_value(payload: CatalogValue) -> dict:
+    try:
+        removed = catalog.remove_value(payload.category, payload.value)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"ok": True, "removed": removed}
 
 
 @app.get("/api/{tool_id}/model")

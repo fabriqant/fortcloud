@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { AlertCircle, Save } from "lucide-react";
+import { AlertCircle, Database, Save } from "lucide-react";
 import { api } from "../lib/api";
-import type { ModelFormat } from "../lib/types";
+import type { Catalog, ModelFormat } from "../lib/types";
 import { cn } from "../lib/utils";
+import { CatalogModal } from "./CatalogModal";
 import { applyDefaults, cleanDocument, SchemaForm, type Schema } from "./SchemaForm";
 import { Button, EmptyState } from "./ui";
 
@@ -20,6 +21,17 @@ export function FormView({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [catalog, setCatalog] = useState<Catalog>({});
+  const [catalogOpen, setCatalogOpen] = useState(false);
+
+  useEffect(() => {
+    api
+      .catalog()
+      .then(setCatalog)
+      .catch(() => {
+        // Suggestions remain optional if the catalog is unavailable.
+      });
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -90,6 +102,17 @@ export function FormView({
 
   return (
     <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-2xl text-[11px] leading-relaxed text-slate-500">
+          Fields suggest reusable values from your local reference catalog. You can still type any
+          value required by the schema.
+        </p>
+        <Button variant="ghost" onClick={() => setCatalogOpen(true)}>
+          <Database className="h-3.5 w-3.5" />
+          Reference data
+        </Button>
+      </div>
+
       <div className="flex flex-wrap gap-2">
         {formats.map((format) => (
           <button
@@ -120,7 +143,7 @@ export function FormView({
 
       {schema && document ? (
         <>
-          <SchemaForm schema={schema} value={document} onChange={setDocument} />
+          <SchemaForm schema={schema} value={document} catalog={catalog} onChange={setDocument} />
           <div className="flex justify-end">
             <Button variant="primary" loading={busy} onClick={() => void save()}>
               <Save className="h-3.5 w-3.5" />
@@ -132,6 +155,14 @@ export function FormView({
         <EmptyState
           title="No editor for this file"
           hint="The JSON Schema for this model file could not be loaded. Use the YAML tab instead."
+        />
+      )}
+
+      {catalogOpen && (
+        <CatalogModal
+          catalog={catalog}
+          onClose={() => setCatalogOpen(false)}
+          onChange={setCatalog}
         />
       )}
     </div>

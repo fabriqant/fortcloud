@@ -482,12 +482,6 @@ export default function App() {
 
               <aside className="min-w-0">
                 <FindingsPanel result={result} />
-                {model && (
-                  <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 text-[10px] text-slate-500 shadow-card">
-                    <p className="font-semibold uppercase tracking-wider text-slate-400">Workspace</p>
-                    <p className="mt-1.5 break-all font-mono leading-relaxed">{model.model_dir}</p>
-                  </div>
-                )}
               </aside>
             </div>
           </Tabs.Root>

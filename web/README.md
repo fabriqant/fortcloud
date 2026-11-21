@@ -8,7 +8,7 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 
 - Seven-tool sidebar driven by [`api/tools.yaml`](api/tools.yaml).
 - One file-backed workspace per tool under `web/workspaces/<tool>/`.
-- Guided forms generated from each tool's JSON Schema, plus a YAML source editor with line numbers, dirty state and explicit save.
+- Guided forms generated from each tool's JSON Schema, with suggestions from a local SQLite reference catalog (owners, teams, regions, zones, providers, environments, services) that you can edit in a modal; values remain optional suggestions and the YAML source editor stays available with line numbers, dirty state and explicit save.
 - Staged YAML import: paste or upload a proposal, review a unified diff, then accept or discard it. Nothing is applied automatically.
 - `Validate`, `Check`, `Strict` and reset-to-example actions.
 - KPI cards, Mermaid dependency graph, Recharts charts and sortable/filterable TanStack tables.
@@ -32,6 +32,7 @@ FastAPI (web/api)
 web/workspaces/<tool>/model/*.yaml     <- editable source of truth
 web/workspaces/<tool>/artifacts/*      <- generated, disposable
 web/workspaces/<tool>/imports/*        <- staged proposals, never auto-applied
+web/catalog.sqlite3                    <- reusable reference values for guided forms
 ```
 
 Optional, outside the API:
@@ -90,6 +91,10 @@ No credentials are sent to the console, stored in a workspace, or written to a p
 |---|---|---|
 | `GET` | `/api/health` | Service status |
 | `GET` | `/api/tools` | Registry of the seven tools |
+| `GET` | `/api/catalog` | Reference values grouped by category |
+| `POST` | `/api/catalog` | Add a reference value |
+| `PATCH` | `/api/catalog` | Rename a reference value |
+| `DELETE` | `/api/catalog` | Remove a reference value |
 | `GET` | `/api/{tool}/model` | YAML files of the workspace |
 | `PUT` | `/api/{tool}/model/{file}` | Save one YAML file |
 | `GET` | `/api/{tool}/formats` | Model file → JSON Schema map |
@@ -119,6 +124,7 @@ Exit codes follow the CLI contract: `0` for success, `1` for validation failures
 web/
 ├── api/
 │   ├── main.py           FastAPI app and routes
+│   ├── catalog.py        local SQLite reference-value catalog
 │   ├── registry.py       tools.yaml loader and tool paths
 │   ├── tools.yaml        single source of truth for the UI shell
 │   ├── workspaces.py     file storage and example seeding
@@ -134,9 +140,10 @@ web/
 │   └── requirements-aws.txt   optional boto3 dependency
 ├── tests/
 │   ├── test_api.py       API and import smoke tests
+│   ├── test_catalog.py   reference catalog CRUD tests
 │   └── test_aws_connector.py  connector mapping with a fake session
 ├── requirements.txt      API and editable tool installs
 └── README.md             this file
 ```
 
-Generated workspaces are ignored by Git. Delete `web/workspaces/` at any time: the next request recreates it from the examples. Staged proposals live in the `imports/` subfolder and are deleted with it.
+Generated workspaces and the local reference catalog are ignored by Git. Delete `web/workspaces/` at any time: the next request recreates it from the examples. Staged proposals live in the `imports/` subfolder and are deleted with it. Delete `web/catalog.sqlite3` to restore the default reference values; edits made in the Reference data modal are otherwise kept locally.

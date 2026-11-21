@@ -1,6 +1,7 @@
 import type {
   ArtifactInfo,
   ArtifactPayload,
+  Catalog,
   ImportDiff,
   ImportInfo,
   ModelDocument,
@@ -31,6 +32,22 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   tools: () => request<ToolInfo[]>("/tools"),
+  catalog: () => request<Catalog>("/catalog"),
+  addCatalogValue: (category: string, value: string) =>
+    request<{ ok: boolean; added: boolean }>("/catalog", {
+      method: "POST",
+      body: JSON.stringify({ category, value }),
+    }),
+  renameCatalogValue: (category: string, value: string, newValue: string) =>
+    request<{ ok: boolean; renamed: boolean }>("/catalog", {
+      method: "PATCH",
+      body: JSON.stringify({ category, value, new_value: newValue }),
+    }),
+  removeCatalogValue: (category: string, value: string) =>
+    request<{ ok: boolean; removed: boolean }>("/catalog", {
+      method: "DELETE",
+      body: JSON.stringify({ category, value }),
+    }),
   model: (tool: string) => request<ModelPayload>(`/${tool}/model`),
   saveFile: (tool: string, file: string, content: string) =>
     request<{ ok: boolean }>(`/${tool}/model/${encodeURIComponent(file)}`, {

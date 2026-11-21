@@ -1,0 +1,165 @@
+{
+  "tool": "fortcloud-ballast",
+  "version": "0.1.0",
+  "summary": {
+    "services": 4,
+    "dependencies": 7,
+    "policies": 7,
+    "flows": 4,
+    "flows_at_risk": 1,
+    "policies_at_risk": 3
+  },
+  "flows": [
+    {
+      "id": "flow-browse",
+      "service": "catalog-browse",
+      "steps": 2,
+      "budget_ms": 2000,
+      "worst_case_ms": 1730,
+      "headroom_ms": 270,
+      "usage": "86%",
+      "status": "AT RISK",
+      "issues": [
+        "step 'dep-catalog' consumes 74% of the latency budget"
+      ]
+    },
+    {
+      "id": "flow-checkout",
+      "service": "checkout",
+      "steps": 3,
+      "budget_ms": 3000,
+      "worst_case_ms": 1500,
+      "headroom_ms": 1500,
+      "usage": "50%",
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "flow-login",
+      "service": "identity-auth",
+      "steps": 1,
+      "budget_ms": 1000,
+      "worst_case_ms": 325,
+      "headroom_ms": 675,
+      "usage": "32%",
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "flow-reporting",
+      "service": "checkout-reporting",
+      "steps": 2,
+      "budget_ms": 5000,
+      "worst_case_ms": 3000,
+      "headroom_ms": 2000,
+      "usage": "60%",
+      "status": "OK",
+      "issues": []
+    }
+  ],
+  "policies": [
+    {
+      "id": "pol-audit",
+      "dependency": "dep-audit",
+      "timeout_ms": 500,
+      "retries": 2,
+      "worst_case_ms": 1800,
+      "circuit_breaker": true,
+      "bulkhead": "audit-pool",
+      "fallback": "queue",
+      "status": "AT RISK",
+      "issues": [
+        "retries without jitter (thundering herd risk)",
+        "circuit breaker reset_timeout 1m exceeds 30s"
+      ]
+    },
+    {
+      "id": "pol-auth",
+      "dependency": "dep-auth",
+      "timeout_ms": 150,
+      "retries": 1,
+      "worst_case_ms": 325,
+      "circuit_breaker": true,
+      "bulkhead": "auth-pool",
+      "fallback": "none",
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "pol-catalog",
+      "dependency": "dep-catalog",
+      "timeout_ms": 300,
+      "retries": 3,
+      "worst_case_ms": 1480,
+      "circuit_breaker": true,
+      "bulkhead": "catalog-pool",
+      "fallback": "cached",
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "pol-inventory",
+      "dependency": "dep-inventory",
+      "timeout_ms": 200,
+      "retries": 2,
+      "worst_case_ms": 675,
+      "circuit_breaker": true,
+      "bulkhead": "inventory-pool",
+      "fallback": "cached",
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "pol-payment",
+      "dependency": "dep-payment",
+      "timeout_ms": 500,
+      "retries": 0,
+      "worst_case_ms": 500,
+      "circuit_breaker": true,
+      "bulkhead": "payment-pool",
+      "fallback": "queue",
+      "status": "OK",
+      "issues": []
+    },
+    {
+      "id": "pol-pricing",
+      "dependency": "dep-pricing",
+      "timeout_ms": 200,
+      "retries": 4,
+      "worst_case_ms": 1200,
+      "circuit_breaker": true,
+      "bulkhead": "pricing-pool",
+      "fallback": "degraded",
+      "status": "AT RISK",
+      "issues": [
+        "4 retries exceed the maximum of 3",
+        "backoff multiplier 1 is below 2 (insufficient backoff)"
+      ]
+    },
+    {
+      "id": "pol-search",
+      "dependency": "dep-search",
+      "timeout_ms": 250,
+      "retries": 0,
+      "worst_case_ms": 250,
+      "circuit_breaker": false,
+      "bulkhead": "",
+      "fallback": "none",
+      "status": "AT RISK",
+      "issues": [
+        "no bulkhead isolation for this dependency",
+        "optional dependency 'dep-search' has no fallback"
+      ]
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "policy pol-pricing: 4 retries exceed the maximum of 3",
+    "policy pol-pricing: backoff multiplier 1 is below 2 (insufficient backoff)",
+    "policy pol-search: no bulkhead isolation for this dependency",
+    "policy pol-search: optional dependency 'dep-search' has no fallback",
+    "policy pol-audit: retries without jitter (thundering herd risk)",
+    "policy pol-audit: circuit breaker reset_timeout 1m exceeds 30s",
+    "flow flow-browse: step 'dep-catalog' consumes 74% of the latency budget"
+  ]
+}

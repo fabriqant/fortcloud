@@ -1,0 +1,32 @@
+# Business services and their end-to-end latency budget — SOURCE OF TRUTH
+# latency_budget : 0 or <number><ms|s|m|h|d>, combinable (1m30s, 200ms)
+# Every flow attached to a service must fit within this budget.
+version: 1
+services:
+  - id: checkout
+    name: API de commande
+    description: Passage de commande et paiement.
+    criticality: P0
+    owner: commerce-team
+    latency_budget: 3s
+
+  - id: identity-auth
+    name: Authentification
+    description: Vérification des sessions et des tokens.
+    criticality: P0
+    owner: sec-team
+    latency_budget: 1s
+
+  - id: catalog-browse
+    name: Navigation catalogue
+    description: Recherche et affichage des produits.
+    criticality: P1
+    owner: catalog-team
+    latency_budget: 2s
+
+  - id: checkout-reporting
+    name: Reporting des commandes
+    description: Consolidation des prix et des événements d'audit.
+    criticality: P2
+    owner: analytics-team
+    latency_budget: 5s

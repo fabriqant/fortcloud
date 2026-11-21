@@ -108,3 +108,35 @@ jobs:
         with:
           name: fortcloud-ark-evidence
           path: ark/artifacts
+
+  ballast-test-and-report:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ballast
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: ballast/requirements.txt
+
+      - name: Install
+        run: python -m pip install -e .
+
+      - name: Smoke test
+        run: fortcloud-ballast --version
+
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Validate model and generate artifacts
+        run: fortcloud-ballast check --out ./artifacts
+
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fortcloud-ballast-policies
+          path: ballast/artifacts

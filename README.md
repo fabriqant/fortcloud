@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
 
-Fortcloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. Today it contains **Atlas** and **Failover**; the other tools are planned and will live in their own folders with their own package, CLI, model, tests and documentation.
+Fortcloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. Today it contains **Atlas**, **Failover** and **Ark**; the other tools are planned and will live in their own folders with their own package, CLI, model, tests and documentation.
 
 The common thread is simple: **no backend, no agent, no platform to adopt** — just versioned files, a CLI and CI checks.
 
@@ -16,13 +16,19 @@ The common thread is simple: **no backend, no agent, no platform to adopt** — 
 |---|---|---|---|---|---|
 | 1 | Map dependencies and risks | **Fortcloud Atlas** | [`atlas/`](atlas/README.md) | **Available — v0.1.0** | *Map every dependency. See every risk.* |
 | 2 | Eliminate single points of failure | **Fortcloud Failover** | [`failover/`](failover/README.md) | **Available — v0.1.0** | *Design out the single point of failure.* |
-| 3 | Protect data and prove restoration | Fortcloud Ark | `ark/` | Planned | *Restore is a feature, not a hope.* |
+| 3 | Protect data and prove restoration | **Fortcloud Ark** | [`ark/`](ark/README.md) | **Available — v0.1.0** | *Restore is a feature, not a hope.* |
 | 4 | Fault-tolerant processing | Fortcloud Ballast | `ballast/` | Planned | *Keep workloads steady when parts fail.* |
 | 5 | Service and data quality monitoring | Fortcloud Vitals | `vitals/` | Planned | *Health and data quality, one signal.* |
 | 6 | Secure access and changes | Fortcloud Custodian | `custodian/` | Planned | *Guard access. Prove every change.* |
 | 7 | Exercise failure scenarios | Fortcloud Crucible | `crucible/` | Planned | *Rehearse the outage before it happens.* |
 
-Each tool can be adopted alone. Atlas does not require Failover, and Failover does not require Atlas: they are separate packages with **independent models** and separate CLIs. Atlas answers *where is the risk?*; Failover answers *how do we remove it and prove the switch works?*
+Each tool can be adopted alone. Atlas, Failover and Ark are separate packages with **independent models** and separate CLIs. They answer different questions:
+
+| Tool | Question |
+|---|---|
+| Atlas | Where is the risk, and what is the blast radius? |
+| Failover | Can we switch to the standby within the RTO? |
+| Ark | Can we restore the data within the RTO/RPO, with evidence? |
 
 ## Repository layout
 
@@ -34,22 +40,30 @@ fortcloud-io/
 ├── atlas/
 │   ├── README.md
 │   ├── pyproject.toml          # package: fortcloud-atlas, CLI: fortcloud-atlas
-│   ├── schema/                 # JSON Schemas — the model contract
-│   ├── src/fortcloud_atlas/    # implementation
+│   ├── schema/
+│   ├── src/fortcloud_atlas/
 │   ├── examples/
 │   ├── docs/
 │   └── tests/
-└── failover/
+├── failover/
+│   ├── README.md
+│   ├── pyproject.toml          # package: fortcloud-failover, CLI: fortcloud-failover
+│   ├── schema/
+│   ├── src/fortcloud_failover/
+│   ├── examples/
+│   ├── docs/
+│   └── tests/
+└── ark/
     ├── README.md
-    ├── pyproject.toml          # package: fortcloud-failover, CLI: fortcloud-failover
-    ├── schema/                 # JSON Schemas — an independent model contract
-    ├── src/fortcloud_failover/
+    ├── pyproject.toml          # package: fortcloud-ark, CLI: fortcloud-ark
+    ├── schema/
+    ├── src/fortcloud_ark/
     ├── examples/
     ├── docs/
     └── tests/
 ```
 
-> GitHub Actions only discovers workflows under `.github/workflows/` at the **repository root**. That is why CI lives there. Each job overrides `working-directory` to its tool folder (`atlas/`, `failover/`) and uses its own dependency cache path.
+> GitHub Actions only discovers workflows under `.github/workflows/` at the **repository root**. That is why CI lives there. Each job overrides `working-directory` to its tool folder and uses its own dependency cache path.
 
 ## Start with Atlas
 
@@ -77,14 +91,18 @@ python -m pip install -e .
 fortcloud-failover check
 ```
 
-This validates an independent failover model and writes:
+This writes a failover coverage matrix, a remediation plan, a drill checklist and a machine-readable status. Read the [Failover README](failover/README.md).
 
-- `docs/generated/failover-matrix.md` — coverage per strategy and per service,
-- `docs/generated/failover-plan.md` — ordered remediation steps with owners,
-- `docs/generated/drill-scenarios.md` — a drill checklist per strategy,
-- `docs/generated/failover-status.json` — machine-readable status for CI.
+## Continue with Ark
 
-Read the [Failover README](failover/README.md) for the four-file model, the rules and the drill guide.
+```bash
+cd fortcloud-io/ark
+python -m pip install -e .
+
+fortcloud-ark check
+```
+
+This writes a backup coverage matrix, a restore evidence report, a recovery plan and a machine-readable status. Read the [Ark README](ark/README.md).
 
 ## Design principles
 
@@ -99,7 +117,7 @@ Read the [Failover README](failover/README.md) for the four-file model, the rule
 
 - [x] **Atlas** — dependency mapping, SPOF audit, RTO/RPO matrix, FMEA register.
 - [x] **Failover** — coverage matrix, remediation plan, drill checklist, CI status.
-- [ ] **Ark** — automated restore verification with evidence attached to each flow.
+- [x] **Ark** — backup coverage, restore evidence, recovery plan, CI status.
 - [ ] **Ballast** — fault-tolerant processing policies (timeouts, retries, circuit breakers, bulkheads).
 - [ ] **Vitals** — service health and data quality signals tied to SLOs.
 - [ ] **Custodian** — least-privilege access and change verification for IaC and pipelines.
@@ -107,8 +125,8 @@ Read the [Failover README](failover/README.md) for the four-file model, the rule
 
 ## Contributing
 
-See [`atlas/CONTRIBUTING.md`](atlas/CONTRIBUTING.md) and [`failover/CONTRIBUTING.md`](failover/CONTRIBUTING.md) for the development workflow. New tools should follow the same layout: a folder named after the tool, its own `pyproject.toml`, model, CLI, tests and docs, plus a job at the repository root.
+See the `CONTRIBUTING.md` of each tool ([Atlas](atlas/CONTRIBUTING.md), [Failover](failover/CONTRIBUTING.md), [Ark](ark/CONTRIBUTING.md)) for the development workflow. New tools should follow the same layout: a folder named after the tool, its own `pyproject.toml`, model, CLI, tests and docs, plus a job at the repository root.
 
 ## License
 
-The tools are MIT licensed — see [`atlas/LICENSE`](atlas/LICENSE) and [`failover/LICENSE`](failover/LICENSE).
+The tools are MIT licensed — see [Atlas](atlas/LICENSE), [Failover](failover/LICENSE) and [Ark](ark/LICENSE).

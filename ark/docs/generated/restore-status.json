@@ -1,0 +1,124 @@
+{
+  "tool": "fortcloud-ark",
+  "version": "0.1.0",
+  "generated_on": "2026-11-21",
+  "summary": {
+    "assets": 8,
+    "backups": 8,
+    "restores": 7,
+    "services": 4,
+    "p0_assets": 4,
+    "assets_at_risk": 4
+  },
+  "assets": [
+    {
+      "id": "config-repo",
+      "criticality": "P1",
+      "status": "AT RISK",
+      "backups": 1,
+      "restore_tests": 1,
+      "last_restore": "2026-10-20",
+      "rto_target_seconds": 28800,
+      "rpo_target_seconds": 86400,
+      "issues": [
+        "restore rst-config result is 'partial'"
+      ]
+    },
+    {
+      "id": "idp-db",
+      "criticality": "P0",
+      "status": "PROVEN",
+      "backups": 1,
+      "restore_tests": 1,
+      "last_restore": "2026-11-02",
+      "rto_target_seconds": 900,
+      "rpo_target_seconds": 0,
+      "issues": []
+    },
+    {
+      "id": "kafka-events",
+      "criticality": "P1",
+      "status": "PROVEN",
+      "backups": 1,
+      "restore_tests": 1,
+      "last_restore": "2026-10-30",
+      "rto_target_seconds": 14400,
+      "rpo_target_seconds": 3600,
+      "issues": []
+    },
+    {
+      "id": "logs-archive",
+      "criticality": "P2",
+      "status": "AT RISK",
+      "backups": 1,
+      "restore_tests": 0,
+      "last_restore": null,
+      "rto_target_seconds": 28800,
+      "rpo_target_seconds": 86400,
+      "issues": [
+        "no restore test"
+      ]
+    },
+    {
+      "id": "obj-lake",
+      "criticality": "P0",
+      "status": "PROVEN",
+      "backups": 1,
+      "restore_tests": 1,
+      "last_restore": "2026-10-25",
+      "rto_target_seconds": 14400,
+      "rpo_target_seconds": 3600,
+      "issues": []
+    },
+    {
+      "id": "pg-core",
+      "criticality": "P0",
+      "status": "PROVEN",
+      "backups": 1,
+      "restore_tests": 2,
+      "last_restore": "2026-11-08",
+      "rto_target_seconds": 1800,
+      "rpo_target_seconds": 300,
+      "issues": []
+    },
+    {
+      "id": "report-exports",
+      "criticality": "P2",
+      "status": "AT RISK",
+      "backups": 1,
+      "restore_tests": 0,
+      "last_restore": null,
+      "rto_target_seconds": 28800,
+      "rpo_target_seconds": 86400,
+      "issues": [
+        "last successful backup is 6 days old (max 2)",
+        "no restore test"
+      ]
+    },
+    {
+      "id": "vault-secrets",
+      "criticality": "P0",
+      "status": "AT RISK",
+      "backups": 1,
+      "restore_tests": 1,
+      "last_restore": "2026-07-15",
+      "rto_target_seconds": 900,
+      "rpo_target_seconds": 0,
+      "issues": [
+        "last successful backup is 3 days old (max 2)",
+        "no ransomware or deletion restore scenario for a P0 asset",
+        "restore rst-vault is 129 days old (max 90)"
+      ]
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "backup bk-vault: last successful backup is 3 days old (max 2)",
+    "backup bk-exports: last successful backup is 6 days old (max 2)",
+    "asset vault-secrets: no ransomware or deletion restore scenario for a P0 asset",
+    "asset vault-secrets: restore rst-vault is 129 days old (max 90)",
+    "asset config-repo: restore rst-config result is 'partial'",
+    "asset logs-archive: no restore test",
+    "asset report-exports: no restore test"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resilience.local/schema/restore.schema.json",
+  "title": "Preuves de restauration",
+  "type": "object",
+  "required": ["version", "restores"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "restores": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "backup", "scenario", "last", "measured_rto", "measured_rpo", "result", "evidence", "owner"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "backup": { "type": "string", "minLength": 2 },
+          "scenario": { "enum": ["point_in_time", "full_loss", "region_loss", "deletion", "ransomware"] },
+          "last": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "measured_rto": { "type": "string", "pattern": "^(0|[0-9]+[smhd]([0-9]+[smhd])*)$" },
+          "measured_rpo": { "type": "string", "pattern": "^(0|[0-9]+[smhd]([0-9]+[smhd])*)$" },
+          "result": { "enum": ["passed", "partial", "failed"] },
+          "evidence": { "type": "string", "minLength": 2 },
+          "owner": { "type": "string", "minLength": 2 },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

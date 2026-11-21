@@ -1,0 +1,84 @@
+# Data asset inventory — SOURCE OF TRUTH
+# criticality   : P0 (critical) | P1 (important) | P2 (support)
+# classification: public | internal | confidential | restricted
+version: 1
+assets:
+  - id: pg-core
+    name: Base transactionnelle principale
+    category: database
+    criticality: P0
+    classification: confidential
+    owner: data-platform
+    provider: cloud eu-west-1
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: obj-lake
+    name: Lac de données objet
+    category: object_store
+    criticality: P0
+    classification: confidential
+    owner: data-platform
+    provider: multi-cloud (S3 + GCS)
+    region: eu-west-3
+    encryption_at_rest: true
+
+  - id: vault-secrets
+    name: Coffre de secrets
+    category: secrets
+    criticality: P0
+    classification: restricted
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: idp-db
+    name: Base d'identités
+    category: database
+    criticality: P0
+    classification: restricted
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: kafka-events
+    name: File d'événements
+    category: queue
+    criticality: P1
+    classification: internal
+    owner: data-platform
+    provider: cloud eu-west-3
+    region: eu-west-3
+    encryption_at_rest: true
+
+  - id: config-repo
+    name: Dépôt de configuration GitOps
+    category: config
+    criticality: P1
+    classification: internal
+    owner: platform
+    provider: Git SaaS
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: logs-archive
+    name: Archive des journaux d'audit
+    category: log
+    criticality: P2
+    classification: internal
+    owner: platform
+    provider: stockage objet froid
+    region: eu-west-3
+    encryption_at_rest: true
+
+  - id: report-exports
+    name: Exports de reporting
+    category: file_share
+    criticality: P2
+    classification: internal
+    owner: analytics-team
+    provider: partage de fichiers SaaS
+    region: europe-west1
+    encryption_at_rest: true

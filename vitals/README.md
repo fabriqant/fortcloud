@@ -91,7 +91,7 @@ Point the CLI at your own directory with `--model /path/to/your/model`. The exam
 version: 1
 services:
   - id: checkout
-    name: API de commande
+    name: Order API
     criticality: P0
     owner: commerce-team
 ```
@@ -102,7 +102,7 @@ services:
 version: 1
 signals:
   - id: sig-checkout-availability
-    name: Disponibilité de l'API commande
+    name: Order API availability
     kind: availability
     source: prometheus
     query: sum(rate(http_requests_total{job="checkout",code!~"5.."}[5m])) / sum(rate(http_requests_total{job="checkout"}[5m]))

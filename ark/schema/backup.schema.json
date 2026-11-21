@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://resilience.local/schema/backup.schema.json",
-  "title": "Politiques de sauvegarde",
+  "title": "Backup policies",
   "type": "object",
   "required": ["version", "backups"],
   "additionalProperties": false,

@@ -1,4 +1,4 @@
-"""Modèle de données et règles partagées de Fortcloud Ark."""
+"""Data model and shared rules for Fortcloud Ark."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import yaml
 
-# src/fortcloud_ark/core.py -> parents[2] est la racine du dossier de l'outil.
+# src/fortcloud_ark/core.py -> parents[2] is the tool's root folder.
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = ROOT / "examples" / "hybrid-multicloud" / "model"
@@ -27,20 +27,20 @@ FILES = {
 }
 
 CATEGORY_LABELS = {
-    "database": "Base de données",
-    "object_store": "Stockage objet",
-    "file_share": "Partage de fichiers",
-    "queue": "File d'événements",
+    "database": "Database",
+    "object_store": "Object store",
+    "file_share": "File share",
+    "queue": "Event queue",
     "config": "Configuration",
     "secrets": "Secrets",
-    "log": "Journaux",
+    "log": "Logs",
 }
 
 SCENARIO_LABELS = {
-    "point_in_time": "Restauration à un instant donné",
-    "full_loss": "Perte totale",
-    "region_loss": "Perte de région",
-    "deletion": "Suppression accidentelle",
+    "point_in_time": "Point-in-time restore",
+    "full_loss": "Full loss",
+    "region_loss": "Region loss",
+    "deletion": "Accidental deletion",
     "ransomware": "Ransomware",
 }
 
@@ -49,7 +49,7 @@ _UNIT_SECONDS = {"s": 1, "m": 60, "h": 3600, "d": 86400}
 
 
 def resolve_schema_dir(explicit: str | Path | None = None) -> Path:
-    """Trouve le dossier de schémas, même quand l'outil est installé hors du dépôt."""
+    """Find the schema directory, even when the tool is installed outside the repository."""
     if explicit:
         return Path(explicit)
     env_value = os.environ.get("FORTCLOUD_ARK_SCHEMA_DIR")
@@ -72,7 +72,7 @@ def load_yaml(path: Path):
 
 
 def load_model(model_dir: str | Path = DEFAULT_MODEL) -> dict:
-    """Charge les quatre collections YAML du modèle Ark."""
+    """Load the four YAML collections of the Ark model."""
     base = Path(model_dir)
     model = {}
     for key, (filename, _) in FILES.items():
@@ -95,7 +95,7 @@ def load_schema(key: str, schema_dir: str | Path | None = None) -> dict:
 
 
 def parse_duration(value) -> int | None:
-    """Convertit `0` ou une suite de `<nombre><s|m|h|d>` en secondes."""
+    """Convert `0` or a sequence of `<number><s|m|h|d>` into seconds."""
     if value is None:
         return None
     text = str(value).strip()
@@ -110,7 +110,7 @@ def parse_duration(value) -> int | None:
 
 
 def format_duration(seconds: int | None) -> str:
-    """Formatte en durée réutilisable comme valeur de modèle (`2m12s`)."""
+    """Format as a reusable duration for a model value (`2m12s`)."""
     if seconds is None:
         return "?"
     if seconds == 0:
@@ -171,7 +171,7 @@ def services_using_asset(model: dict, asset_id: str) -> list[dict]:
 
 
 def targets_for_asset(model: dict, asset_id: str) -> tuple[int | None, int | None]:
-    """RTO et RPO les plus serrés parmi les services qui utilisent l'actif."""
+    """Tightest RTO and RPO among the services that use the asset."""
     services = services_using_asset(model, asset_id)
     rto_values = [parse_duration(item.get("rto")) for item in services]
     rpo_values = [parse_duration(item.get("rpo")) for item in services]

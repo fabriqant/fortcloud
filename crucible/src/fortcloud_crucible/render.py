@@ -1,4 +1,4 @@
-"""Génération du plan de scénarios, de la matrice des rôles, du plan de communication et du rapport de vérification."""
+"""Generate the scenario plan, roles matrix, communication plan and verification report."""
 
 from __future__ import annotations
 

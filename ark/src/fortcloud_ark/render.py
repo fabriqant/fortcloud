@@ -1,4 +1,4 @@
-"""Génération de la matrice de couverture, des preuves de restauration et du plan."""
+"""Generate the backup coverage matrix, restore evidence, and recovery plan."""
 
 from __future__ import annotations
 

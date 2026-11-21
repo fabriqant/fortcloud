@@ -18,22 +18,22 @@ flow that depends on it — or blocks deployments for support components.
 
 | Component | Category | Criticality | Owner | Dependents | Risks | Action |
 |---|---|---|---|---|---|---|
-| `dns-global` — DNS global / résolution | Réseau | P0 | net-team | 4 | R-002 | Mettre en place un second fournisseur DNS anycast et tester une bascule complète. |
-| `idp-oidc` — Fournisseur d'identité OIDC | Identités | P0 | sec-team | 2 | R-001 | Fédérer un IdP de secours et tester le basculement. |
-| `network-hub` — Hub réseau inter-sites (on-prem) | Réseau | P0 | net-team | 3 | R-003 | Dupliquer le hub et activer BGP redondant. |
-| `payments-api` — API de paiement externe | Service externe | P0 | payments-team | 1 | R-007 | Négocier un SLA contractuel et un second processeur de paiement. |
-| `argocd` — Orchestrateur GitOps (Argo CD) | Orchestrateur | P1 | platform | 0 | R-006 | Passer à 2 replicas et restaurer depuis Git en moins de 8h. |
+| `dns-global` — Global DNS / name resolution | Network | P0 | net-team | 4 | R-002 | Deploy a second anycast DNS provider and test a full failover. |
+| `idp-oidc` — OIDC identity provider | Identity | P0 | sec-team | 2 | R-001 | Federate a backup IdP and test the failover. |
+| `network-hub` — Inter-site network hub (on-prem) | Network | P0 | net-team | 3 | R-003 | Duplicate the hub and enable redundant BGP. |
+| `payments-api` — External payments API | External service | P0 | payments-team | 1 | R-007 | Negotiate a contractual SLA and a second payment processor. |
+| `argocd` — GitOps orchestrator (Argo CD) | Orchestration | P1 | platform | 0 | R-006 | Run 2 replicas and restore from Git in under 8 hours. |
 
 ### P0 components in a single region
 
 | Component | Regions | Provider | Owner |
 |---|---|---|---|
-| `dns-global` | global | fournisseur DNS unique | net-team |
-| `idp-oidc` | eu-west-3 | SaaS unique | sec-team |
+| `dns-global` | global | single DNS provider | net-team |
+| `idp-oidc` | eu-west-3 | single SaaS | sec-team |
 | `k8s-control` | eu-west-1 | cloud (EKS eu-west-1) | platform |
 | `kafka-bus` | eu-west-3 | cloud (MSK eu-west-3) | data-platform |
 | `network-hub` | on-prem-dc1 | on-prem DC1 | net-team |
-| `payments-api` | eu-west-3 | tiers (SaaS) | payments-team |
+| `payments-api` | eu-west-3 | third party (SaaS) | payments-team |
 
 ## RTO / RPO matrix
 
@@ -41,17 +41,17 @@ RTO = maximum time to restore service. RPO = maximum acceptable data loss.
 
 | Flow | Criticality | Availability | RTO | RPO | Owner | Last restore test |
 |---|---|---|---|---|---|---|
-| `identity-auth` — Authentification des utilisateurs | P0 | 99.99% | 15m | 0 | sec-team | 18 d |
-| `order-to-cash` — Commande jusqu'à encaissement | P0 | 99.95% | 30m | 5m | commerce-team | 39 d |
-| `analytics-ingestion` — Ingestion analytique | P1 | 99.50% | 4h | 1h | data-platform | **98 d (stale)** |
-| `deploy-pipeline` — Chaîne de déploiement | P2 | 99.00% | 8h | 24h | platform | **142 d (stale)** |
+| `identity-auth` — User authentication | P0 | 99.99% | 15m | 0 | sec-team | 18 d |
+| `order-to-cash` — Order to cash | P0 | 99.95% | 30m | 5m | commerce-team | 39 d |
+| `analytics-ingestion` — Analytics ingestion | P1 | 99.50% | 4h | 1h | data-platform | **98 d (stale)** |
+| `deploy-pipeline` — Deployment pipeline | P2 | 99.00% | 8h | 24h | platform | **142 d (stale)** |
 
 ### Recovery strategies
 
-- **analytics-ingestion**: Replay des événements Kafka + réconciliation depuis pg-core ; perte acceptable limitée au lac.
-- **deploy-pipeline**: Re-apply des manifests depuis le dépôt Git ; aucune perte de données métier.
-- **identity-auth**: Sessions en cache local + IdP de secours en cours de déploiement ; RPO 0 car l'identité est sans état critique côté plateforme.
-- **order-to-cash**: Multi-AZ + réplication asynchrone vers DC secondaire + backups immuables + circuit breaker sur l'API de paiement.
+- **analytics-ingestion**: Kafka event replay + reconciliation from pg-core; acceptable loss limited to the lake.
+- **deploy-pipeline**: Re-apply manifests from the Git repository; no business data loss.
+- **identity-auth**: Local session cache + backup IdP being deployed; RPO 0 because identity has no critical state on the platform side.
+- **order-to-cash**: Multi-AZ + asynchronous replication to the secondary DC + immutable backups + circuit breaker on the payment API.
 
 ## Risk register
 
@@ -59,20 +59,20 @@ Sorted by descending score (likelihood × impact).
 
 | ID | Risk | Components | Score | Severity | Status | Owner | Due |
 |---|---|---|---|---|---|---|---|
-| R-007 | API de paiement externe indisponible | `payments-api` | 16 | critique | in_progress | payments-team | 2026-11-30 |
-| R-001 | Fournisseur d'identité unique | `idp-oidc` | 15 | critique | in_progress | sec-team | 2026-12-15 |
-| R-002 | DNS unique fournisseur | `dns-global` | 15 | critique | in_progress | net-team | 2026-12-20 |
-| R-004 | Bus d'événements mono-région | `kafka-bus` | 12 | élevé | in_progress | data-platform | 2026-12-10 |
-| R-003 | Hub réseau inter-sites unique | `network-hub` | 10 | élevé | open | net-team | 2026-12-31 |
-| R-005 | Plan de contrôle Kubernetes mono-région | `k8s-control` | 10 | élevé | open | platform | 2027-01-15 |
-| R-008 | Restauration analytique non validée | `obj-lake` | 9 | élevé | open | data-platform | 2026-12-05 |
-| R-006 | Orchestrateur GitOps en instance unique | `argocd` | 6 | modéré | in_progress | platform | 2026-11-30 |
+| R-007 | External payments API unavailable | `payments-api` | 16 | critical | in_progress | payments-team | 2026-11-30 |
+| R-001 | Single identity provider | `idp-oidc` | 15 | critical | in_progress | sec-team | 2026-12-15 |
+| R-002 | Single DNS provider | `dns-global` | 15 | critical | in_progress | net-team | 2026-12-20 |
+| R-004 | Single-region event bus | `kafka-bus` | 12 | high | in_progress | data-platform | 2026-12-10 |
+| R-003 | Single inter-site network hub | `network-hub` | 10 | high | open | net-team | 2026-12-31 |
+| R-005 | Single-region Kubernetes control plane | `k8s-control` | 10 | high | open | platform | 2027-01-15 |
+| R-008 | Analytics restore not validated | `obj-lake` | 9 | high | open | data-platform | 2026-12-05 |
+| R-006 | Single-instance GitOps orchestrator | `argocd` | 6 | moderate | in_progress | platform | 2026-11-30 |
 
 ### Critical action plans
 
-- **R-007 — API de paiement externe indisponible** (16): Négocier un SLA contractuel et un second processeur de paiement. — payments-team, due 2026-11-30.
-- **R-001 — Fournisseur d'identité unique** (15): Fédérer un IdP de secours et tester le basculement. — sec-team, due 2026-12-15.
-- **R-002 — DNS unique fournisseur** (15): Mettre en place un second fournisseur DNS anycast et tester une bascule complète. — net-team, due 2026-12-20.
+- **R-007 — External payments API unavailable** (16): Negotiate a contractual SLA and a second payment processor. — payments-team, due 2026-11-30.
+- **R-001 — Single identity provider** (15): Federate a backup IdP and test the failover. — sec-team, due 2026-12-15.
+- **R-002 — Single DNS provider** (15): Deploy a second anycast DNS provider and test a full failover. — net-team, due 2026-12-20.
 
 ## Restore tests to refresh
 

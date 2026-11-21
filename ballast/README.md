@@ -87,7 +87,7 @@ Point the CLI at your own directory with `--model /path/to/your/model`. The exam
 version: 1
 services:
   - id: checkout
-    name: API de commande
+    name: Order API
     criticality: P0
     owner: commerce-team
     latency_budget: 3s
@@ -99,7 +99,7 @@ services:
 version: 1
 dependencies:
   - id: dep-payment
-    name: Passerelle de paiement
+    name: Payment gateway
     type: http_api
     criticality: P0
     operation: write
@@ -132,7 +132,7 @@ policies:
 version: 1
 flows:
   - id: flow-checkout
-    name: Passage de commande
+    name: Order placement
     service: checkout
     steps:
       - dependency: dep-auth

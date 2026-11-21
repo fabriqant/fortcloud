@@ -19,7 +19,7 @@ verifier. The verifier signs off only after service and data checks pass.
 | Participant | Name | Team | Contact |
 |---|---|---|---|
 | `alice` | Alice Martin | platform-team | alice@example.com |
-| `bob` | Bernard Lefèvre | platform-team | bob@example.com |
+| `bob` | Bernard Lefevre | platform-team | bob@example.com |
 | `carol` | Carole Ndiaye | communications | carol@example.com |
 | `dave` | David Chen | sre | dave@example.com |
 | `erin` | Erin Novak | data-platform | erin@example.com |

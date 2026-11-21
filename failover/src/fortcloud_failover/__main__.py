@@ -1,4 +1,4 @@
-"""Point d'entrée `python -m fortcloud_failover`."""
+"""Entry point for `python -m fortcloud_failover`."""
 
 import sys
 

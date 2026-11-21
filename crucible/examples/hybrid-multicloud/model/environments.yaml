@@ -5,7 +5,7 @@
 version: 1
 environments:
   - id: sandbox
-    name: Bac à sable isolé
+    name: Isolated sandbox
     isolation: full
     data: synthetic
     owner: platform-team
@@ -14,7 +14,7 @@ environments:
     notes: The only place where a new scenario may run for the first time.
 
   - id: staging
-    name: Préproduction à données masquées
+    name: Masked-data staging
     isolation: partial
     data: masked
     owner: platform-team

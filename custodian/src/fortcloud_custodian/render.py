@@ -1,4 +1,4 @@
-"""Génération des matrices d'accès, d'inventaire, de contrôle des changements et d'audit."""
+"""Generate access matrices, inventories, change-control reports and audit trails."""
 
 from __future__ import annotations
 

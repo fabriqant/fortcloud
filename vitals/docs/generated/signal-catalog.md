@@ -7,13 +7,13 @@ and produce alerts nobody owns.
 
 | Signal | Kind | Source | Interval | Unit | Objectives | Last check | Status |
 |---|---|---|---|---|---|---|---|
-| `sig-auth-availability` — Disponibilité du service d'identité | Disponibilité | Datadog | 15s | percent | 1 | 2026-11-18 | OK |
-| `sig-auth-completeness` — Complétude des enregistrements d'identité | Complétude | Requête SQL | 5m | percent | 1 | 2026-07-15 | OK |
-| `sig-catalog-availability` — Disponibilité du catalogue | Disponibilité | CloudWatch | 15m | percent | 1 | 2026-11-18 | OK |
-| `sig-checkout-availability` — Disponibilité de l'API commande | Disponibilité | Prometheus | 30s | percent | 1 | 2026-11-18 | OK |
-| `sig-checkout-freshness` — Fraîcheur de la base commande | Fraîcheur | Requête SQL | 1m | duration | 1 | 2026-10-10 | OK |
-| `sig-checkout-latency` — Latence p99 de l'API commande | Latence | Prometheus | 15s | ms | 1 | 2026-11-18 | OK |
-| `sig-reporting-validity` — Validité des exports analytiques | Validité | Requête SQL | 1h | percent | 1 | 2026-11-18 | OK |
+| `sig-auth-availability` — Identity service availability | Availability | Datadog | 15s | percent | 1 | 2026-11-18 | OK |
+| `sig-auth-completeness` — Identity record completeness | Completeness | SQL query | 5m | percent | 1 | 2026-07-15 | OK |
+| `sig-catalog-availability` — Catalog availability | Availability | CloudWatch | 15m | percent | 1 | 2026-11-18 | OK |
+| `sig-checkout-availability` — Order API availability | Availability | Prometheus | 30s | percent | 1 | 2026-11-18 | OK |
+| `sig-checkout-freshness` — Order database freshness | Freshness | SQL query | 1m | duration | 1 | 2026-10-10 | OK |
+| `sig-checkout-latency` — Order API p99 latency | Latency | Prometheus | 15s | ms | 1 | 2026-11-18 | OK |
+| `sig-reporting-validity` — Analytics export validity | Validity | SQL query | 1h | percent | 1 | 2026-11-18 | OK |
 
 ## `sig-catalog-availability`
 

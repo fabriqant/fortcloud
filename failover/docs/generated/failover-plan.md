@@ -9,7 +9,7 @@ from a deterministic rule in `validate.py`; fix the model, not this file.
 
 - **Owner:** net-team
 - **Services:** `identity-auth`, `order-to-cash`
-- **Mode:** Actif/actif
+- **Mode:** Active/active
 - **Replication:** stateless
 - **Status:** COVERED
 
@@ -20,24 +20,24 @@ every topology change.
 
 - **Owner:** sec-team
 - **Services:** `identity-auth`, `order-to-cash`
-- **Mode:** Actif/passif
+- **Mode:** Active/passive
 - **Replication:** stateless
 - **Status:** AT RISK
 
 **Gaps:**
 
-- both instances use the same provider 'SaaS unique'.
+- both instances use the same provider 'single SaaS'.
 
 **Steps:**
 
-1. Fix: Both instances use the same provider 'SaaS unique'. Owner: sec-team.
+1. Fix: Both instances use the same provider 'single SaaS'. Owner: sec-team.
 2. Re-run `fortcloud-failover check --strict` and attach `failover-status.json` to the pull request.
 
 ## fo-vault — `vault-secrets` → `vault-secrets-dr`
 
 - **Owner:** sec-team
 - **Services:** `identity-auth`, `order-to-cash`
-- **Mode:** Actif/passif
+- **Mode:** Active/passive
 - **Replication:** sync
 - **Status:** AT RISK
 
@@ -56,7 +56,7 @@ every topology change.
 
 - **Owner:** data-platform
 - **Services:** `order-to-cash`
-- **Mode:** Actif/passif
+- **Mode:** Active/passive
 - **Replication:** async
 - **Status:** AT RISK
 

@@ -1,6 +1,6 @@
-# Vue C4 — conteneurs et frontières de panne
+# C4 view — containers and failure boundaries
 
-Niveau 2 : les composants du modèle répartis selon leurs frontières d'exécution. Les couleurs reprennent la criticité du [graphe des dépendances](../generated/dependency-graph.md).
+Level 2: the components of the model arranged by execution boundary. Colours follow the criticality of the [dependency graph](../generated/dependency-graph.md).
 
 ```mermaid
 flowchart TB
@@ -10,29 +10,29 @@ flowchart TB
 
   subgraph CLOUD_A["Cloud A — eu-west-3 / eu-west-1"]
     direction TB
-    pg["Base transactionnelle<br/>pg-core"]:::p0
-    kafka["Bus d'événements<br/>kafka-bus"]:::p0
-    k8s["Plan de contrôle K8s<br/>k8s-control"]:::p0
-    objA["Lac de données (réplique)<br/>obj-lake"]:::p0
-    idp["IdP SaaS<br/>idp-oidc"]:::p0
+    pg["Primary transactional DB<br/>pg-core"]:::p0
+    kafka["Event bus<br/>kafka-bus"]:::p0
+    k8s["Kubernetes control plane<br/>k8s-control"]:::p0
+    objA["Data lake (replica)<br/>obj-lake"]:::p0
+    idp["SaaS IdP<br/>idp-oidc"]:::p0
   end
 
   subgraph ONPREM["On-prem — DC1"]
     direction TB
-    hub["Hub réseau<br/>network-hub"]:::p0
+    hub["Network hub<br/>network-hub"]:::p0
     vault["Vault / KMS<br/>vault-secrets"]:::p1
     argo["Argo CD<br/>argocd"]:::p1
-    etl["Workers ETL<br/>etl-workers"]:::p1
-    obs["Observabilité<br/>observability"]:::p1
+    etl["ETL workers<br/>etl-workers"]:::p1
+    obs["Observability<br/>observability"]:::p1
   end
 
   subgraph CLOUD_B["Cloud B — europe-west1"]
-    objB["Lac de données (réplique)<br/>obj-lake"]:::p0
+    objB["Data lake (replica)<br/>obj-lake"]:::p0
   end
 
-  subgraph EXT["Externe"]
-    dns["DNS global<br/>dns-global"]:::p0
-    pay["API paiements<br/>payments-api"]:::p0
+  subgraph EXT["External"]
+    dns["Global DNS<br/>dns-global"]:::p0
+    pay["Payments API<br/>payments-api"]:::p0
   end
 
   etl --> kafka
@@ -51,13 +51,13 @@ flowchart TB
   obs -.-> etl
 ```
 
-## Frontières de panne
+## Failure boundaries
 
-| Frontière | Ce qu'elle protège | Ce qu'elle ne protège pas |
+| Boundary | What it protects | What it does not protect |
 |---|---|---|
-| Zones dans une région | Défaillance d'un serveur ou d'une AZ | Panne régionale, DNS, IdP |
-| Régions dans un cloud | Panne régionale | Panne du fournisseur cloud, identité partagée |
-| Deux clouds | Panne d'un fournisseur cloud | DNS unique, hub on-prem, IdP SaaS unique |
-| Site on-prem secondaire | Panne du DC principal | Dépendances SaaS partagées |
+| Zones within a region | A server or AZ failure | Regional outage, DNS, IdP |
+| Regions within a cloud | A regional outage | Cloud provider outage, shared identity |
+| Two clouds | One cloud provider failing | Single DNS, on-prem hub, single SaaS IdP |
+| Secondary on-prem site | Failure of the primary DC | Shared SaaS dependencies |
 
-Le modèle ne considère pas qu'une redondance est effective tant que le test de basculement correspondant n'est pas daté dans `model/flows.yaml`.
+The model does not consider redundancy effective until the corresponding failover test is dated in `model/flows.yaml`.

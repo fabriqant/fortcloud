@@ -1,4 +1,4 @@
-"""Génération du budget de timeout, de la matrice de policies et du plan."""
+"""Generation of the timeout budget, policy matrix, and resilience plan."""
 
 from __future__ import annotations
 

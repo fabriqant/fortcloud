@@ -4,7 +4,7 @@
 version: 1
 dependencies:
   - id: dep-auth
-    name: Service d'authentification
+    name: Authentication service
     type: http_api
     criticality: P0
     operation: read
@@ -12,7 +12,7 @@ dependencies:
     owner: sec-team
 
   - id: dep-inventory
-    name: Service d'inventaire
+    name: Inventory service
     type: grpc
     criticality: P0
     operation: read
@@ -20,7 +20,7 @@ dependencies:
     owner: inventory-team
 
   - id: dep-payment
-    name: Passerelle de paiement
+    name: Payment gateway
     type: http_api
     criticality: P0
     operation: write
@@ -29,7 +29,7 @@ dependencies:
     notes: Non-idempotent — must never be retried automatically.
 
   - id: dep-pricing
-    name: Moteur de tarification
+    name: Pricing engine
     type: http_api
     criticality: P1
     operation: read
@@ -37,7 +37,7 @@ dependencies:
     owner: pricing-team
 
   - id: dep-catalog
-    name: Base du catalogue
+    name: Catalog database
     type: database
     criticality: P1
     operation: read
@@ -45,7 +45,7 @@ dependencies:
     owner: catalog-team
 
   - id: dep-search
-    name: Index de recherche
+    name: Search index
     type: search
     criticality: P2
     operation: read
@@ -53,7 +53,7 @@ dependencies:
     owner: search-team
 
   - id: dep-audit
-    name: File d'événements d'audit
+    name: Audit event queue
     type: queue
     criticality: P2
     operation: write

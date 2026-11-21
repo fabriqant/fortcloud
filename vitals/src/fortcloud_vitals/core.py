@@ -1,4 +1,4 @@
-"""Modèle de données et calculs de budget d'erreur de Fortcloud Vitals."""
+"""Data model and error-budget calculations for Fortcloud Vitals."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import yaml
 
-# src/fortcloud_vitals/core.py -> parents[2] est la racine du dossier de l'outil.
+# src/fortcloud_vitals/core.py -> parents[2] is the tool folder root.
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = ROOT / "examples" / "hybrid-multicloud" / "model"
@@ -33,19 +33,19 @@ FILES = {
 }
 
 KIND_LABELS = {
-    "availability": "Disponibilité",
-    "latency": "Latence",
-    "freshness": "Fraîcheur",
-    "completeness": "Complétude",
-    "validity": "Validité",
+    "availability": "Availability",
+    "latency": "Latency",
+    "freshness": "Freshness",
+    "completeness": "Completeness",
+    "validity": "Validity",
 }
 
 SOURCE_LABELS = {
     "prometheus": "Prometheus",
     "datadog": "Datadog",
     "cloudwatch": "CloudWatch",
-    "sql": "Requête SQL",
-    "custom": "Personnalisé",
+    "sql": "SQL query",
+    "custom": "Custom",
 }
 
 _DURATION_PATTERN = re.compile(r"^(0|([0-9]+(ms|s|m|h|d))+)$")
@@ -54,7 +54,7 @@ _UNIT_MS = {"ms": 1, "s": 1000, "m": 60_000, "h": 3_600_000, "d": 86_400_000}
 
 
 def resolve_schema_dir(explicit: str | Path | None = None) -> Path:
-    """Trouve le dossier de schémas, même hors du dépôt."""
+    """Find the schema directory, even outside the repository."""
     if explicit:
         return Path(explicit)
     env_value = os.environ.get("FORTCLOUD_VITALS_SCHEMA_DIR")
@@ -77,7 +77,7 @@ def load_yaml(path: Path):
 
 
 def load_model(model_dir: str | Path = DEFAULT_MODEL) -> dict:
-    """Charge les quatre collections YAML du modèle Vitals."""
+    """Load the four YAML collections of the Vitals model."""
     base = Path(model_dir)
     model = {}
     for key, (filename, _) in FILES.items():
@@ -100,7 +100,7 @@ def load_schema(key: str, schema_dir: str | Path | None = None) -> dict:
 
 
 def parse_duration(value) -> int | None:
-    """Convertit `0` ou une suite de `<nombre><ms|s|m|h|d>` en millisecondes."""
+    """Convert `0` or a sequence of `<number><ms|s|m|h|d>` into milliseconds."""
     if value is None:
         return None
     text = str(value).strip()
@@ -114,7 +114,7 @@ def parse_duration(value) -> int | None:
 
 
 def format_duration(milliseconds) -> str:
-    """Formatte en durée réutilisable comme valeur de modèle (`43m12s`)."""
+    """Format as a duration reusable as a model value (`43m12s`)."""
     if milliseconds is None:
         return "?"
     milliseconds = int(round(milliseconds))
@@ -138,7 +138,7 @@ def format_duration(milliseconds) -> str:
 
 
 def format_duration_rounded(milliseconds) -> str:
-    """Formatte en secondes entières pour les libellés de rapport."""
+    """Format in whole seconds for report labels."""
     if milliseconds is None:
         return "?"
     return format_duration(int(round(milliseconds / 1000)) * 1000)
@@ -219,7 +219,7 @@ def latest_check(model: dict, objective_id: str) -> dict | None:
 
 
 def objective_metrics(model: dict, objective: dict) -> dict:
-    """Calcule budget d'erreur, marge d'alerte et intervalle maximal."""
+    """Compute the error budget, alert margin, and maximum sampling interval."""
     signals = signal_map(model)
     signal = signals.get(objective.get("signal"), {})
     kind = objective.get("kind")

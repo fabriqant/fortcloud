@@ -11,7 +11,7 @@ A drill that is not announced produces the same pages as a real outage. The mode
 ```yaml
 stakeholders:
   - id: support
-    name: Support client
+    name: Customer support
     channel: war-room
     notify: [start, update, end]
 ```

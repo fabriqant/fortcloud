@@ -1,4 +1,4 @@
-"""Point d'entrée `python -m fortcloud_ark`."""
+"""Entry point for `python -m fortcloud_ark`."""
 
 import sys
 

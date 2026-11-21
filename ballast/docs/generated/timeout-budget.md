@@ -9,12 +9,12 @@ backoff delays. It must stay below the service latency budget.
 
 | Flow | Service | Crit. | Steps | Budget | Worst case | Headroom | Usage | Status |
 |---|---|---|---|---|---|---|---|---|
-| `flow-browse` — Recherche catalogue | `catalog-browse` | P1 | 2 | 2s | 1s730ms | 270ms | 86% | AT RISK |
-| `flow-checkout` — Passage de commande | `checkout` | P0 | 3 | 3s | 1s500ms | 1s500ms | 50% | OK |
-| `flow-login` — Connexion utilisateur | `identity-auth` | P0 | 1 | 1s | 325ms | 675ms | 32% | OK |
-| `flow-reporting` — Consolidation des rapports | `checkout-reporting` | P2 | 2 | 5s | 3s | 2s | 60% | OK |
+| `flow-browse` — Catalog search | `catalog-browse` | P1 | 2 | 2s | 1s730ms | 270ms | 86% | AT RISK |
+| `flow-checkout` — Order placement | `checkout` | P0 | 3 | 3s | 1s500ms | 1s500ms | 50% | OK |
+| `flow-login` — User login | `identity-auth` | P0 | 1 | 1s | 325ms | 675ms | 32% | OK |
+| `flow-reporting` — Report consolidation | `checkout-reporting` | P2 | 2 | 5s | 3s | 2s | 60% | OK |
 
-## `flow-browse` — Recherche catalogue
+## `flow-browse` — Catalog search
 
 - **Service:** `catalog-browse`
 - **Budget:** 2s
@@ -24,11 +24,11 @@ backoff delays. It must stay below the service latency budget.
 
 | # | Dependency | Type | Policy | Worst case | Share |
 |---|---|---|---|---|---|
-| 1 | `dep-catalog` | Base de données | `pol-catalog` | 1s480ms | 74% |
-| 2 | `dep-search` | Moteur de recherche | `pol-search` | 250ms | 12% |
+| 1 | `dep-catalog` | Database | `pol-catalog` | 1s480ms | 74% |
+| 2 | `dep-search` | Search engine | `pol-search` | 250ms | 12% |
 
 
-## `flow-checkout` — Passage de commande
+## `flow-checkout` — Order placement
 
 - **Service:** `checkout`
 - **Budget:** 3s
@@ -43,7 +43,7 @@ backoff delays. It must stay below the service latency budget.
 | 3 | `dep-payment` | API HTTP | `pol-payment` | 500ms | 17% |
 
 
-## `flow-login` — Connexion utilisateur
+## `flow-login` — User login
 
 - **Service:** `identity-auth`
 - **Budget:** 1s
@@ -56,7 +56,7 @@ backoff delays. It must stay below the service latency budget.
 | 1 | `dep-auth` | API HTTP | `pol-auth` | 325ms | 32% |
 
 
-## `flow-reporting` — Consolidation des rapports
+## `flow-reporting` — Report consolidation
 
 - **Service:** `checkout-reporting`
 - **Budget:** 5s
@@ -67,7 +67,7 @@ backoff delays. It must stay below the service latency budget.
 | # | Dependency | Type | Policy | Worst case | Share |
 |---|---|---|---|---|---|
 | 1 | `dep-pricing` | API HTTP | `pol-pricing` | 1s200ms | 24% |
-| 2 | `dep-audit` | File d'événements | `pol-audit` | 1s800ms | 36% |
+| 2 | `dep-audit` | Event queue | `pol-audit` | 1s800ms | 36% |
 
 ## Links
 

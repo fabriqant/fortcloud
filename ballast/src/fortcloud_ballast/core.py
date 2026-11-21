@@ -1,4 +1,4 @@
-"""Modèle de données et calculs partagés de Fortcloud Ballast."""
+"""Data model and shared calculations for Fortcloud Ballast."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-# src/fortcloud_ballast/core.py -> parents[2] est la racine du dossier de l'outil.
+# src/fortcloud_ballast/core.py -> parents[2] is the tool's root directory.
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = ROOT / "examples" / "hybrid-multicloud" / "model"
@@ -27,30 +27,30 @@ FILES = {
 }
 
 TYPE_LABELS = {
-    "database": "Base de données",
+    "database": "Database",
     "cache": "Cache",
     "http_api": "API HTTP",
     "grpc": "gRPC",
-    "queue": "File d'événements",
-    "search": "Moteur de recherche",
+    "queue": "Event queue",
+    "search": "Search engine",
 }
 
 FALLBACK_LABELS = {
-    "none": "aucun",
-    "cached": "données en cache",
-    "default": "valeur par défaut",
-    "degraded": "mode dégradé",
-    "queue": "mise en file d'attente",
+    "none": "None",
+    "cached": "Cached data",
+    "default": "Default value",
+    "degraded": "Degraded mode",
+    "queue": "Queuing",
 }
 
-# Les timeouts étant souvent sub-secondaires, toutes les durées sont stockées en ms.
+# Since timeouts are often sub-second, all durations are stored in ms.
 _DURATION_PATTERN = re.compile(r"^(0|([0-9]+(ms|s|m|h|d))+)$")
 _TOKEN_PATTERN = re.compile(r"([0-9]+)(ms|s|m|h|d)")
 _UNIT_MS = {"ms": 1, "s": 1000, "m": 60_000, "h": 3_600_000, "d": 86_400_000}
 
 
 def resolve_schema_dir(explicit: str | Path | None = None) -> Path:
-    """Trouve le dossier de schémas, même quand l'outil est installé hors du dépôt."""
+    """Find the schema directory, even when the tool is installed outside the repository."""
     if explicit:
         return Path(explicit)
     env_value = os.environ.get("FORTCLOUD_BALLAST_SCHEMA_DIR")
@@ -73,7 +73,7 @@ def load_yaml(path: Path):
 
 
 def load_model(model_dir: str | Path = DEFAULT_MODEL) -> dict:
-    """Charge les quatre collections YAML du modèle Ballast."""
+    """Load the four YAML collections of the Ballast model."""
     base = Path(model_dir)
     model = {}
     for key, (filename, _) in FILES.items():
@@ -96,7 +96,7 @@ def load_schema(key: str, schema_dir: str | Path | None = None) -> dict:
 
 
 def parse_duration(value) -> int | None:
-    """Convertit `0` ou une suite de `<nombre><ms|s|m|h|d>` en millisecondes."""
+    """Convert `0` or a sequence of `<number><ms|s|m|h|d>` to milliseconds."""
     if value is None:
         return None
     text = str(value).strip()
@@ -110,7 +110,7 @@ def parse_duration(value) -> int | None:
 
 
 def format_duration(milliseconds: int | None) -> str:
-    """Formatte en durée réutilisable comme valeur de modèle (`1m30s`, `150ms`)."""
+    """Format a duration that can be reused as a model value (`1m30s`, `150ms`)."""
     if milliseconds is None:
         return "?"
     if milliseconds == 0:
@@ -164,7 +164,7 @@ def flows_using_dependency(model: dict, dependency_id: str) -> list[dict]:
 
 
 def worst_case_ms(policy: dict) -> int:
-    """Temps maximale d'une étape : tentatives + backoff exponentiel."""
+    """Maximum time for a step: attempts plus exponential backoff."""
     timeout = parse_duration(policy.get("timeout")) or 0
     retries = policy.get("retries", 0)
     backoff = parse_duration(policy.get("backoff")) or 0
@@ -195,7 +195,7 @@ def utilization(model: dict, flow: dict) -> float | None:
 
 
 def dominant_step(model: dict, flow: dict) -> tuple[dict, float] | None:
-    """Retourne l'étape qui consomme la plus grande part du budget."""
+    """Return the step that consumes the largest share of the budget."""
     budget = budget_ms(model, flow)
     if not budget:
         return None

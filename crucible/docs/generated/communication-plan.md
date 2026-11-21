@@ -14,16 +14,16 @@ start, send periodic updates and close the exercise explicitly.
 
 | Channel | Name | Type | Audience | Owner | Status |
 |---|---|---|---|---|---|
-| `exec-bridge` | Pont de direction | bridge | external | communications | OK |
-| `war-room` | Salon d'exercice | slack | internal | communications | OK |
+| `exec-bridge` | Executive bridge | bridge | external | communications | OK |
+| `war-room` | Exercise war room | slack | internal | communications | OK |
 
 ## Stakeholders
 
 | Stakeholder | Channel | Notified at | Status |
 |---|---|---|---|
-| `data-team` — Équipe données | `war-room` | start, update, end | OK |
-| `leadership` — Direction | `exec-bridge` | start, end | OK |
-| `support` — Support client | `war-room` | start, update, end | OK |
+| `data-team` — Data team | `war-room` | start, update, end | OK |
+| `leadership` — Leadership | `exec-bridge` | start, end | OK |
+| `support` — Customer support | `war-room` | start, update, end | OK |
 
 ## Plan gaps
 

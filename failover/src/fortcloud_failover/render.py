@@ -1,4 +1,4 @@
-"""Génération de la matrice de couverture, du plan de remediation et des drills."""
+"""Generation of the coverage matrix, remediation plan and drills."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Point d'entrée `python -m fortcloud_ballast`."""
+"""Entry point for `python -m fortcloud_ballast`."""
 
 import sys
 

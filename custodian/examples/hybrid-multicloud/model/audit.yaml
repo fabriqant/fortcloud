@@ -3,7 +3,7 @@
 version: 1
 sinks:
   - id: sink-siem
-    name: SIEM centralisé
+    name: Centralized SIEM
     type: siem
     destination: https://siem.example.com/events
     retention_days: 365
@@ -11,7 +11,7 @@ sinks:
     owner: sec-team
 
   - id: sink-archive
-    name: Archive d'audit
+    name: Audit archive
     type: object-storage
     destination: s3://audit-logs/custodian/
     retention_days: 2555
@@ -20,7 +20,7 @@ sinks:
 
 operations:
   - id: op-grant-change
-    name: Attribution et révocation de privilèges
+    name: Granting and revoking privileges
     kind: grant_change
     environment: prod
     logged: true
@@ -31,7 +31,7 @@ operations:
     owner: sec-team
 
   - id: op-secret-access
-    name: Lecture des secrets de production
+    name: Reading production secrets
     kind: secret_access
     environment: prod
     logged: true
@@ -42,7 +42,7 @@ operations:
     owner: sec-team
 
   - id: op-deploy
-    name: Déploiements en production
+    name: Production deployments
     kind: deploy
     environment: prod
     logged: true
@@ -53,7 +53,7 @@ operations:
     owner: platform-team
 
   - id: op-pipeline-change
-    name: Modification des pipelines
+    name: Pipeline changes
     kind: pipeline_change
     environment: prod
     logged: true
@@ -64,7 +64,7 @@ operations:
     owner: platform-team
 
   - id: op-infra-change
-    name: Changements d'infrastructure en préproduction
+    name: Infrastructure changes in staging
     kind: infra_change
     environment: staging
     logged: true

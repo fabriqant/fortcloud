@@ -4,14 +4,14 @@ PYTHON ?= python
 PIP ?= $(PYTHON) -m pip
 
 help:
-	@echo "Fortcloud Atlas — commandes disponibles :"
-	@echo "  make install   Installe le paquet en mode éditable"
-	@echo "  make validate  Valide le modèle d'exemple"
-	@echo "  make graph     Génère docs/generated/dependency-graph.md"
-	@echo "  make report    Génère docs/generated/resilience-report.md"
-	@echo "  make check     Valide et génère les deux artefacts"
-	@echo "  make test      Lance les tests unitaires"
-	@echo "  make clean     Nettoie les caches Python"
+	@echo "Fortcloud Atlas — available commands:"
+	@echo "  make install   Install the package in editable mode"
+	@echo "  make validate  Validate the example model"
+	@echo "  make graph     Generate docs/generated/dependency-graph.md"
+	@echo "  make report    Generate docs/generated/resilience-report.md"
+	@echo "  make check     Validate and generate both artifacts"
+	@echo "  make test      Run the unit tests"
+	@echo "  make clean     Remove Python caches"
 
 install:
 	$(PIP) install -e .

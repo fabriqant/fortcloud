@@ -54,7 +54,7 @@ Generated files are **disposable**: they are rebuilt every time. Never edit `doc
 
 ```yaml
 - id: pg-core                       # short unique name used by other files
-  name: Base transactionnelle       # human-readable name
+  name: Primary transactional database   # human-readable name
   category: storage                 # storage | processing | orchestration | network | identity | external_service
   criticality: P0                   # P0 critical, P1 important, P2 support
   owner: data-platform              # team accountable for it
@@ -81,7 +81,7 @@ A **component** is any piece the system relies on — including a SaaS product y
   to: dns-global          # the component it NEEDS
   kind: dns               # data | control | identity | network | dns | secret | config
   required: true          # false = the graph draws a dotted arrow
-  description: Résolution des noms internes et externes du cluster.
+  description: Internal and external name resolution for the cluster.
 ```
 
 The direction is the most common mistake: the arrow goes **from the consumer to the provider**. If four components point at `dns-global`, a DNS outage breaks all four. That is the **blast radius**.
@@ -94,7 +94,7 @@ The direction is the most common mistake: the arrow goes **from the consumer to 
   availability_target: 99.95%       # normal-operation target
   rto: 30m                          # max time to restore the service
   rpo: 5m                           # max acceptable data loss
-  strategy: Multi-AZ + réplication asynchrone + backups immuables...
+  strategy: Multi-AZ + async replication + immutable backups...
   components: [pg-core, kafka-bus, idp-oidc, payments-api, dns-global]
   steps: [...]                      # the narrative of the flow
   external_dependencies: [payments-api]
@@ -107,16 +107,16 @@ Durations are `0` or a number followed by `s`, `m`, `h` or `d`. Quote `"0"` in Y
 
 ```yaml
 - id: R-002                         # format R-001, R-002, ...
-  title: DNS unique fournisseur
+  title: Single DNS provider
   components: [dns-global]
   flows: [order-to-cash, identity-auth]
-  failure_mode: Panne du fournisseur DNS — toutes les résolutions échouent.
+  failure_mode: DNS provider outage — every name resolution fails.
   likelihood: 3                     # 1 rare ... 5 frequent
   impact: 5                         # 1 low ... 5 critical
   status: in_progress               # open | in_progress | mitigated | accepted | closed
   owner: net-team
-  mitigations: [TTL courts sur les enregistrements critiques]
-  action: Mettre en place un second fournisseur DNS anycast et tester une bascule.
+  mitigations: [Short TTLs on critical records]
+  action: Deploy a second anycast DNS provider and test a full failover.
   target_date: "2026-12-20"
 ```
 

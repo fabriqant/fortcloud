@@ -1,4 +1,4 @@
-"""Modèle de données et helpers d'analyse de Fortcloud Custodian."""
+"""Data model and analysis helpers for Fortcloud Custodian."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import yaml
 
-# src/fortcloud_custodian/core.py -> parents[2] est la racine du dossier de l'outil.
+# src/fortcloud_custodian/core.py -> parents[2] is the tool's root folder.
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = ROOT / "examples" / "hybrid-multicloud" / "model"
@@ -30,13 +30,13 @@ REQUIRED_TESTS = ("unit", "integration")
 
 CLASSIFICATION_LABELS = {
     "public": "Public",
-    "internal": "Interne",
-    "confidential": "Confidentiel",
-    "restricted": "Restreint",
+    "internal": "Internal",
+    "confidential": "Confidential",
+    "restricted": "Restricted",
 }
 
 PRINCIPAL_LABELS = {
-    "human": "Humain",
+    "human": "Human",
     "service": "Service",
     "ci": "CI",
 }
@@ -50,11 +50,11 @@ STORE_LABELS = {
 }
 
 KIND_LABELS = {
-    "grant_change": "Changement d'accès",
-    "secret_access": "Lecture de secret",
-    "deploy": "Déploiement",
-    "pipeline_change": "Changement de pipeline",
-    "infra_change": "Changement d'infrastructure",
+    "grant_change": "Access change",
+    "secret_access": "Secret read",
+    "deploy": "Deployment",
+    "pipeline_change": "Pipeline change",
+    "infra_change": "Infrastructure change",
 }
 
 FILES = {
@@ -64,17 +64,17 @@ FILES = {
     "audit": ("audit.yaml", "audit.schema.json"),
 }
 
-# Clé racine YAML portant la collection de chaque fichier de modèle.
+# YAML root key holding the collection of each model file.
 ROOT_KEYS = {
-    "access": None,      # le document entier (environments, principals, grants)
+    "access": None,      # the whole document (environments, principals, grants)
     "secrets": "secrets",
     "changes": "pipelines",
-    "audit": None,       # le document entier (sinks, operations)
+    "audit": None,       # the whole document (sinks, operations)
 }
 
 
 def resolve_schema_dir(explicit: str | Path | None = None) -> Path:
-    """Trouve le dossier de schémas, même hors du dépôt."""
+    """Find the schema directory, even outside the repository."""
     if explicit:
         return Path(explicit)
     env_value = os.environ.get("FORTCLOUD_CUSTODIAN_SCHEMA_DIR")
@@ -97,7 +97,7 @@ def load_yaml(path: Path):
 
 
 def load_model(model_dir: str | Path = DEFAULT_MODEL) -> dict:
-    """Charge les quatre collections YAML du modèle Custodian."""
+    """Load the four YAML collections of the Custodian model."""
     base = Path(model_dir)
     model = {}
     for key, (filename, _) in FILES.items():
@@ -188,7 +188,7 @@ def is_wildcard(permission: str | None) -> bool:
 
 
 def crosses_environment(resource: str, environment: str, other_environments) -> bool:
-    """Vrai si une ressource explicite vise un autre environnement déclaré."""
+    """True if an explicit resource targets another declared environment."""
     text = str(resource)
     for other in other_environments:
         if other == environment:

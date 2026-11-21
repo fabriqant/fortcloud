@@ -25,9 +25,9 @@ class CoreTests(unittest.TestCase):
 
     def test_risk_scoring(self):
         self.assertEqual(core.risk_score({"likelihood": 4, "impact": 4}), 16)
-        self.assertEqual(core.severity(16), "critique")
-        self.assertEqual(core.severity(10), "élevé")
-        self.assertEqual(core.severity(3), "faible")
+        self.assertEqual(core.severity(16), "critical")
+        self.assertEqual(core.severity(10), "high")
+        self.assertEqual(core.severity(3), "low")
 
     def test_restore_test_age(self):
         today = date(2026, 11, 20)

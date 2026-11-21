@@ -4,7 +4,7 @@
 version: 1
 pipelines:
   - id: pipe-checkout-prod
-    name: Déploiement commande en production
+    name: Checkout deployment in production
     environment: prod
     trigger: tag
     deployer: ci-deploy
@@ -20,7 +20,7 @@ pipelines:
       automate: true
 
   - id: pipe-checkout-staging
-    name: Déploiement commande en préproduction
+    name: Checkout deployment in staging
     environment: staging
     trigger: pull_request
     deployer: ci-staging
@@ -36,7 +36,7 @@ pipelines:
       automate: true
 
   - id: pipe-reporting-prod
-    name: Déploiement analytique en production
+    name: Analytics deployment in production
     environment: prod
     trigger: manual
     deployer: ci-deploy
@@ -53,7 +53,7 @@ pipelines:
     notes: Single approver and stale rollback verification.
 
   - id: pipe-legacy-prod
-    name: Déploiement historique en production
+    name: Legacy deployment in production
     environment: prod
     trigger: manual
     deployer: ci-legacy

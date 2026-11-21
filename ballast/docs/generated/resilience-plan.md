@@ -5,7 +5,7 @@
 Ordered by criticality, then by the tightest latency budget. Fix the model,
 not this file.
 
-## flow:flow-browse — Recherche catalogue
+## flow:flow-browse — Catalog search
 
 - **Owner:** catalog-team
 - **Service:** `catalog-browse` (P1)
@@ -14,7 +14,7 @@ not this file.
 1. Fix: Step 'dep-catalog' consumes 74% of the latency budget.
 2. Re-run `fortcloud-ballast check --strict` and attach `ballast-status.json` to the pull request.
 
-## policy:pol-audit — File d'événements d'audit
+## policy:pol-audit — Audit event queue
 
 - **Owner:** platform
 - **Dependency:** `dep-audit` (P2)
@@ -23,7 +23,7 @@ not this file.
 2. Fix: Circuit breaker reset_timeout 1m exceeds 30s.
 3. Re-run `fortcloud-ballast check --strict`.
 
-## policy:pol-pricing — Moteur de tarification
+## policy:pol-pricing — Pricing engine
 
 - **Owner:** pricing-team
 - **Dependency:** `dep-pricing` (P1)
@@ -32,7 +32,7 @@ not this file.
 2. Fix: Backoff multiplier 1 is below 2 (insufficient backoff).
 3. Re-run `fortcloud-ballast check --strict`.
 
-## policy:pol-search — Index de recherche
+## policy:pol-search — Search index
 
 - **Owner:** search-team
 - **Dependency:** `dep-search` (P2)

@@ -9,137 +9,137 @@ dependencies:
     to: dns-global
     kind: dns
     required: true
-    description: Résolution des noms internes et externes du cluster.
+    description: Internal and external name resolution for the cluster.
 
   - id: d-002
     from: pg-core
     to: dns-global
     kind: dns
     required: true
-    description: Résolution des endpoints de réplication.
+    description: Endpoint resolution for replication.
 
   - id: d-003
     from: idp-oidc
     to: dns-global
     kind: dns
     required: true
-    description: Publication des endpoints OIDC / discovery.
+    description: Publication of the OIDC discovery endpoints.
 
   - id: d-004
     from: payments-api
     to: dns-global
     kind: dns
     required: true
-    description: Résolution publique de l'API externe.
+    description: Public resolution of the external API.
 
   - id: d-005
     from: pg-core
     to: network-hub
     kind: network
     required: true
-    description: Lien inter-sites pour la réplication vers le DC.
+    description: Inter-site link for replication to the DC.
 
   - id: d-006
     from: k8s-control
     to: network-hub
     kind: network
     required: true
-    description: Connectivité des workloads hybrides.
+    description: Connectivity for hybrid workloads.
 
   - id: d-007
     from: etl-workers
     to: network-hub
     kind: network
     required: true
-    description: Accès aux sources on-prem.
+    description: Access to on-prem sources.
 
   - id: d-008
     from: k8s-control
     to: idp-oidc
     kind: identity
     required: true
-    description: Authentification des utilisateurs et des service accounts.
+    description: Authentication of users and service accounts.
 
   - id: d-009
     from: pg-core
     to: idp-oidc
     kind: identity
     required: true
-    description: Contrôle d'accès via rôles fédérés.
+    description: Access control via federated roles.
 
   - id: d-010
     from: idp-oidc
     to: vault-secrets
     kind: secret
     required: true
-    description: Stockage des clés de signature et des certificats.
+    description: Storage of signing keys and certificates.
 
   - id: d-011
     from: pg-core
     to: vault-secrets
     kind: secret
     required: true
-    description: Récupération des identifiants de base de données.
+    description: Retrieval of database credentials.
 
   - id: d-012
     from: etl-workers
     to: vault-secrets
     kind: secret
     required: true
-    description: Récupération des tokens de traitement.
+    description: Retrieval of processing tokens.
 
   - id: d-013
     from: etl-workers
     to: k8s-control
     kind: control
     required: true
-    description: Ordonnancement et redémarrage des pods.
+    description: Pod scheduling and restart.
 
   - id: d-014
     from: argocd
     to: k8s-control
     kind: control
     required: true
-    description: Application des manifests GitOps.
+    description: Application of GitOps manifests.
 
   - id: d-015
     from: etl-workers
     to: kafka-bus
     kind: data
     required: true
-    description: Consommation des événements entrants.
+    description: Consumption of incoming events.
 
   - id: d-016
     from: kafka-bus
     to: pg-core
     kind: data
     required: true
-    description: Capture des changements (CDC) depuis la base.
+    description: Change data capture (CDC) from the database.
 
   - id: d-017
     from: etl-workers
     to: obj-lake
     kind: data
     required: true
-    description: Écriture des données transformées dans le lac.
+    description: Write of transformed data to the lake.
 
   - id: d-018
     from: etl-workers
     to: payments-api
     kind: data
     required: true
-    description: Appel de l'API de paiement externe.
+    description: Call to the external payment API.
 
   - id: d-019
     from: pg-core
     to: observability
     kind: control
     required: false
-    description: Export des métriques et alertes.
+    description: Export of metrics and alerts.
 
   - id: d-020
     from: etl-workers
     to: observability
     kind: control
     required: false
-    description: Traces et logs de traitement.
+    description: Processing traces and logs.

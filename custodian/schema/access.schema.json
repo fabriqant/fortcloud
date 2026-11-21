@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://resilience.local/schema/access.schema.json",
-  "title": "Environnements, identités et privilèges",
+  "title": "Environments, identities and privileges",
   "type": "object",
   "required": ["version", "environments", "principals", "grants"],
   "additionalProperties": false,

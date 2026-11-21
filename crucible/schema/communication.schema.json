@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://resilience.local/schema/communication.schema.json",
-  "title": "Plan de communication des exercices",
+  "title": "Exercise communication plan",
   "type": "object",
   "required": ["version", "channels", "stakeholders", "plan"],
   "additionalProperties": false,

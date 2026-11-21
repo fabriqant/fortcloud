@@ -7,10 +7,10 @@ tests, an identified deployer and a verified, automated rollback.
 
 | Pipeline | Env | Trigger | Deployer | Review | Approvers | Tests | Rollback | Mode | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| `pipe-checkout-prod` — Déploiement commande en production | `prod` | tag | `ci-deploy` | yes | 2 | unit, integration, security, e2e | yes | auto | OK |
-| `pipe-checkout-staging` — Déploiement commande en préproduction | `staging` | pull_request | `ci-staging` | yes | 1 | unit, integration, security | yes | auto | OK |
-| `pipe-legacy-prod` — Déploiement historique en production | `prod` | manual | `ci-legacy` | yes | 2 | unit, integration, security | yes | manual | AT RISK |
-| `pipe-reporting-prod` — Déploiement analytique en production | `prod` | manual | `ci-deploy` | yes | 1 | unit, integration, security | yes | auto | AT RISK |
+| `pipe-checkout-prod` — Checkout deployment in production | `prod` | tag | `ci-deploy` | yes | 2 | unit, integration, security, e2e | yes | auto | OK |
+| `pipe-checkout-staging` — Checkout deployment in staging | `staging` | pull_request | `ci-staging` | yes | 1 | unit, integration, security | yes | auto | OK |
+| `pipe-legacy-prod` — Legacy deployment in production | `prod` | manual | `ci-legacy` | yes | 2 | unit, integration, security | yes | manual | AT RISK |
+| `pipe-reporting-prod` — Analytics deployment in production | `prod` | manual | `ci-deploy` | yes | 1 | unit, integration, security | yes | auto | AT RISK |
 
 ## `pipe-legacy-prod`
 

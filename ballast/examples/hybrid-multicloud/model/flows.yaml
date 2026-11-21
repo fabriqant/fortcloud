@@ -4,7 +4,7 @@
 version: 1
 flows:
   - id: flow-checkout
-    name: Passage de commande
+    name: Order placement
     service: checkout
     steps:
       - dependency: dep-auth
@@ -15,14 +15,14 @@ flows:
         policy: pol-payment
 
   - id: flow-login
-    name: Connexion utilisateur
+    name: User login
     service: identity-auth
     steps:
       - dependency: dep-auth
         policy: pol-auth
 
   - id: flow-browse
-    name: Recherche catalogue
+    name: Catalog search
     service: catalog-browse
     steps:
       - dependency: dep-catalog
@@ -31,7 +31,7 @@ flows:
         policy: pol-search
 
   - id: flow-reporting
-    name: Consolidation des rapports
+    name: Report consolidation
     service: checkout-reporting
     steps:
       - dependency: dep-pricing

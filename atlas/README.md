@@ -111,7 +111,7 @@ dependencies:
     to: dns-global
     kind: dns
     required: true
-    description: Résolution des noms internes et externes du cluster.
+    description: Internal and external name resolution for the cluster.
 ```
 
 `flows.yaml` — the business promise, with an RTO/RPO that must be credible:
@@ -120,13 +120,13 @@ dependencies:
 version: 1
 flows:
   - id: order-to-cash
-    name: Commande jusqu'à encaissement
+    name: Order to cash
     criticality: P0
     owner: commerce-team
     availability_target: 99.95%
     rto: 30m
     rpo: 5m
-    strategy: Multi-AZ + réplication asynchrone + backups immuables + circuit breaker.
+    strategy: Multi-AZ + async replication + immutable backups + circuit breaker.
     components: [pg-core, kafka-bus, idp-oidc, payments-api, dns-global]
     external_dependencies: [payments-api]
     last_restore_test: "2026-10-12"
@@ -151,9 +151,9 @@ And the FMEA register, sorted by descending score:
 
 | ID | Risk | Score | Severity | Status | Owner | Due |
 |---|---|---|---|---|---|---|
-| R-007 | API de paiement externe indisponible | 16 | critique | in_progress | payments-team | 2026-11-30 |
-| R-001 | Fournisseur d'identité unique | 15 | critique | in_progress | sec-team | 2026-12-15 |
-| R-002 | DNS unique fournisseur | 15 | critique | in_progress | net-team | 2026-12-20 |
+| R-007 | External payments API unavailable | 16 | critical | in_progress | payments-team | 2026-11-30 |
+| R-001 | Single identity provider | 15 | critical | in_progress | sec-team | 2026-12-15 |
+| R-002 | Single DNS provider | 15 | critical | in_progress | net-team | 2026-12-20 |
 
 The bundled example intentionally contains 11 warnings (stale restore tests, single-region P0s, open critical risks) so you can see the checks in action. Your own clean model should produce none.
 

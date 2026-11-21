@@ -76,9 +76,9 @@ fortcloud-atlas validate --strict
 
 | Symptom | Fix |
 |---|---|
-| `Schema introuvable` | Run from the repo root, or pass `--schema-dir /path/to/schema`, or set `FORTCLOUD_ATLAS_SCHEMA_DIR` |
-| `Fichier de modèle introuvable` | Check `--model`: it must contain all four YAML files |
-| `P0 en instance unique sans risque actif` | Add a `risks.yaml` entry referencing the component with an owner and an action |
+| `Schema not found` | Run from the repo root, or pass `--schema-dir /path/to/schema`, or set `FORTCLOUD_ATLAS_SCHEMA_DIR` |
+| `Model file not found` | Check `--model`: it must contain all four YAML files |
+| `P0 single instance without an active risk` | Add a `risks.yaml` entry referencing the component with an owner and an action |
 | `availability_target does not match ...` | Use two decimals, e.g. `99.95%` |
 | `rpo is not of type string` | Quote it: `rpo: "0"` |
 

@@ -1,4 +1,4 @@
-"""Génération du graphe Mermaid et du rapport de résilience."""
+"""Mermaid graph and resilience report generation."""
 
 from __future__ import annotations
 

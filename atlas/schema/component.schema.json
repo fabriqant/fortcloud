@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://resilience.local/schema/component.schema.json",
-  "title": "Inventaire des composants",
+  "title": "Component inventory",
   "type": "object",
   "required": ["version", "components"],
   "additionalProperties": false,

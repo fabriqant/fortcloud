@@ -7,10 +7,10 @@ window). Record the measured time and attach evidence to the pull request.
 
 | Strategy | Primary | Standby | Mode | Last drill | Evidence |
 |---|---|---|---|---|---|
-| `fo-dns` | `dns-global` | `dns-global-dr` | Actif/actif | 24 d | https://ci.example.com/drills/fo-dns-17 |
-| `fo-idp` | `idp-oidc` | `idp-oidc-dr` | Actif/passif | 16 d | https://ci.example.com/drills/fo-idp-42 |
-| `fo-pg` | `pg-core` | `pg-core-dr` | Actif/passif | 40 d (partial) | https://ci.example.com/drills/fo-pg-31 |
-| `fo-vault` | `vault-secrets` | `vault-secrets-dr` | Actif/passif | **129 d (stale)** | https://ci.example.com/drills/fo-vault-08 |
+| `fo-dns` | `dns-global` | `dns-global-dr` | Active/active | 24 d | https://ci.example.com/drills/fo-dns-17 |
+| `fo-idp` | `idp-oidc` | `idp-oidc-dr` | Active/passive | 16 d | https://ci.example.com/drills/fo-idp-42 |
+| `fo-pg` | `pg-core` | `pg-core-dr` | Active/passive | 40 d (partial) | https://ci.example.com/drills/fo-pg-31 |
+| `fo-vault` | `vault-secrets` | `vault-secrets-dr` | Active/passive | **129 d (stale)** | https://ci.example.com/drills/fo-vault-08 |
 
 ## fo-dns — loss of `dns-global`
 

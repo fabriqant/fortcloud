@@ -7,15 +7,15 @@ how many times to retry, when to open the circuit and where to isolate it.
 
 | Policy | Dependency | Type | Crit. | Timeout | Retries | Worst case | Breaker | Bulkhead | Fallback | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `pol-audit` | `dep-audit` | File d'événements | P2 | 500ms | 2 | 1s800ms | yes | audit-pool | mise en file d'attente | AT RISK |
-| `pol-auth` | `dep-auth` | API HTTP | P0 | 150ms | 1 | 325ms | yes | auth-pool | aucun | OK |
-| `pol-catalog` | `dep-catalog` | Base de données | P1 | 300ms | 3 | 1s480ms | yes | catalog-pool | données en cache | OK |
-| `pol-inventory` | `dep-inventory` | gRPC | P0 | 200ms | 2 | 675ms | yes | inventory-pool | données en cache | OK |
-| `pol-payment` | `dep-payment` | API HTTP | P0 | 500ms | 0 | 500ms | yes | payment-pool | mise en file d'attente | OK |
-| `pol-pricing` | `dep-pricing` | API HTTP | P1 | 200ms | 4 | 1s200ms | yes | pricing-pool | mode dégradé | AT RISK |
-| `pol-search` | `dep-search` | Moteur de recherche | P2 | 250ms | 0 | 250ms | **no** | **none** | aucun | AT RISK |
+| `pol-audit` | `dep-audit` | Event queue | P2 | 500ms | 2 | 1s800ms | yes | audit-pool | Queuing | AT RISK |
+| `pol-auth` | `dep-auth` | API HTTP | P0 | 150ms | 1 | 325ms | yes | auth-pool | None | OK |
+| `pol-catalog` | `dep-catalog` | Database | P1 | 300ms | 3 | 1s480ms | yes | catalog-pool | Cached data | OK |
+| `pol-inventory` | `dep-inventory` | gRPC | P0 | 200ms | 2 | 675ms | yes | inventory-pool | Cached data | OK |
+| `pol-payment` | `dep-payment` | API HTTP | P0 | 500ms | 0 | 500ms | yes | payment-pool | Queuing | OK |
+| `pol-pricing` | `dep-pricing` | API HTTP | P1 | 200ms | 4 | 1s200ms | yes | pricing-pool | Degraded mode | AT RISK |
+| `pol-search` | `dep-search` | Search engine | P2 | 250ms | 0 | 250ms | **no** | **none** | None | AT RISK |
 
-## `pol-audit` — File d'événements d'audit
+## `pol-audit` — Audit event queue
 
 - **Owner:** platform
 - **Operation:** write (idempotent)
@@ -26,7 +26,7 @@ how many times to retry, when to open the circuit and where to isolate it.
 - **Note:** No jitter and a slow breaker reset.
 
 
-## `pol-catalog` — Base du catalogue
+## `pol-catalog` — Catalog database
 
 - **Owner:** catalog-team
 - **Operation:** read (idempotent)
@@ -35,7 +35,7 @@ how many times to retry, when to open the circuit and where to isolate it.
 - **Note:** Dominates the browse latency budget.
 
 
-## `pol-inventory` — Service d'inventaire
+## `pol-inventory` — Inventory service
 
 - **Owner:** inventory-team
 - **Operation:** read (idempotent)
@@ -44,7 +44,7 @@ how many times to retry, when to open the circuit and where to isolate it.
 - **Note:** Stale inventory is acceptable for a checkout decision.
 
 
-## `pol-payment` — Passerelle de paiement
+## `pol-payment` — Payment gateway
 
 - **Owner:** payments-team
 - **Operation:** write (**non-idempotent**)
@@ -53,7 +53,7 @@ how many times to retry, when to open the circuit and where to isolate it.
 - **Note:** No retries on a non-idempotent charge.
 
 
-## `pol-pricing` — Moteur de tarification
+## `pol-pricing` — Pricing engine
 
 - **Owner:** pricing-team
 - **Operation:** read (idempotent)
@@ -64,7 +64,7 @@ how many times to retry, when to open the circuit and where to isolate it.
 - **Note:** Too many retries with no exponential backoff.
 
 
-## `pol-search` — Index de recherche
+## `pol-search` — Search index
 
 - **Owner:** search-team
 - **Operation:** read (idempotent)

@@ -50,4 +50,4 @@ strategies:
     automated: false
     runbook: ../../docs/templates/drill.md
     owner: data-platform
-    notes: TTL DNS supérieur au RTO et bascule manuelle — volontairement détecté.
+    notes: DNS TTL above the RTO and manual switchover — intentionally flagged.

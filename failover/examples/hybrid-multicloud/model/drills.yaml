@@ -28,7 +28,7 @@ drills:
     result: passed
     evidence: https://ci.example.com/drills/fo-vault-08
     owner: sec-team
-    notes: Ancien drill — doit être rejoué avant la prochaine revue.
+    notes: Old drill — must be rerun before the next review.
 
   - id: drill-pg
     strategy: fo-pg
@@ -38,4 +38,4 @@ drills:
     result: partial
     evidence: https://ci.example.com/drills/fo-pg-31
     owner: data-platform
-    notes: Bascule réussie mais TTL DNS trop long — résultat partiel.
+    notes: Switchover succeeded but DNS TTL was too long — partial result.

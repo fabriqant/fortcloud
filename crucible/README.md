@@ -119,7 +119,7 @@ participants:
     team: sre
 scenarios:
   - id: ex-restore-sandbox
-    name: Restauration de l'API commande
+    name: Checkout API restore
     kind: restore
     environment: sandbox
     system: checkout
@@ -173,13 +173,13 @@ From `scenario-plan.md`:
 
 | Scenario | Kind | Env | Controlled | Scheduled | Status | RTO | Status |
 |---|---|---|---|---|---|---|---|
-| `ex-restore-sandbox` | Restauration | `sandbox` | yes | 2026-11-25 | Réussi | 30m | OK |
-| `ex-restore-prod` | Restauration | `prod` | no | 2026-11-20 | Échoué | 30m | AT RISK |
+| `ex-restore-sandbox` | Restore | `sandbox` | yes | 2026-11-25 | Passed | 30m | OK |
+| `ex-restore-prod` | Restore | `prod` | no | 2026-11-20 | Failed | 30m | AT RISK |
 
 And from `verification-report.md`:
 
-- `ex-failover-staging` — Réussi: **VERIFIED**
-- `ex-failover-prod` — Planifié: **PENDING**
+- `ex-failover-staging` — Passed: **VERIFIED**
+- `ex-failover-prod` — Planned: **PENDING**
 
 The bundled example intentionally contains 6 warnings so you can see the checks in action. Once your own model is clean, run `check --strict` in CI.
 

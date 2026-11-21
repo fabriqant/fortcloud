@@ -15,7 +15,7 @@ Fortcloud Custodian turns a hand-maintained YAML model of identities, secrets, d
 | **Apply least privilege** | `access.yaml` → `grants` | Explicit permissions, no wildcards, permission count, expiry, approved elevated roles |
 | **Separate environments** | `access.yaml` → `environments`, `principals`, `grants` | One identity per environment, grants inside the principal scope, no cross-environment resources, isolated secrets |
 | **Protect secrets** | `secrets.yaml` | References only (never values), rotation policy and age, environment isolation, declared consumers |
-| **Journaliser les opérations sensibles** | `audit.yaml` | Every sensitive operation logged into a declared, immutable, durable sink with fresh evidence |
+| **Log sensitive operations** | `audit.yaml` | Every sensitive operation logged into a declared, immutable, durable sink with fresh evidence |
 | **Automate deployments with review, tests and rollback** | `changes.yaml` | Required review, enough approvers, unit + integration + security tests, scoped deployer, verified automated rollback |
 
 [← Back to the Fortcloud-io family README](../README.md) · [Previous tool: Fortcloud Vitals](../vitals/README.md) · [Next tool: Fortcloud Crucible](../crucible/README.md) — rehearse the outage before it happens.
@@ -159,7 +159,7 @@ grants:
 version: 1
 secrets:
   - id: sec-checkout-db
-    name: Mot de passe de la base commande
+    name: Checkout database password
     store: vault
     reference: vault://prod/checkout/db
     environments: [prod]
@@ -175,7 +175,7 @@ secrets:
 version: 1
 pipelines:
   - id: pipe-checkout-prod
-    name: Déploiement commande en production
+    name: Checkout deployment in production
     environment: prod
     trigger: tag
     deployer: ci-deploy
@@ -197,7 +197,7 @@ pipelines:
 version: 1
 sinks:
   - id: sink-siem
-    name: SIEM centralisé
+    name: Centralized SIEM
     type: siem
     destination: https://siem.example.com/events
     retention_days: 365
@@ -205,7 +205,7 @@ sinks:
     owner: sec-team
 operations:
   - id: op-deploy
-    name: Déploiements en production
+    name: Production deployments
     kind: deploy
     environment: prod
     logged: true

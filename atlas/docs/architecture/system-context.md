@@ -1,35 +1,35 @@
-# Vue C4 — contexte système
+# C4 view — system context
 
-Niveau 1 : la plateforme dans son environnement. Les systèmes externes sont des sources de risque hors de notre contrôle direct.
+Level 1: the platform in its environment. External systems are sources of risk outside our direct control.
 
 ```mermaid
 C4Context
-  title Contexte système — plateforme hybride / multi-cloud
+  title System context — hybrid / multi-cloud platform
 
-  Person(user, "Utilisateur interne", "Passe commande, consulte les tableaux de bord")
-  Person(ops, "Équipe d'ingénierie", "Déploie, exploite, restaure")
+  Person(user, "Internal user", "Places orders, reads dashboards")
+  Person(ops, "Engineering team", "Deploys, operates, restores")
 
-  System(platform, "Plateforme métier", "Commandes, traitements, analytique")
-  System_Ext(idp, "Fournisseur d'identité", "OIDC — SaaS unique (SPOF)")
-  System_Ext(payments, "API de paiement", "Tiers — SLA contractuel requis")
-  System_Ext(dns, "DNS public", "Fournisseur unique (SPOF)")
-  System_Ext(ci, "Dépôt Git / CI", "Source des manifests et des artefacts")
+  System(platform, "Business platform", "Orders, processing, analytics")
+  System_Ext(idp, "Identity provider", "OIDC — single SaaS (SPOF)")
+  System_Ext(payments, "Payments API", "Third party — contractual SLA required")
+  System_Ext(dns, "Public DNS", "Single provider (SPOF)")
+  System_Ext(ci, "Git repository / CI", "Source of manifests and artifacts")
 
-  Rel(user, platform, "Utilise", "HTTPS")
-  Rel(platform, idp, "Authentifie", "OIDC")
-  Rel(platform, payments, "Débite", "HTTPS")
-  Rel(platform, dns, "Résout les noms", "DNS")
-  Rel(ci, platform, "Déploie via GitOps")
-  Rel(ops, platform, "Exploite et restaure")
-  Rel(ops, ci, "Modifie le modèle et le code")
+  Rel(user, platform, "Uses", "HTTPS")
+  Rel(platform, idp, "Authenticates via", "OIDC")
+  Rel(platform, payments, "Charges", "HTTPS")
+  Rel(platform, dns, "Resolves names via", "DNS")
+  Rel(ci, platform, "Deploys via GitOps")
+  Rel(ops, platform, "Operates and restores")
+  Rel(ops, ci, "Changes the model and code")
 
   UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="2")
 ```
 
-> Le rendu C4 de Mermaid nécessite une version récente (≥ 9). Le graphe détaillé des composants est dans [dependency-graph.md](../generated/dependency-graph.md).
+> Mermaid C4 rendering requires a recent version (≥ 9). The detailed component graph is in [dependency-graph.md](../generated/dependency-graph.md).
 
-## Lectures
+## Reading this view
 
-- L'utilisateur ne voit que la plateforme : une panne de l'IdP, du DNS ou de l'API de paiement se traduit pour lui par une panne de la plateforme.
-- L'équipe d'ingénierie est elle-même dépendante du dépôt Git/CI pour rétablir : à inclure dans l'analyse des SPOF si la CI est hébergée chez un tiers.
-- Les flux et leurs objectifs sont détaillés dans `model/flows.yaml` et le [rapport de résilience](../generated/resilience-report.md).
+- The user only sees the platform: an IdP, DNS or payments API outage looks like a platform outage to them.
+- The engineering team also depends on the Git/CI repository to recover: include it in the SPOF analysis if CI is hosted by a third party.
+- Flows and their objectives are detailed in `model/flows.yaml` and the [resilience report](../generated/resilience-report.md).

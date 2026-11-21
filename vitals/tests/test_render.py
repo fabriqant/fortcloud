@@ -23,7 +23,7 @@ class RenderTests(unittest.TestCase):
         document = render.build_signals(self.model, TODAY)
         self.assertIn("sig-auth-availability", document)
         self.assertIn("Datadog", document)
-        self.assertIn("Requête SQL", document)
+        self.assertIn("SQL query", document)
 
     def test_plan_contains_gaps_and_definition_of_done(self):
         document = render.build_plan(self.model, TODAY)

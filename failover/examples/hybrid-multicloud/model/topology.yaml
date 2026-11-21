@@ -6,23 +6,23 @@
 version: 1
 topology:
   - id: idp-oidc
-    name: Fournisseur d'identité OIDC
+    name: OIDC identity provider
     criticality: P0
     owner: sec-team
-    provider: SaaS unique
+    provider: single SaaS
     region: eu-west-1
     zone: az1
     role: primary
     pair: idp
     capacity: 100
     health_check: https://idp.internal/healthz
-    notes: Sessions stateless côté plateforme — RPO 0 tenable.
+    notes: Platform-side stateless sessions — RPO 0 is achievable.
 
   - id: idp-oidc-dr
-    name: Fournisseur d'identité OIDC (secours)
+    name: OIDC identity provider (standby)
     criticality: P0
     owner: sec-team
-    provider: SaaS unique
+    provider: single SaaS
     region: eu-west-3
     zone: az1
     role: standby
@@ -31,10 +31,10 @@ topology:
     health_check: https://idp-dr.internal/healthz
 
   - id: dns-global
-    name: DNS global / résolution
+    name: Global DNS / resolution
     criticality: P0
     owner: net-team
-    provider: fournisseur DNS A
+    provider: DNS provider A
     region: global-a
     zone: anycast
     role: primary
@@ -43,10 +43,10 @@ topology:
     health_check: https://dns-a.internal/health
 
   - id: dns-global-dr
-    name: DNS global (second fournisseur)
+    name: Global DNS (second provider)
     criticality: P0
     owner: net-team
-    provider: fournisseur DNS B
+    provider: DNS provider B
     region: global-b
     zone: anycast
     role: standby
@@ -55,7 +55,7 @@ topology:
     health_check: https://dns-b.internal/health
 
   - id: vault-secrets
-    name: Coffre de secrets
+    name: Secrets vault
     criticality: P0
     owner: sec-team
     provider: SaaS
@@ -67,7 +67,7 @@ topology:
     health_check: https://vault.internal/v1/health
 
   - id: vault-secrets-dr
-    name: Coffre de secrets (réplica)
+    name: Secrets vault (replica)
     criticality: P0
     owner: sec-team
     provider: SaaS
@@ -77,10 +77,10 @@ topology:
     pair: vault
     capacity: 100
     health_check: https://vault-dr.internal/v1/health
-    notes: Réplication synchrone mais drill régional à rafraîchir.
+    notes: Synchronous replication, but the regional drill needs refreshing.
 
   - id: pg-core
-    name: Base transactionnelle principale
+    name: Primary transactional database
     criticality: P0
     owner: data-platform
     provider: cloud eu-west-1
@@ -92,7 +92,7 @@ topology:
     health_check: https://pg.internal/health
 
   - id: pg-core-dr
-    name: Base transactionnelle (secours)
+    name: Transactional database (standby)
     criticality: P0
     owner: data-platform
     provider: cloud eu-west-3
@@ -102,10 +102,10 @@ topology:
     pair: pg
     capacity: 50
     health_check: https://pg-dr.internal/health
-    notes: Capacité réduite en secours — à dimensionner avant la prochaine revue.
+    notes: Reduced standby capacity — size it before the next review.
 
   - id: kafka-bus
-    name: Bus d'événements
+    name: Event bus
     criticality: P1
     owner: data-platform
     provider: cloud eu-west-3
@@ -117,7 +117,7 @@ topology:
     health_check: https://kafka.internal/health
 
   - id: obj-lake
-    name: Lac de données objet
+    name: Object data lake
     criticality: P1
     owner: data-platform
     provider: multi-cloud

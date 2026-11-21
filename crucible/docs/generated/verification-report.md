@@ -26,9 +26,9 @@ data were checked, with evidence and an approved verifier sign-off.
 
 ## Exercise verdicts
 
-- `ex-failover-prod` — Planifié: PENDING.
-- `ex-failover-staging` — Réussi: VERIFIED.
-- `ex-recovery-prod` — Planifié: PENDING.
-- `ex-recovery-sandbox` — Réussi: PENDING.
-- `ex-restore-prod` — Échoué: PENDING.
-- `ex-restore-sandbox` — Réussi: VERIFIED.
+- `ex-failover-prod` — Planned: PENDING.
+- `ex-failover-staging` — Passed: VERIFIED.
+- `ex-recovery-prod` — Planned: PENDING.
+- `ex-recovery-sandbox` — Passed: PENDING.
+- `ex-restore-prod` — Failed: PENDING.
+- `ex-restore-sandbox` — Passed: VERIFIED.

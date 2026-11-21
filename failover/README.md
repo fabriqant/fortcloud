@@ -85,7 +85,7 @@ Point the CLI at your own directory with `--model /path/to/your/model`. The exam
 version: 1
 topology:
   - id: pg-core
-    name: Base transactionnelle principale
+    name: Primary transactional database
     criticality: P0
     owner: data-platform
     provider: cloud eu-west-1
@@ -103,7 +103,7 @@ topology:
 version: 1
 services:
   - id: order-to-cash
-    name: Commande jusqu'à encaissement
+    name: Order to cash
     criticality: P0
     owner: commerce-team
     rto: 30m

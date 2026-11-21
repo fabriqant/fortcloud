@@ -11,7 +11,7 @@ participants:
     contact: alice@example.com
 
   - id: bob
-    name: Bernard Lefèvre
+    name: Bernard Lefevre
     team: platform-team
     contact: bob@example.com
 
@@ -32,7 +32,7 @@ participants:
 
 scenarios:
   - id: ex-restore-sandbox
-    name: Restauration de l'API commande
+    name: Checkout API restore
     kind: restore
     environment: sandbox
     system: checkout
@@ -55,7 +55,7 @@ scenarios:
         role: verifier
 
   - id: ex-failover-staging
-    name: Bascule du service d'identité
+    name: Identity service failover
     kind: failover
     environment: staging
     system: identity-auth
@@ -78,7 +78,7 @@ scenarios:
         role: verifier
 
   - id: ex-recovery-sandbox
-    name: Reprise du reporting analytique
+    name: Analytical reporting recovery
     kind: recovery
     environment: sandbox
     system: reporting
@@ -102,7 +102,7 @@ scenarios:
     notes: A long drill window; shorten it before the next edition.
 
   - id: ex-restore-prod
-    name: Restauration de l'API commande en production
+    name: Checkout API restore in production
     kind: restore
     environment: prod
     system: checkout
@@ -126,7 +126,7 @@ scenarios:
     notes: Failed drill — the finding must be fixed before the next attempt.
 
   - id: ex-failover-prod
-    name: Bascule du service d'identité en production
+    name: Identity service failover in production
     kind: failover
     environment: prod
     system: identity-auth
@@ -149,7 +149,7 @@ scenarios:
         role: verifier
 
   - id: ex-recovery-prod
-    name: Reprise du reporting en production
+    name: Reporting recovery in production
     kind: recovery
     environment: prod
     system: reporting

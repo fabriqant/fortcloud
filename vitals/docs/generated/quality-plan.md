@@ -8,7 +8,7 @@ Ordered by service criticality. Fix the model, not this file.
 
 - **Owner:** sec-team
 - **Service:** `identity-auth` (P0)
-- **Signal:** `sig-auth-completeness` (Requête SQL)
+- **Signal:** `sig-auth-completeness` (SQL query)
 
 1. Fix: Alert fires after 80% of the error budget is spent (max 50%).
 2. Fix: Last check is 129 days old (max 90).
@@ -29,7 +29,7 @@ Ordered by service criticality. Fix the model, not this file.
 
 - **Owner:** analytics-team
 - **Service:** `reporting` (P2)
-- **Signal:** `sig-reporting-validity` (Requête SQL)
+- **Signal:** `sig-reporting-validity` (SQL query)
 
 1. Fix: Signal interval 1h is too coarse (max 20m10s).
 2. Fix: Result is 'failed'.

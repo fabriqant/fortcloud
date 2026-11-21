@@ -1,4 +1,4 @@
-"""Modèle de données et helpers de planification de Fortcloud Crucible."""
+"""Data model and planning helpers for Fortcloud Crucible."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import yaml
 
-# src/fortcloud_crucible/core.py -> parents[2] est la racine du dossier de l'outil.
+# src/fortcloud_crucible/core.py -> parents[2] is the tool's root folder.
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = ROOT / "examples" / "hybrid-multicloud" / "model"
@@ -30,23 +30,23 @@ CHECK_KINDS = ("service", "data")
 CHECK_RESULTS = ("passed", "failed", "pending")
 
 KIND_LABELS = {
-    "restore": "Restauration",
-    "failover": "Bascule",
-    "recovery": "Reprise après incident",
+    "restore": "Restore",
+    "failover": "Failover",
+    "recovery": "Recovery",
 }
 
 ROLE_LABELS = {
-    "coordinator": "Coordinateur",
-    "operator": "Opérateur",
-    "communicator": "Communication",
-    "verifier": "Vérification",
+    "coordinator": "Coordinator",
+    "operator": "Operator",
+    "communicator": "Communicator",
+    "verifier": "Verification",
 }
 
 STATUS_LABELS = {
-    "planned": "Planifié",
-    "running": "En cours",
-    "passed": "Réussi",
-    "failed": "Échoué",
+    "planned": "Planned",
+    "running": "In progress",
+    "passed": "Passed",
+    "failed": "Failed",
 }
 
 FILES = {
@@ -69,7 +69,7 @@ _UNIT_MS = {"ms": 1, "s": 1000, "m": 60_000, "h": 3_600_000, "d": 86_400_000}
 
 
 def resolve_schema_dir(explicit: str | Path | None = None) -> Path:
-    """Trouve le dossier de schémas, même hors du dépôt."""
+    """Find the schema directory, even outside the repository."""
     if explicit:
         return Path(explicit)
     env_value = os.environ.get("FORTCLOUD_CRUCIBLE_SCHEMA_DIR")
@@ -92,7 +92,7 @@ def load_yaml(path: Path):
 
 
 def load_model(model_dir: str | Path = DEFAULT_MODEL) -> dict:
-    """Charge les quatre collections YAML du modèle Crucible."""
+    """Load the four YAML collections of the Crucible model."""
     base = Path(model_dir)
     model = {}
     for key, (filename, _) in FILES.items():
@@ -119,7 +119,7 @@ def load_schema(key: str, schema_dir: str | Path | None = None) -> dict:
 
 
 def parse_duration(value) -> int | None:
-    """Convertit `0` ou une suite de `<nombre><ms|s|m|h|d>` en millisecondes."""
+    """Convert `0` or a sequence of `<number><ms|s|m|h|d>` into milliseconds."""
     if value is None:
         return None
     text = str(value).strip()
@@ -133,7 +133,7 @@ def parse_duration(value) -> int | None:
 
 
 def format_duration(milliseconds) -> str:
-    """Formatte en durée réutilisable comme valeur de modèle (`1h30m`)."""
+    """Format as a reusable duration for model values (`1h30m`)."""
     if milliseconds is None:
         return "?"
     milliseconds = int(round(milliseconds))
@@ -207,7 +207,7 @@ def signoff_map(model: dict) -> dict:
 
 
 def is_controlled(environment: dict | None) -> bool:
-    """Un environnement contrôlé est isolé, non-productif et approuvé."""
+    """A controlled environment is isolated, non-production and approved."""
     if not environment:
         return False
     return (
@@ -218,7 +218,7 @@ def is_controlled(environment: dict | None) -> bool:
 
 
 def controlled_first_evidence(model: dict, scenario: dict) -> dict | None:
-    """Dernier exercice du même type réussi dans un environnement contrôlé."""
+    """Latest passed exercise of the same kind in a controlled environment."""
     envs = env_map(model)
     candidates = [
         item

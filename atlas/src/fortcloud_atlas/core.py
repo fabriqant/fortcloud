@@ -1,4 +1,4 @@
-"""Modèle de données et règles partagées de Fortcloud Atlas."""
+"""Shared data model and rules for Fortcloud Atlas."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-# src/fortcloud_atlas/core.py -> parents[2] est la racine du dépôt.
+# src/fortcloud_atlas/core.py -> parents[2] is the repository root.
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = ROOT / "examples" / "hybrid-multicloud" / "model"
@@ -24,17 +24,17 @@ FILES = {
 }
 
 CATEGORY_LABELS = {
-    "storage": "Stockage",
-    "processing": "Traitements",
-    "orchestration": "Orchestrateur",
-    "network": "Réseau",
-    "identity": "Identités",
-    "external_service": "Service externe",
+    "storage": "Storage",
+    "processing": "Processing",
+    "orchestration": "Orchestration",
+    "network": "Network",
+    "identity": "Identity",
+    "external_service": "External service",
 }
 
 
 def resolve_schema_dir(explicit: str | Path | None = None) -> Path:
-    """Trouve le dossier de schémas, même quand l'outil est installé hors du dépôt."""
+    """Find the schema directory, including outside the repository."""
     if explicit:
         return Path(explicit)
     env_value = os.environ.get("FORTCLOUD_ATLAS_SCHEMA_DIR")
@@ -57,7 +57,7 @@ def load_yaml(path: Path):
 
 
 def load_model(model_dir: str | Path = DEFAULT_MODEL) -> dict:
-    """Charge les quatre collections YAML du modèle."""
+    """Load the four YAML collections of the model."""
     base = Path(model_dir)
     model = {}
     for key, (filename, _) in FILES.items():
@@ -85,21 +85,21 @@ def risk_score(risk: dict) -> int:
 
 def severity(score: int) -> str:
     if score >= 15:
-        return "critique"
+        return "critical"
     if score >= 8:
-        return "élevé"
+        return "high"
     if score >= 4:
-        return "modéré"
-    return "faible"
+        return "moderate"
+    return "low"
 
 
 def is_spof(component: dict) -> bool:
-    """Un composant en instance unique est un point de défaillance unique."""
+    """A single-instance component is a single point of failure."""
     return component["redundancy"]["instances"] == 1
 
 
 def is_single_region_p0(component: dict) -> bool:
-    """Un composant P0 sur une seule région reste vulnérable à une panne régionale."""
+    """A single-region P0 component remains exposed to a regional outage."""
     return component["criticality"] == "P0" and len(component["regions"]) < 2
 
 

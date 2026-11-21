@@ -29,7 +29,7 @@
       "switchover_seconds": 150,
       "rto_budget_seconds": 900,
       "issues": [
-        "both instances use the same provider 'SaaS unique'"
+        "both instances use the same provider 'single SaaS'"
       ]
     },
     {
@@ -61,7 +61,7 @@
   ],
   "errors": [],
   "warnings": [
-    "strategy fo-idp: both instances use the same provider 'SaaS unique'",
+    "strategy fo-idp: both instances use the same provider 'single SaaS'",
     "strategy fo-vault: both instances use the same provider 'SaaS'",
     "strategy fo-vault: drill drill-vault is 129 days old (max 90)",
     "strategy fo-pg: standby capacity 50 is lower than primary capacity 100",

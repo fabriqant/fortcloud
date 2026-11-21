@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://resilience.local/schema/dependency.schema.json",
-  "title": "Graphe des dépendances",
+  "title": "Dependency graph",
   "type": "object",
   "required": ["version", "dependencies"],
   "additionalProperties": false,

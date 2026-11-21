@@ -4,7 +4,7 @@
 version: 1
 signals:
   - id: sig-checkout-availability
-    name: Disponibilité de l'API commande
+    name: Order API availability
     kind: availability
     source: prometheus
     query: sum(rate(http_requests_total{job="checkout",code!~"5.."}[5m])) / sum(rate(http_requests_total{job="checkout"}[5m]))
@@ -13,7 +13,7 @@ signals:
     owner: commerce-team
 
   - id: sig-checkout-latency
-    name: Latence p99 de l'API commande
+    name: Order API p99 latency
     kind: latency
     source: prometheus
     query: histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job="checkout"}[5m])) by (le))
@@ -22,7 +22,7 @@ signals:
     owner: commerce-team
 
   - id: sig-checkout-freshness
-    name: Fraîcheur de la base commande
+    name: Order database freshness
     kind: freshness
     source: sql
     query: SELECT now() - max(updated_at) FROM orders
@@ -31,7 +31,7 @@ signals:
     owner: data-platform
 
   - id: sig-auth-availability
-    name: Disponibilité du service d'identité
+    name: Identity service availability
     kind: availability
     source: datadog
     query: avg:trace.http.request.errors{service:identity-auth}
@@ -40,7 +40,7 @@ signals:
     owner: sec-team
 
   - id: sig-auth-completeness
-    name: Complétude des enregistrements d'identité
+    name: Identity record completeness
     kind: completeness
     source: sql
     query: SELECT count(*) FILTER (WHERE email IS NULL) / count(*) FROM identities
@@ -49,7 +49,7 @@ signals:
     owner: sec-team
 
   - id: sig-catalog-availability
-    name: Disponibilité du catalogue
+    name: Catalog availability
     kind: availability
     source: cloudwatch
     query: Availability +{service=catalog-browse}
@@ -59,7 +59,7 @@ signals:
     notes: Sampled too coarsely for the declared error budget.
 
   - id: sig-reporting-validity
-    name: Validité des exports analytiques
+    name: Analytics export validity
     kind: validity
     source: sql
     query: SELECT count(*) FILTER (WHERE amount < 0) / count(*) FROM daily_exports

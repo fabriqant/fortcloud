@@ -1,4 +1,4 @@
-"""Point d'entrée `python -m fortcloud_crucible`."""
+"""Entry point for `python -m fortcloud_crucible`."""
 
 import sys
 

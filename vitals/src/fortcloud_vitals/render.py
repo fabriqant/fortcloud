@@ -1,4 +1,4 @@
-"""Génération du tableau de bord SLO, du catalogue de signaux et du plan."""
+"""Generation of the SLO dashboard, signal catalog, and quality plan."""
 
 from __future__ import annotations
 

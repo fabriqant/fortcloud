@@ -4,7 +4,7 @@
 version: 1
 assets:
   - id: pg-core
-    name: Base transactionnelle principale
+    name: Primary transactional database
     category: database
     criticality: P0
     classification: confidential
@@ -14,7 +14,7 @@ assets:
     encryption_at_rest: true
 
   - id: obj-lake
-    name: Lac de données objet
+    name: Object data lake
     category: object_store
     criticality: P0
     classification: confidential
@@ -24,7 +24,7 @@ assets:
     encryption_at_rest: true
 
   - id: vault-secrets
-    name: Coffre de secrets
+    name: Secrets vault
     category: secrets
     criticality: P0
     classification: restricted
@@ -34,7 +34,7 @@ assets:
     encryption_at_rest: true
 
   - id: idp-db
-    name: Base d'identités
+    name: Identity database
     category: database
     criticality: P0
     classification: restricted
@@ -44,7 +44,7 @@ assets:
     encryption_at_rest: true
 
   - id: kafka-events
-    name: File d'événements
+    name: Event queue
     category: queue
     criticality: P1
     classification: internal
@@ -54,7 +54,7 @@ assets:
     encryption_at_rest: true
 
   - id: config-repo
-    name: Dépôt de configuration GitOps
+    name: GitOps configuration repository
     category: config
     criticality: P1
     classification: internal
@@ -64,21 +64,21 @@ assets:
     encryption_at_rest: true
 
   - id: logs-archive
-    name: Archive des journaux d'audit
+    name: Audit log archive
     category: log
     criticality: P2
     classification: internal
     owner: platform
-    provider: stockage objet froid
+    provider: cold object storage
     region: eu-west-3
     encryption_at_rest: true
 
   - id: report-exports
-    name: Exports de reporting
+    name: Reporting exports
     category: file_share
     criticality: P2
     classification: internal
     owner: analytics-team
-    provider: partage de fichiers SaaS
+    provider: SaaS file sharing
     region: europe-west1
     encryption_at_rest: true

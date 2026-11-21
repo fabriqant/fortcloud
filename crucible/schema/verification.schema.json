@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://resilience.local/schema/verification.schema.json",
-  "title": "Vérification service/données et signatures",
+  "title": "Service/data verification and signatures",
   "type": "object",
   "required": ["version", "checks", "signoffs"],
   "additionalProperties": false,

@@ -1,4 +1,4 @@
-"""Point d'entrée `python -m fortcloud_custodian`."""
+"""Entry point for `python -m fortcloud_custodian`."""
 
 import sys
 

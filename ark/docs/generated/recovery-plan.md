@@ -4,7 +4,7 @@
 
 Ordered by asset criticality, then by tightest RTO. Fix the model, not this file.
 
-## idp-db — Base d'identités
+## idp-db — Identity database
 
 - **Owner:** sec-team
 - **Criticality:** P0
@@ -14,7 +14,7 @@ Ordered by asset criticality, then by tightest RTO. Fix the model, not this file
 
 No gap detected. Keep the backup and restore cadence.
 
-## vault-secrets — Coffre de secrets
+## vault-secrets — Secrets vault
 
 - **Owner:** sec-team
 - **Criticality:** P0
@@ -35,7 +35,7 @@ No gap detected. Keep the backup and restore cadence.
 3. Fix: Restore rst-vault is 129 days old (max 90). Owner: sec-team.
 4. Re-run `fortcloud-ark check --strict` and attach `restore-status.json` to the pull request.
 
-## pg-core — Base transactionnelle principale
+## pg-core — Primary transactional database
 
 - **Owner:** data-platform
 - **Criticality:** P0
@@ -45,7 +45,7 @@ No gap detected. Keep the backup and restore cadence.
 
 No gap detected. Keep the backup and restore cadence.
 
-## obj-lake — Lac de données objet
+## obj-lake — Object data lake
 
 - **Owner:** data-platform
 - **Criticality:** P0
@@ -55,7 +55,7 @@ No gap detected. Keep the backup and restore cadence.
 
 No gap detected. Keep the backup and restore cadence.
 
-## kafka-events — File d'événements
+## kafka-events — Event queue
 
 - **Owner:** data-platform
 - **Criticality:** P1
@@ -65,7 +65,7 @@ No gap detected. Keep the backup and restore cadence.
 
 No gap detected. Keep the backup and restore cadence.
 
-## config-repo — Dépôt de configuration GitOps
+## config-repo — GitOps configuration repository
 
 - **Owner:** platform
 - **Criticality:** P1
@@ -82,7 +82,7 @@ No gap detected. Keep the backup and restore cadence.
 1. Fix: Restore rst-config result is 'partial'. Owner: platform.
 2. Re-run `fortcloud-ark check --strict` and attach `restore-status.json` to the pull request.
 
-## logs-archive — Archive des journaux d'audit
+## logs-archive — Audit log archive
 
 - **Owner:** platform
 - **Criticality:** P2
@@ -99,7 +99,7 @@ No gap detected. Keep the backup and restore cadence.
 1. Fix: No restore test. Owner: platform.
 2. Re-run `fortcloud-ark check --strict` and attach `restore-status.json` to the pull request.
 
-## report-exports — Exports de reporting
+## report-exports — Reporting exports
 
 - **Owner:** analytics-team
 - **Criticality:** P2

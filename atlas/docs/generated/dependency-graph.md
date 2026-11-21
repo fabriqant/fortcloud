@@ -11,18 +11,18 @@ flowchart LR
   classDef p1 fill:#fff3cd,stroke:#b8860b,color:#3b2f00;
   classDef p2 fill:#e8f5e9,stroke:#2e7d32,color:#183b1a;
 
-  argocd["Orchestrateur GitOps (Argo CD)<br/>Orchestrateur"]:::p1
-  dns-global["DNS global / résolution<br/>Réseau"]:::p0
-  etl-workers["Workers de traitement / ETL<br/>Traitements"]:::p1
-  idp-oidc["Fournisseur d'identité OIDC<br/>Identités"]:::p0
-  k8s-control["Plan de contrôle Kubernetes<br/>Orchestrateur"]:::p0
-  kafka-bus["Bus d'événements<br/>Traitements"]:::p0
-  network-hub["Hub réseau inter-sites (on-prem)<br/>Réseau"]:::p0
-  obj-lake["Lac de données objet<br/>Stockage"]:::p0
-  observability["Observabilité (métriques, logs, traces)<br/>Traitements"]:::p1
-  payments-api["API de paiement externe<br/>Service externe"]:::p0
-  pg-core["Base transactionnelle principale<br/>Stockage"]:::p0
-  vault-secrets["Coffre de secrets / KMS<br/>Identités"]:::p1
+  argocd["GitOps orchestrator (Argo CD)<br/>Orchestration"]:::p1
+  dns-global["Global DNS / name resolution<br/>Network"]:::p0
+  etl-workers["ETL / processing workers<br/>Processing"]:::p1
+  idp-oidc["OIDC identity provider<br/>Identity"]:::p0
+  k8s-control["Kubernetes control plane<br/>Orchestration"]:::p0
+  kafka-bus["Event bus<br/>Processing"]:::p0
+  network-hub["Inter-site network hub (on-prem)<br/>Network"]:::p0
+  obj-lake["Object data lake<br/>Storage"]:::p0
+  observability["Observability (metrics, logs, traces)<br/>Processing"]:::p1
+  payments-api["External payments API<br/>External service"]:::p0
+  pg-core["Primary transactional database<br/>Storage"]:::p0
+  vault-secrets["Secrets vault / KMS<br/>Identity"]:::p1
 
   k8s-control -->|dns| dns-global
   pg-core -->|dns| dns-global
@@ -58,13 +58,13 @@ flowchart LR
 
 | Component | Category | Criticality | Direct dependents |
 |---|---|---|---|
-| `dns-global` — DNS global / résolution | Réseau | P0 | 4 |
-| `network-hub` — Hub réseau inter-sites (on-prem) | Réseau | P0 | 3 |
-| `vault-secrets` — Coffre de secrets / KMS | Identités | P1 | 3 |
-| `idp-oidc` — Fournisseur d'identité OIDC | Identités | P0 | 2 |
-| `k8s-control` — Plan de contrôle Kubernetes | Orchestrateur | P0 | 2 |
-| `observability` — Observabilité (métriques, logs, traces) | Traitements | P1 | 2 |
-| `kafka-bus` — Bus d'événements | Traitements | P0 | 1 |
-| `obj-lake` — Lac de données objet | Stockage | P0 | 1 |
+| `dns-global` — Global DNS / name resolution | Network | P0 | 4 |
+| `network-hub` — Inter-site network hub (on-prem) | Network | P0 | 3 |
+| `vault-secrets` — Secrets vault / KMS | Identity | P1 | 3 |
+| `idp-oidc` — OIDC identity provider | Identity | P0 | 2 |
+| `k8s-control` — Kubernetes control plane | Orchestration | P0 | 2 |
+| `observability` — Observability (metrics, logs, traces) | Processing | P1 | 2 |
+| `kafka-bus` — Event bus | Processing | P0 | 1 |
+| `obj-lake` — Object data lake | Storage | P0 | 1 |
 
 See also: [resilience report](resilience-report.md).

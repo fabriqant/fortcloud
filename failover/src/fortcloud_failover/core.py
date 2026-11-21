@@ -1,4 +1,4 @@
-"""Modèle de données et règles partagées de Fortcloud Failover."""
+"""Data model and shared rules for Fortcloud Failover."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import yaml
 
-# src/fortcloud_failover/core.py -> parents[2] est la racine du dépôt.
+# src/fortcloud_failover/core.py -> parents[2] is the repository root.
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = ROOT / "examples" / "hybrid-multicloud" / "model"
@@ -25,16 +25,16 @@ FILES = {
 }
 
 MODE_LABELS = {
-    "active_active": "Actif/actif",
-    "active_passive": "Actif/passif",
-    "warm": "Tiède",
-    "cold": "Froid",
+    "active_active": "Active/active",
+    "active_passive": "Active/passive",
+    "warm": "Warm",
+    "cold": "Cold",
 }
 
 ROLE_LABELS = {
-    "primary": "Primaire",
-    "standby": "Secours",
-    "standalone": "Autonome",
+    "primary": "Primary",
+    "standby": "Standby",
+    "standalone": "Standalone",
 }
 
 _DURATION_PATTERN = re.compile(r"^(0|[0-9]+[smhd]([0-9]+[smhd])*)$")
@@ -42,7 +42,7 @@ _UNIT_SECONDS = {"s": 1, "m": 60, "h": 3600, "d": 86400}
 
 
 def resolve_schema_dir(explicit: str | Path | None = None) -> Path:
-    """Trouve le dossier de schémas, même quand l'outil est installé hors du dépôt."""
+    """Find the schema directory, even when the tool is installed outside the repository."""
     if explicit:
         return Path(explicit)
     env_value = os.environ.get("FORTCLOUD_FAILOVER_SCHEMA_DIR")
@@ -65,7 +65,7 @@ def load_yaml(path: Path):
 
 
 def load_model(model_dir: str | Path = DEFAULT_MODEL) -> dict:
-    """Charge les quatre collections YAML du modèle Failover."""
+    """Load the four YAML collections of the Failover model."""
     base = Path(model_dir)
     model = {}
     for key, (filename, _) in FILES.items():
@@ -88,7 +88,7 @@ def load_schema(key: str, schema_dir: str | Path | None = None) -> dict:
 
 
 def parse_duration(value) -> int | None:
-    """Convertit `0` ou une suite de `<nombre><s|m|h|d>` en secondes."""
+    """Convert `0` or a sequence of `<number><s|m|h|d>` into seconds."""
     if value is None:
         return None
     text = str(value).strip()
@@ -100,7 +100,7 @@ def parse_duration(value) -> int | None:
 
 
 def format_duration(seconds: int | None) -> str:
-    """Formatte en durée réutilisable comme valeur de modèle (`2m12s`)."""
+    """Format a duration that can be reused as a model value (`2m12s`)."""
     if seconds is None:
         return "?"
     if seconds == 0:
@@ -156,7 +156,7 @@ def switchover_seconds(strategy: dict) -> int | None:
 
 
 def rto_budget(strategy: dict, model: dict) -> int | None:
-    """Le RTO le plus serré parmi les services couverts par la stratégie."""
+    """The tightest RTO among the services covered by the strategy."""
     services = services_using(model, strategy.get("primary", "")) + services_using(
         model, strategy.get("standby", "")
     )

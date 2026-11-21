@@ -3,13 +3,13 @@
 version: 1
 channels:
   - id: war-room
-    name: Salon d'exercice
+    name: Exercise war room
     type: slack
     audience: internal
     owner: communications
 
   - id: exec-bridge
-    name: Pont de direction
+    name: Executive bridge
     type: bridge
     audience: external
     owner: communications
@@ -17,18 +17,18 @@ channels:
 
 stakeholders:
   - id: support
-    name: Support client
+    name: Customer support
     channel: war-room
     notify: [start, update, end]
 
   - id: leadership
-    name: Direction
+    name: Leadership
     channel: exec-bridge
     notify: [start, end]
     notes: No periodic update — the gap is intentional.
 
   - id: data-team
-    name: Équipe données
+    name: Data team
     channel: war-room
     notify: [start, update, end]
 

@@ -5,12 +5,12 @@
 version: 1
 environments:
   - id: dev
-    name: Développement
+    name: Development
     classification: internal
     owner: platform-team
 
   - id: staging
-    name: Préproduction
+    name: Staging
     classification: confidential
     owner: platform-team
 
@@ -33,26 +33,26 @@ principals:
     environments: [prod]
 
   - id: ci-staging
-    name: Deployment runner — préproduction
+    name: Deployment runner — staging
     type: ci
     owner: platform-team
     environments: [staging]
 
   - id: ci-legacy
-    name: Runner historique
+    name: Legacy runner
     type: ci
     owner: platform-team
     environments: [dev, prod]
     notes: Legacy identity still spanning two environments.
 
   - id: svc-checkout
-    name: Service commande
+    name: Checkout service
     type: service
     owner: commerce-team
     environments: [prod]
 
   - id: svc-reporting
-    name: Service analytique
+    name: Analytics service
     type: service
     owner: analytics-team
     environments: [staging]

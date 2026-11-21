@@ -52,16 +52,16 @@ class ValidateTests(unittest.TestCase):
             risks["risks"].append(
                 {
                     "id": "R-999",
-                    "title": "Remplaçant factice",
+                    "title": "Dummy replacement risk",
                     "components": ["obj-lake"],
                     "flows": ["order-to-cash"],
-                    "failure_mode": "Mode de défaillance de test",
+                    "failure_mode": "Test failure mode",
                     "likelihood": 1,
                     "impact": 1,
                     "status": "open",
                     "owner": "test-team",
                     "mitigations": [],
-                    "action": "Action de test",
+                    "action": "Test corrective action",
                     "target_date": "2026-12-31",
                 }
             )

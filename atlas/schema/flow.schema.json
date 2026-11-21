@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://resilience.local/schema/flow.schema.json",
-  "title": "Flux métier et objectifs de résilience",
+  "title": "Business flows and resilience objectives",
   "type": "object",
   "required": ["version", "flows"],
   "additionalProperties": false,

@@ -10,21 +10,30 @@
 
 Fortcloud Atlas turns a hand-maintained YAML model of your infrastructure into a **validated dependency graph**, a **single-point-of-failure audit** and an **RTO/RPO matrix**. It is one tool in the Fortcloud family and works entirely on its own — no platform, no backend, no agent.
 
+[← Back to the Fortcloud-io family README](../README.md)
+
+> **Where the code lives:** this tool is the `atlas/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. The GitHub Actions workflow lives at the repository root (`.github/workflows/ci.yml`) and runs with `working-directory: atlas` so GitHub can discover it.
+
 ## Why
 
 In hybrid and multi-cloud setups, the dangerous dependencies are rarely in the application diagram: DNS, the IdP, the secrets manager, the network hub, the CI/CD pipeline. Atlas makes them explicit, computes their blast radius and fails your CI when a P0 component has no owner and no mitigation.
+
+Typical questions Atlas answers:
+
+- Which single instance takes down four business flows if it disappears?
+- Which P0 components still live in one region or with one provider?
+- Is the advertised RTO backed by a restore test younger than 90 days?
+- Which FMEA risks are critical, open and past their due date?
 
 ## 30-second quickstart
 
 ```bash
 git clone https://github.com/fabriqant/fortcloud-io.git
-cd atlas
+cd fortcloud-io/atlas
 python -m pip install -e .
 
 fortcloud-atlas check
 ```
-
-> The Fortcloud Atlas tool lives in the `atlas/` folder of the `fortcloud-io` repository. The CI workflow stays at the repository root so GitHub Actions can discover it.
 
 Result:
 
@@ -36,6 +45,8 @@ Try it without installing anything:
 ```bash
 python -m fortcloud_atlas check --model examples/hybrid-multicloud/model --out /tmp/atlas-demo
 ```
+
+Requirements: Python 3.9+ and two dependencies (`PyYAML`, `jsonschema`), installed automatically by `pip install -e .`.
 
 ## What it checks
 
@@ -63,6 +74,89 @@ model/
 
 Point the CLI at your own directory with `--model /path/to/your/model`. The example in `examples/hybrid-multicloud/` is a complete, working sample — replace it, don't edit the generated files.
 
+### What a model entry looks like
+
+`components.yaml` — the inventory and its redundancy/backup facts:
+
+```yaml
+version: 1
+components:
+  - id: pg-core
+    name: Base transactionnelle principale
+    category: storage
+    criticality: P0
+    owner: data-platform
+    provider: hybride (on-prem DC1 + cloud eu-west-3)
+    environments: [prod, dr]
+    regions: [eu-west-3, on-prem-dc1]
+    zones: [az1, az2]
+    redundancy:
+      instances: 2
+      active_passive: true
+      replication: async
+    backup:
+      enabled: true
+      immutable: true
+      retention_days: 35
+      last_restore_test: "2026-10-12"
+```
+
+`dependencies.yaml` — direction matters: `from` is the component that **depends on** `to`. Many inbound arrows to one node mean a large blast radius.
+
+```yaml
+version: 1
+dependencies:
+  - id: d-001
+    from: k8s-control
+    to: dns-global
+    kind: dns
+    required: true
+    description: Résolution des noms internes et externes du cluster.
+```
+
+`flows.yaml` — the business promise, with an RTO/RPO that must be credible:
+
+```yaml
+version: 1
+flows:
+  - id: order-to-cash
+    name: Commande jusqu'à encaissement
+    criticality: P0
+    owner: commerce-team
+    availability_target: 99.95%
+    rto: 30m
+    rpo: 5m
+    strategy: Multi-AZ + réplication asynchrone + backups immuables + circuit breaker.
+    components: [pg-core, kafka-bus, idp-oidc, payments-api, dns-global]
+    external_dependencies: [payments-api]
+    last_restore_test: "2026-10-12"
+```
+
+Accepted RTO/RPO format: `0` or `<number><s|m|h|d>`.
+
+`risks.yaml` — one FMEA row per threat, with an owner and a dated corrective action.
+
+## Generated output (excerpt)
+
+From `docs/generated/resilience-report.md` on the bundled example:
+
+| Flow | Criticality | Availability | RTO | RPO | Owner | Last restore test |
+|---|---|---|---|---|---|---|
+| `identity-auth` | P0 | 99.99% | 15m | 0 | sec-team | 18 d |
+| `order-to-cash` | P0 | 99.95% | 30m | 5m | commerce-team | 39 d |
+| `analytics-ingestion` | P1 | 99.50% | 4h | 1h | data-platform | **98 d (stale)** |
+| `deploy-pipeline` | P2 | 99.00% | 8h | 24h | platform | **142 d (stale)** |
+
+And the FMEA register, sorted by descending score:
+
+| ID | Risk | Score | Severity | Status | Owner | Due |
+|---|---|---|---|---|---|---|
+| R-007 | API de paiement externe indisponible | 16 | critique | in_progress | payments-team | 2026-11-30 |
+| R-001 | Fournisseur d'identité unique | 15 | critique | in_progress | sec-team | 2026-12-15 |
+| R-002 | DNS unique fournisseur | 15 | critique | in_progress | net-team | 2026-12-20 |
+
+The bundled example intentionally contains 11 warnings (stale restore tests, single-region P0s, open critical risks) so you can see the checks in action. Your own clean model should produce none.
+
 ## CLI
 
 ```bash
@@ -72,7 +166,55 @@ fortcloud-atlas report   [--model DIR] [--out DIR]
 fortcloud-atlas check    [--model DIR] [--out DIR] [--strict]
 ```
 
-`--strict` turns warnings into errors — handy once your model is clean. Exit code is `0` on success, `1` otherwise, so the commands drop straight into CI.
+`--schema-dir` lets you point at a different set of JSON Schemas. `--strict` turns warnings into errors — handy once your model is clean. Exit code is `0` on success, `1` otherwise, so the commands drop straight into CI.
+
+## Continuous integration
+
+The workflow at the repository root runs the unit tests, validates the model and publishes the generated files as an artifact named `fortcloud-atlas-report`:
+
+```yaml
+defaults:
+  run:
+    working-directory: atlas
+
+jobs:
+  test-and-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: atlas/requirements.txt
+      - run: python -m pip install -e .
+      - run: python -m unittest discover -s tests -v
+      - run: fortcloud-atlas check --out ./artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fortcloud-atlas-report
+          path: atlas/artifacts
+```
+
+See [`.github/workflows/ci.yml`](../.github/workflows/ci.yml). Generated files are disposable: rebuild them, never hand-edit them.
+
+## Repository layout
+
+```text
+fortcloud-io/
+├── .github/workflows/ci.yml
+├── README.md                  # family overview
+└── atlas/                     # this tool
+    ├── README.md
+    ├── pyproject.toml         # package fortcloud-atlas, CLI fortcloud-atlas
+    ├── requirements.txt
+    ├── schema/                # 4 JSON Schemas — the model contracts
+    ├── src/fortcloud_atlas/   # cli, core, validate, render
+    ├── examples/hybrid-multicloud/model/
+    ├── docs/                  # concepts, guides, C4 views, ADRs, runbook template
+    ├── tests/                 # 10 unit tests
+    └── LICENSE
+```
 
 ## Documentation
 
@@ -80,13 +222,20 @@ fortcloud-atlas check    [--model DIR] [--out DIR] [--strict]
 - [Quickstart](docs/quickstart.md)
 - [Concepts — SPOF, FMEA, RTO/RPO](docs/concepts.md)
 - [Service levels and error budgets](docs/guides/service-levels.md)
-- [Reference views (C4)](docs/architecture/system-context.md)
-- [Architecture decisions](docs/adrs/0001-yaml-as-source-of-truth.md)
+- [Technology guide](docs/guides/technology.md)
+- [Reference views (C4) — system context](docs/architecture/system-context.md)
+- [Reference views (C4) — container view](docs/architecture/container-view.md)
+- [ADR 0001 — YAML as source of truth](docs/adrs/0001-yaml-as-source-of-truth.md)
+- [ADR 0002 — Generated artifacts are disposable](docs/adrs/0002-generated-artifacts-are-disposable.md)
 - [Runbook template](docs/templates/runbook.md)
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Changes to `schema/` and to the rules in `src/fortcloud_atlas/validate.py` require a test.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Changes to `schema/` and to the rules in `src/fortcloud_atlas/validate.py` require a test. Run the suite from this folder:
+
+```bash
+python -m unittest discover -s tests -v
+```
 
 ## License
 

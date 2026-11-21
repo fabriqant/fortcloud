@@ -71,6 +71,17 @@ export interface ArtifactPayload {
   content: string;
 }
 
+export interface ModelFormat {
+  file: string;
+  schema: string;
+}
+
+export interface ModelDocument {
+  tool: string;
+  file: string;
+  document: Record<string, unknown>;
+}
+
 export interface ImportInfo {
   name: string;
   size: number;

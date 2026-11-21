@@ -3,6 +3,8 @@ import type {
   ArtifactPayload,
   ImportDiff,
   ImportInfo,
+  ModelDocument,
+  ModelFormat,
   ModelPayload,
   RunResult,
   ToolInfo,
@@ -44,6 +46,14 @@ export const api = {
   artifacts: (tool: string) => request<ArtifactInfo[]>(`/${tool}/artifacts`),
   artifact: (tool: string, name: string) =>
     request<ArtifactPayload>(`/${tool}/artifacts/${encodeURIComponent(name)}`),
+  formats: (tool: string) => request<ModelFormat[]>(`/${tool}/formats`),
+  document: (tool: string, file: string) =>
+    request<ModelDocument>(`/${tool}/model/${encodeURIComponent(file)}/document`),
+  saveDocument: (tool: string, file: string, document: Record<string, unknown>) =>
+    request<{ ok: boolean }>(`/${tool}/model/${encodeURIComponent(file)}/document`, {
+      method: "PUT",
+      body: JSON.stringify({ document }),
+    }),
   schemas: (tool: string) => request<Record<string, string>>(`/${tool}/schemas`),
   imports: (tool: string) => request<ImportInfo[]>(`/${tool}/imports`),
   stageImport: (tool: string, file: string, content: string) =>

@@ -17,6 +17,7 @@ import { ArtifactView } from "./components/ArtifactView";
 import { ChartCard } from "./components/ChartCard";
 import { DataTable } from "./components/DataTable";
 import { FindingsPanel } from "./components/FindingsPanel";
+import { FormView } from "./components/FormView";
 import { GraphView } from "./components/GraphView";
 import { ImportView } from "./components/ImportView";
 import { KpiCards } from "./components/KpiCards";
@@ -49,6 +50,7 @@ export default function App() {
   const [result, setResult] = useState<RunResult | null>(null);
   const [strict, setStrict] = useState(false);
   const [tab, setTab] = useState<TabKey>("overview");
+  const [modelMode, setModelMode] = useState<"form" | "yaml">("form");
   const [busy, setBusy] = useState<"validate" | "check" | "save" | "reset" | null>(null);
   const [error, setError] = useState("");
   const activeIdRef = useRef("");
@@ -341,41 +343,71 @@ export default function App() {
                   )}
                 </Tabs.Content>
 
-                <Tabs.Content value="model" className="animate-fade-in outline-none">
-                  <div className="mb-4 rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
-                    Edit a YAML file below, then select <span className="font-semibold">Save</span>. The model
-                    changes only after <span className="font-semibold">Check</span> regenerates the artifacts.
-                    Use <span className="font-semibold">Reset</span> to restore the bundled example as a
-                    starting template.
+                <Tabs.Content value="model" className="animate-fade-in space-y-5 outline-none">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
+                      {(["form", "yaml"] as const).map((mode) => (
+                        <button
+                          key={mode}
+                          onClick={() => setModelMode(mode)}
+                          className={cn(
+                            "rounded-md px-3.5 py-1.5 text-xs font-semibold transition",
+                            mode === modelMode
+                              ? "bg-slate-900 text-white"
+                              : "text-slate-500 hover:text-slate-800",
+                          )}
+                        >
+                          {mode === "form" ? "Guided form" : "YAML source"}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="max-w-md text-[11px] leading-relaxed text-slate-500">
+                      {modelMode === "form"
+                        ? "Fill in the fields, then save. Validation still runs through the tool."
+                        : "Edit the YAML directly, then Save. Check regenerates the artifacts."}
+                    </p>
                   </div>
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {Object.keys(model?.files ?? {}).map((filename) => (
-                      <button
-                        key={filename}
-                        onClick={() => setActiveFile(filename)}
-                        className={cn(
-                          "rounded-lg border px-3 py-2 font-mono text-[11px] font-semibold transition",
-                          filename === activeFile
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
-                        )}
-                      >
-                        {filename}
-                        {draft[filename] !== model?.files[filename] && (
-                          <span className="ml-2 text-amber-400">●</span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                  {activeFile && (
-                    <ModelEditor
-                      file={activeFile}
-                      value={draft[activeFile] ?? ""}
-                      dirty={dirty}
-                      saving={busy === "save"}
-                      onChange={(value) => setDraft((current) => ({ ...current, [activeFile]: value }))}
-                      onSave={saveFile}
-                    />
+
+                  {modelMode === "form" ? (
+                    <FormView toolId={activeToolId} onSaved={() => loadTool(activeToolId, true)} />
+                  ) : (
+                    <>
+                      <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
+                        Edit a YAML file below, then select <span className="font-semibold">Save</span>. The
+                        model changes only after <span className="font-semibold">Check</span> regenerates the
+                        artifacts. Use <span className="font-semibold">Reset</span> to restore the bundled
+                        example as a starting template.
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {modelFiles.map((filename) => (
+                          <button
+                            key={filename}
+                            onClick={() => setActiveFile(filename)}
+                            className={cn(
+                              "rounded-lg border px-3 py-2 font-mono text-[11px] font-semibold transition",
+                              filename === activeFile
+                                ? "border-slate-900 bg-slate-900 text-white"
+                                : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
+                            )}
+                          >
+                            {filename}
+                            {draft[filename] !== model?.files[filename] && (
+                              <span className="ml-2 text-amber-400">●</span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                      {activeFile && (
+                        <ModelEditor
+                          file={activeFile}
+                          value={draft[activeFile] ?? ""}
+                          dirty={dirty}
+                          saving={busy === "save"}
+                          onChange={(value) => setDraft((current) => ({ ...current, [activeFile]: value }))}
+                          onSave={saveFile}
+                        />
+                      )}
+                    </>
                   )}
                 </Tabs.Content>
 

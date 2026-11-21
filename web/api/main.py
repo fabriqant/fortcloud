@@ -38,6 +38,10 @@ class ImportFile(BaseModel):
     content: str
 
 
+class DocumentPayload(BaseModel):
+    document: dict
+
+
 class InventoryRequest(BaseModel):
     source: str = "terraform"
     profile: str | None = None
@@ -176,6 +180,36 @@ def get_data(tool_id: str) -> dict:
     result = structured.build(tool, model)
     result.update({"tool": tool.id, "errors": errors, "warnings": warnings})
     return result
+
+
+@app.get("/api/{tool_id}/formats")
+def list_formats(tool_id: str) -> list[dict]:
+    tool = _tool(tool_id)
+    core, _, _ = runner.load_modules(tool)
+    return [
+        {"file": filename, "schema": schema_filename}
+        for filename, schema_filename in core.FILES.values()
+    ]
+
+
+@app.get("/api/{tool_id}/model/{filename}/document")
+def get_document(tool_id: str, filename: str) -> dict:
+    tool = _tool(tool_id)
+    try:
+        document = workspaces.read_model_document(tool, filename)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {"tool": tool.id, "file": filename, "document": document}
+
+
+@app.put("/api/{tool_id}/model/{filename}/document")
+def put_document(tool_id: str, filename: str, payload: DocumentPayload) -> dict:
+    tool = _tool(tool_id)
+    try:
+        workspaces.write_model_document(tool, filename, payload.document)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {"ok": True, "tool": tool.id, "file": filename}
 
 
 @app.get("/api/{tool_id}/schemas")

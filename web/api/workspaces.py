@@ -6,6 +6,8 @@ import difflib
 import shutil
 from pathlib import Path
 
+import yaml
+
 from . import registry
 
 
@@ -47,6 +49,29 @@ def reset_model(tool: registry.Tool) -> None:
     ensure_workspace(tool)
 
 
+def _json_safe(value):
+    if isinstance(value, dict):
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    return str(value)
+
+
+def read_model_document(tool: registry.Tool, filename: str) -> dict:
+    _check_model_name(tool, filename)
+    ensure_workspace(tool)
+    document = yaml.safe_load((tool.model_dir / filename).read_text(encoding="utf-8")) or {}
+    return _json_safe(document)
+
+
+def write_model_document(tool: registry.Tool, filename: str, document: dict) -> None:
+    _check_model_name(tool, filename)
+    content = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
+    write_model_file(tool, filename, content)
+
+
 def import_dir(tool: registry.Tool) -> Path:
     return tool.workspace_dir / "imports"
 
@@ -60,13 +85,13 @@ def import_files(tool: registry.Tool) -> list[str]:
     return sorted(entry.name for entry in path.iterdir() if entry.is_file() and entry.name in known)
 
 
-def _check_import_name(tool: registry.Tool, filename: str) -> None:
+def _check_model_name(tool: registry.Tool, filename: str) -> None:
     if filename not in model_files(tool):
         raise KeyError(f"Unknown model file for {tool.id}: {filename}")
 
 
 def read_import(tool: registry.Tool, filename: str) -> str:
-    _check_import_name(tool, filename)
+    _check_model_name(tool, filename)
     path = import_dir(tool) / filename
     if not path.is_file():
         raise FileNotFoundError(filename)
@@ -74,13 +99,13 @@ def read_import(tool: registry.Tool, filename: str) -> str:
 
 
 def stage_import(tool: registry.Tool, filename: str, content: str) -> None:
-    _check_import_name(tool, filename)
+    _check_model_name(tool, filename)
     import_dir(tool).mkdir(parents=True, exist_ok=True)
     (import_dir(tool) / filename).write_text(content, encoding="utf-8")
 
 
 def discard_import(tool: registry.Tool, filename: str) -> None:
-    _check_import_name(tool, filename)
+    _check_model_name(tool, filename)
     (import_dir(tool) / filename).unlink(missing_ok=True)
 
 

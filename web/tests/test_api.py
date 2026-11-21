@@ -97,6 +97,23 @@ def test_artifact_read_and_model_update():
     assert client.get("/api/atlas/artifacts/missing.md").status_code == 404
 
 
+def test_formats_and_structured_document():
+    formats = client.get("/api/atlas/formats").json()
+    assert formats[0] == {"file": "components.yaml", "schema": "component.schema.json"}
+
+    response = client.get("/api/atlas/model/components.yaml/document").json()
+    assert response["file"] == "components.yaml"
+    assert response["document"]["components"][0]["id"] == "pg-core"
+
+    document = response["document"]
+    document["components"][0]["name"] = "Renamed primary database"
+    assert client.put(
+        "/api/atlas/model/components.yaml/document", json={"document": document}
+    ).status_code == 200
+    assert "Renamed primary database" in client.get("/api/atlas/model").json()["files"]["components.yaml"]
+    assert client.get("/api/atlas/model/unknown.yaml/document").status_code == 404
+
+
 def test_import_stage_diff_accept_and_discard():
     assert client.get("/api/atlas/imports").json() == []
     assert client.post("/api/atlas/imports", json={"file": "unknown.yaml", "content": "x"}).status_code == 404

@@ -1,0 +1,129 @@
+# Failover topology — SOURCE OF TRUTH
+# role      : primary | standby | standalone
+# pair      : identifier shared by a primary and its standby (null if none)
+# capacity  : relative capacity units — the standby must absorb the primary load
+# health_check : probe used to detect a failure (null if not instrumented)
+version: 1
+topology:
+  - id: idp-oidc
+    name: Fournisseur d'identité OIDC
+    criticality: P0
+    owner: sec-team
+    provider: SaaS unique
+    region: eu-west-1
+    zone: az1
+    role: primary
+    pair: idp
+    capacity: 100
+    health_check: https://idp.internal/healthz
+    notes: Sessions stateless côté plateforme — RPO 0 tenable.
+
+  - id: idp-oidc-dr
+    name: Fournisseur d'identité OIDC (secours)
+    criticality: P0
+    owner: sec-team
+    provider: SaaS unique
+    region: eu-west-3
+    zone: az1
+    role: standby
+    pair: idp
+    capacity: 100
+    health_check: https://idp-dr.internal/healthz
+
+  - id: dns-global
+    name: DNS global / résolution
+    criticality: P0
+    owner: net-team
+    provider: fournisseur DNS A
+    region: global-a
+    zone: anycast
+    role: primary
+    pair: dns
+    capacity: 100
+    health_check: https://dns-a.internal/health
+
+  - id: dns-global-dr
+    name: DNS global (second fournisseur)
+    criticality: P0
+    owner: net-team
+    provider: fournisseur DNS B
+    region: global-b
+    zone: anycast
+    role: standby
+    pair: dns
+    capacity: 100
+    health_check: https://dns-b.internal/health
+
+  - id: vault-secrets
+    name: Coffre de secrets
+    criticality: P0
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-1
+    zone: az1
+    role: primary
+    pair: vault
+    capacity: 100
+    health_check: https://vault.internal/v1/health
+
+  - id: vault-secrets-dr
+    name: Coffre de secrets (réplica)
+    criticality: P0
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-3
+    zone: az1
+    role: standby
+    pair: vault
+    capacity: 100
+    health_check: https://vault-dr.internal/v1/health
+    notes: Réplication synchrone mais drill régional à rafraîchir.
+
+  - id: pg-core
+    name: Base transactionnelle principale
+    criticality: P0
+    owner: data-platform
+    provider: cloud eu-west-1
+    region: eu-west-1
+    zone: az1
+    role: primary
+    pair: pg
+    capacity: 100
+    health_check: https://pg.internal/health
+
+  - id: pg-core-dr
+    name: Base transactionnelle (secours)
+    criticality: P0
+    owner: data-platform
+    provider: cloud eu-west-3
+    region: eu-west-3
+    zone: az1
+    role: standby
+    pair: pg
+    capacity: 50
+    health_check: https://pg-dr.internal/health
+    notes: Capacité réduite en secours — à dimensionner avant la prochaine revue.
+
+  - id: kafka-bus
+    name: Bus d'événements
+    criticality: P1
+    owner: data-platform
+    provider: cloud eu-west-3
+    region: eu-west-3
+    zone: az1
+    role: standalone
+    pair: null
+    capacity: 100
+    health_check: https://kafka.internal/health
+
+  - id: obj-lake
+    name: Lac de données objet
+    criticality: P1
+    owner: data-platform
+    provider: multi-cloud
+    region: europe-west1
+    zone: az1
+    role: standalone
+    pair: null
+    capacity: 100
+    health_check: null

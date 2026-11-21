@@ -1,0 +1,53 @@
+# Failover strategies — SOURCE OF TRUTH
+# detection_time + promotion_time must stay below the tightest RTO of covered services.
+# replication: none | async | sync | stateless — `async/none` cannot satisfy RPO 0.
+version: 1
+strategies:
+  - id: fo-idp
+    primary: idp-oidc
+    standby: idp-oidc-dr
+    mode: active_passive
+    replication: stateless
+    detection_time: 30s
+    promotion_time: 2m
+    dns_ttl: 30s
+    automated: true
+    runbook: ../../docs/templates/drill.md
+    owner: sec-team
+
+  - id: fo-dns
+    primary: dns-global
+    standby: dns-global-dr
+    mode: active_active
+    replication: stateless
+    detection_time: 1m
+    promotion_time: 5m
+    dns_ttl: 30s
+    automated: true
+    runbook: ../../docs/templates/drill.md
+    owner: net-team
+
+  - id: fo-vault
+    primary: vault-secrets
+    standby: vault-secrets-dr
+    mode: active_passive
+    replication: sync
+    detection_time: 1m
+    promotion_time: 10m
+    dns_ttl: 30s
+    automated: true
+    runbook: ../../docs/templates/drill.md
+    owner: sec-team
+
+  - id: fo-pg
+    primary: pg-core
+    standby: pg-core-dr
+    mode: active_passive
+    replication: async
+    detection_time: 1m
+    promotion_time: 25m
+    dns_ttl: 45m
+    automated: false
+    runbook: ../../docs/templates/drill.md
+    owner: data-platform
+    notes: TTL DNS supérieur au RTO et bascule manuelle — volontairement détecté.

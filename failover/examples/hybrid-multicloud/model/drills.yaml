@@ -1,0 +1,41 @@
+# Drill evidence — SOURCE OF TRUTH
+# A strategy needs a drill younger than 90 days with result: passed and an evidence link.
+version: 1
+drills:
+  - id: drill-idp
+    strategy: fo-idp
+    scenario: primary-loss
+    last: "2026-11-05"
+    duration: 2m12s
+    result: passed
+    evidence: https://ci.example.com/drills/fo-idp-42
+    owner: sec-team
+
+  - id: drill-dns
+    strategy: fo-dns
+    scenario: dns-failover
+    last: "2026-10-28"
+    duration: 4m40s
+    result: passed
+    evidence: https://ci.example.com/drills/fo-dns-17
+    owner: net-team
+
+  - id: drill-vault
+    strategy: fo-vault
+    scenario: region-loss
+    last: "2026-07-15"
+    duration: 9m05s
+    result: passed
+    evidence: https://ci.example.com/drills/fo-vault-08
+    owner: sec-team
+    notes: Ancien drill — doit être rejoué avant la prochaine revue.
+
+  - id: drill-pg
+    strategy: fo-pg
+    scenario: region-loss
+    last: "2026-10-12"
+    duration: 27m30s
+    result: partial
+    evidence: https://ci.example.com/drills/fo-pg-31
+    owner: data-platform
+    notes: Bascule réussie mais TTL DNS trop long — résultat partiel.

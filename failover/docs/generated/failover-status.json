@@ -1,0 +1,72 @@
+{
+  "tool": "fortcloud-failover",
+  "version": "0.1.0",
+  "generated_on": "2026-11-21",
+  "summary": {
+    "components": 10,
+    "services": 3,
+    "strategies": 4,
+    "drills": 4,
+    "p0_components": 8,
+    "covered_p0_components": 8,
+    "strategies_at_risk": 3
+  },
+  "strategies": [
+    {
+      "id": "fo-dns",
+      "primary": "dns-global",
+      "standby": "dns-global-dr",
+      "status": "COVERED",
+      "switchover_seconds": 360,
+      "rto_budget_seconds": 900,
+      "issues": []
+    },
+    {
+      "id": "fo-idp",
+      "primary": "idp-oidc",
+      "standby": "idp-oidc-dr",
+      "status": "AT RISK",
+      "switchover_seconds": 150,
+      "rto_budget_seconds": 900,
+      "issues": [
+        "both instances use the same provider 'SaaS unique'"
+      ]
+    },
+    {
+      "id": "fo-pg",
+      "primary": "pg-core",
+      "standby": "pg-core-dr",
+      "status": "AT RISK",
+      "switchover_seconds": 1560,
+      "rto_budget_seconds": 1800,
+      "issues": [
+        "standby capacity 50 is lower than primary capacity 100",
+        "DNS TTL 45m exceeds RTO 30m",
+        "switchover is manual for a P0 service",
+        "drill drill-pg result is 'partial'"
+      ]
+    },
+    {
+      "id": "fo-vault",
+      "primary": "vault-secrets",
+      "standby": "vault-secrets-dr",
+      "status": "AT RISK",
+      "switchover_seconds": 660,
+      "rto_budget_seconds": 900,
+      "issues": [
+        "both instances use the same provider 'SaaS'",
+        "drill drill-vault is 129 days old (max 90)"
+      ]
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "strategy fo-idp: both instances use the same provider 'SaaS unique'",
+    "strategy fo-vault: both instances use the same provider 'SaaS'",
+    "strategy fo-vault: drill drill-vault is 129 days old (max 90)",
+    "strategy fo-pg: standby capacity 50 is lower than primary capacity 100",
+    "strategy fo-pg: DNS TTL 45m exceeds RTO 30m",
+    "strategy fo-pg: switchover is manual for a P0 service",
+    "strategy fo-pg: drill drill-pg result is 'partial'"
+  ]
+}

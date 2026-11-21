@@ -10,7 +10,7 @@
 
 Fortcloud Atlas turns a hand-maintained YAML model of your infrastructure into a **validated dependency graph**, a **single-point-of-failure audit** and an **RTO/RPO matrix**. It is one tool in the Fortcloud family and works entirely on its own — no platform, no backend, no agent.
 
-[← Back to the Fortcloud-io family README](../README.md)
+[← Back to the Fortcloud-io family README](../README.md) · [Next tool: Fortcloud Failover](../failover/README.md) — design out the single point of failure.
 
 > **Where the code lives:** this tool is the `atlas/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. The GitHub Actions workflow lives at the repository root (`.github/workflows/ci.yml`) and runs with `working-directory: atlas` so GitHub can discover it.
 

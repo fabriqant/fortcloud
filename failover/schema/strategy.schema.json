@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resilience.local/schema/strategy.schema.json",
+  "title": "Stratégies de bascule",
+  "type": "object",
+  "required": ["version", "strategies"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "strategies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "primary", "standby", "mode", "replication", "detection_time", "promotion_time", "dns_ttl", "automated", "runbook", "owner"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "primary": { "type": "string", "minLength": 2 },
+          "standby": { "type": "string", "minLength": 2 },
+          "mode": { "enum": ["active_active", "active_passive", "warm", "cold"] },
+          "replication": { "enum": ["none", "async", "sync", "stateless"] },
+          "detection_time": { "type": "string", "pattern": "^(0|[0-9]+[smhd]([0-9]+[smhd])*)$" },
+          "promotion_time": { "type": "string", "pattern": "^(0|[0-9]+[smhd]([0-9]+[smhd])*)$" },
+          "dns_ttl": { "type": "string", "pattern": "^(0|[0-9]+[smhd]([0-9]+[smhd])*)$" },
+          "automated": { "type": "boolean" },
+          "runbook": { "type": "string", "minLength": 2 },
+          "owner": { "type": "string", "minLength": 2 },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

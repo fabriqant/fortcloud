@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 import shutil
 from pathlib import Path
 
@@ -44,6 +45,72 @@ def reset_model(tool: registry.Tool) -> None:
     if tool.artifact_dir.exists():
         shutil.rmtree(tool.artifact_dir)
     ensure_workspace(tool)
+
+
+def import_dir(tool: registry.Tool) -> Path:
+    return tool.workspace_dir / "imports"
+
+
+def import_files(tool: registry.Tool) -> list[str]:
+    """List staged proposals whose names match a model file of the tool."""
+    path = import_dir(tool)
+    if not path.is_dir():
+        return []
+    known = set(model_files(tool))
+    return sorted(entry.name for entry in path.iterdir() if entry.is_file() and entry.name in known)
+
+
+def _check_import_name(tool: registry.Tool, filename: str) -> None:
+    if filename not in model_files(tool):
+        raise KeyError(f"Unknown model file for {tool.id}: {filename}")
+
+
+def read_import(tool: registry.Tool, filename: str) -> str:
+    _check_import_name(tool, filename)
+    path = import_dir(tool) / filename
+    if not path.is_file():
+        raise FileNotFoundError(filename)
+    return path.read_text(encoding="utf-8")
+
+
+def stage_import(tool: registry.Tool, filename: str, content: str) -> None:
+    _check_import_name(tool, filename)
+    import_dir(tool).mkdir(parents=True, exist_ok=True)
+    (import_dir(tool) / filename).write_text(content, encoding="utf-8")
+
+
+def discard_import(tool: registry.Tool, filename: str) -> None:
+    _check_import_name(tool, filename)
+    (import_dir(tool) / filename).unlink(missing_ok=True)
+
+
+def import_diff(tool: registry.Tool, filename: str) -> dict:
+    proposal = read_import(tool, filename)
+    current_path = tool.model_dir / filename
+    current = current_path.read_text(encoding="utf-8") if current_path.is_file() else ""
+    diff = list(
+        difflib.unified_diff(
+            current.splitlines(),
+            proposal.splitlines(),
+            fromfile=f"current/{filename}",
+            tofile=f"proposed/{filename}",
+            lineterm="",
+        )
+    )
+    return {
+        "file": filename,
+        "changed": bool(diff),
+        "current": current,
+        "proposed": proposal,
+        "diff": "\n".join(diff),
+    }
+
+
+def accept_import(tool: registry.Tool, filename: str) -> dict[str, str]:
+    proposal = read_import(tool, filename)
+    write_model_file(tool, filename, proposal)
+    discard_import(tool, filename)
+    return read_model(tool)
 
 
 def read_artifact(tool: registry.Tool, filename: str) -> str:

@@ -71,4 +71,17 @@ export interface ArtifactPayload {
   content: string;
 }
 
-export type TabKey = "overview" | "model" | "outputs" | "schemas";
+export interface ImportInfo {
+  name: string;
+  size: number;
+}
+
+export interface ImportDiff {
+  file: string;
+  changed: boolean;
+  current: string;
+  proposed: string;
+  diff: string;
+}
+
+export type TabKey = "overview" | "model" | "outputs" | "import" | "schemas";

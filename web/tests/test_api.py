@@ -97,5 +97,34 @@ def test_artifact_read_and_model_update():
     assert client.get("/api/atlas/artifacts/missing.md").status_code == 404
 
 
+def test_import_stage_diff_accept_and_discard():
+    assert client.get("/api/atlas/imports").json() == []
+    assert client.post("/api/atlas/imports", json={"file": "unknown.yaml", "content": "x"}).status_code == 404
+
+    proposal = "version: 1\ncomponents:\n  - id: imported\n"
+    assert client.post(
+        "/api/atlas/imports", json={"file": "components.yaml", "content": proposal}
+    ).status_code == 200
+    assert [item["name"] for item in client.get("/api/atlas/imports").json()] == ["components.yaml"]
+
+    diff = client.get("/api/atlas/imports/components.yaml/diff").json()
+    assert diff["file"] == "components.yaml"
+    assert diff["changed"] is True
+    assert "+  - id: imported" in diff["diff"]
+    assert diff["proposed"] == proposal
+
+    assert client.post("/api/atlas/imports/components.yaml/accept").status_code == 200
+    model = client.get("/api/atlas/model").json()["files"]
+    assert "id: imported" in model["components.yaml"]
+    assert client.get("/api/atlas/imports").json() == []
+    assert client.get("/api/atlas/imports/components.yaml/diff").status_code == 404
+
+    assert client.post(
+        "/api/atlas/imports", json={"file": "risks.yaml", "content": "version: 1\nrisks: []\n"}
+    ).status_code == 200
+    assert client.delete("/api/atlas/imports/risks.yaml").status_code == 200
+    assert client.get("/api/atlas/imports").json() == []
+
+
 def test_unknown_tool():
     assert client.get("/api/unknown/model").status_code == 404

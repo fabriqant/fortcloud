@@ -1,6 +1,8 @@
 import type {
   ArtifactInfo,
   ArtifactPayload,
+  ImportDiff,
+  ImportInfo,
   ModelPayload,
   RunResult,
   ToolInfo,
@@ -43,4 +45,20 @@ export const api = {
   artifact: (tool: string, name: string) =>
     request<ArtifactPayload>(`/${tool}/artifacts/${encodeURIComponent(name)}`),
   schemas: (tool: string) => request<Record<string, string>>(`/${tool}/schemas`),
+  imports: (tool: string) => request<ImportInfo[]>(`/${tool}/imports`),
+  stageImport: (tool: string, file: string, content: string) =>
+    request<{ ok: boolean }>(`/${tool}/imports`, {
+      method: "POST",
+      body: JSON.stringify({ file, content }),
+    }),
+  importDiff: (tool: string, file: string) =>
+    request<ImportDiff>(`/${tool}/imports/${encodeURIComponent(file)}/diff`),
+  acceptImport: (tool: string, file: string) =>
+    request<{ ok: boolean }>(`/${tool}/imports/${encodeURIComponent(file)}/accept`, {
+      method: "POST",
+    }),
+  discardImport: (tool: string, file: string) =>
+    request<{ ok: boolean }>(`/${tool}/imports/${encodeURIComponent(file)}`, {
+      method: "DELETE",
+    }),
 };

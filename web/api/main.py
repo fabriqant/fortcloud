@@ -24,12 +24,17 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_methods=["GET", "POST", "PUT"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Content-Type"],
 )
 
 
 class ModelFile(BaseModel):
+    content: str
+
+
+class ImportFile(BaseModel):
+    file: str
     content: str
 
 
@@ -80,6 +85,59 @@ def reset_model(tool_id: str) -> dict:
     tool = _tool(tool_id)
     workspaces.reset_model(tool)
     return {"ok": True, "tool": tool.id, "files": workspaces.read_model(tool)}
+
+
+@app.get("/api/{tool_id}/imports")
+def list_imports(tool_id: str) -> list[dict]:
+    tool = _tool(tool_id)
+    workspaces.ensure_workspace(tool)
+    path = workspaces.import_dir(tool)
+    return [
+        {
+            "name": name,
+            "size": (path / name).stat().st_size,
+        }
+        for name in workspaces.import_files(tool)
+    ]
+
+
+@app.post("/api/{tool_id}/imports")
+def stage_import(tool_id: str, payload: ImportFile) -> dict:
+    tool = _tool(tool_id)
+    try:
+        workspaces.stage_import(tool, payload.file, payload.content)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {"ok": True, "tool": tool.id, "file": payload.file}
+
+
+@app.get("/api/{tool_id}/imports/{filename}/diff")
+def get_import_diff(tool_id: str, filename: str) -> dict:
+    tool = _tool(tool_id)
+    try:
+        return workspaces.import_diff(tool, filename)
+    except (KeyError, FileNotFoundError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/api/{tool_id}/imports/{filename}/accept")
+def accept_import(tool_id: str, filename: str) -> dict:
+    tool = _tool(tool_id)
+    try:
+        files = workspaces.accept_import(tool, filename)
+    except (KeyError, FileNotFoundError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {"ok": True, "tool": tool.id, "files": files}
+
+
+@app.delete("/api/{tool_id}/imports/{filename}")
+def delete_import(tool_id: str, filename: str) -> dict:
+    tool = _tool(tool_id)
+    try:
+        workspaces.discard_import(tool, filename)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {"ok": True, "tool": tool.id, "file": filename}
 
 
 @app.post("/api/{tool_id}/validate")

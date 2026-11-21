@@ -18,6 +18,7 @@ import { ChartCard } from "./components/ChartCard";
 import { DataTable } from "./components/DataTable";
 import { FindingsPanel } from "./components/FindingsPanel";
 import { GraphView } from "./components/GraphView";
+import { ImportView } from "./components/ImportView";
 import { KpiCards } from "./components/KpiCards";
 import { ModelEditor } from "./components/ModelEditor";
 import { ToolSidebar } from "./components/ToolSidebar";
@@ -27,6 +28,7 @@ const TAB_ITEMS: { key: TabKey; label: string }[] = [
   { key: "overview", label: "Overview" },
   { key: "model", label: "Model" },
   { key: "outputs", label: "Outputs" },
+  { key: "import", label: "Import" },
   { key: "schemas", label: "Schemas" },
 ];
 
@@ -56,6 +58,7 @@ export default function App() {
     [tools, activeToolId],
   );
   const accent = accentFor(tool?.accent ?? "blue");
+  const modelFiles = useMemo(() => Object.keys(model?.files ?? {}), [model]);
 
   const loadTool = useCallback(async (toolId: string, clearResult: boolean) => {
     if (clearResult) setResult(null);
@@ -409,6 +412,14 @@ export default function App() {
                   ) : (
                     <EmptyState title="No artifacts" hint="Run Check to generate the reports for this tool." />
                   )}
+                </Tabs.Content>
+
+                <Tabs.Content value="import" className="animate-fade-in outline-none">
+                  <ImportView
+                    toolId={activeToolId}
+                    files={modelFiles}
+                    onAccepted={() => loadTool(activeToolId, true)}
+                  />
                 </Tabs.Content>
 
                 <Tabs.Content value="schemas" className="animate-fade-in outline-none">

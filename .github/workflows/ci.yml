@@ -1,4 +1,4 @@
-name: Fortcloud Atlas — CI
+name: FortCloud Atlas — CI
 
 on:
   push:

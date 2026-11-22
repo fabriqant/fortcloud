@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-11-21
-- **Scope:** Fortcloud Vitals v0.1.0
+- **Scope:** FortCloud Vitals v0.1.0
 
 ## Context
 

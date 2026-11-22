@@ -1,6 +1,6 @@
 tools:
   - id: atlas
-    name: Fortcloud Atlas
+    name: FortCloud Atlas
     tagline: Map dependencies. See risk.
     description: Atlas models infrastructure dependencies as a validated graph and audit. It exposes single points of failure, single-region P0 components, FMEA risks and RTO/RPO coverage from components.yaml, dependencies.yaml, flows.yaml and risks.yaml. Check rebuilds the dependency graph and resilience report so every claim can be traced back to the model.
     accent: red
@@ -14,7 +14,7 @@ tools:
         kind: markdown
 
   - id: failover
-    name: Fortcloud Failover
+    name: FortCloud Failover
     tagline: Design out failure.
     description: Failover models topology, services, strategies and drills to prove a switchover is real. It checks paired primaries and standbys, detection plus promotion against RTO, replication against RPO, capacity and DNS TTL, and drill freshness. Check produces a coverage matrix, remediation plan, drill checklist and CI status.
     accent: orange
@@ -34,7 +34,7 @@ tools:
         kind: json
 
   - id: ark
-    name: Fortcloud Ark
+    name: FortCloud Ark
     tagline: Prove restores work.
     description: Ark models data assets, backup policies and dated restore evidence. It checks P0 coverage, immutability, encryption, schedule versus RPO, measured RTO/RPO and restore scenarios, then publishes backup coverage, restore evidence, recovery plan and CI status. A backup is only real when a dated test has measured the restore.
     accent: amber
@@ -54,7 +54,7 @@ tools:
         kind: json
 
   - id: ballast
-    name: Fortcloud Ballast
+    name: FortCloud Ballast
     tagline: Keep latency honest.
     description: Ballast models outbound calls, resilience policies and ordered flows to keep latency promises under failure. It computes worst-case timeout budgets, checks retries, jitter, breakers, bulkheads and fallbacks, and flags non-idempotent retries or coarsely budgeted chains. Check emits timeout budget, policy matrix, remediation plan and CI status.
     accent: blue
@@ -74,7 +74,7 @@ tools:
         kind: json
 
   - id: vitals
-    name: Fortcloud Vitals
+    name: FortCloud Vitals
     tagline: Measure what works.
     description: Vitals models services, signals, SLOs and verification checks to turn monitoring into evidence. It matches signal kinds and intervals to objectives, checks alert thresholds against error budgets, requires data-quality objectives and runbooks for P0 services, and flags stale checks. Check emits an SLO dashboard, signal catalog, quality plan and CI status.
     accent: green
@@ -94,7 +94,7 @@ tools:
         kind: json
 
   - id: custodian
-    name: Fortcloud Custodian
+    name: FortCloud Custodian
     tagline: Make access auditable.
     description: Custodian models identities, grants, secrets, audit sinks and deployment pipelines. It enforces least privilege, environment isolation, reference-only secrets, rotation, immutable audit sinks and reviewed deployments with verified rollback. Check generates access and secret inventories, change control, audit trail and CI status.
     accent: violet
@@ -117,7 +117,7 @@ tools:
         kind: json
 
   - id: crucible
-    name: Fortcloud Crucible
+    name: FortCloud Crucible
     tagline: Rehearse the outage.
     description: Crucible models failure drills, participants, channels, verification and sign-offs. It enforces controlled-environment rehearsals before production exercises, four named roles, notification cadence and passed service/data checks with evidence. Check emits scenario plan, roles matrix, communication plan, verification report and CI status.
     accent: pink

@@ -1,12 +1,12 @@
 <table width="100%" cellpadding="24" cellspacing="0">
   <tr>
     <td align="center" bgcolor="#0f172a">
-      <img src="logo-white-2.png" alt="Fortcloud" width="360" />
+      <img src="logo-white-2.png" alt="FortCloud" width="360" />
     </td>
   </tr>
 </table>
 
-# Fortcloud-io
+# FortCloud-io
 
 ### Cloud resilience tooling for hybrid and multi-cloud infrastructure
 
@@ -14,7 +14,7 @@
 
 [![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
 
-Fortcloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. It contains all seven tools — **Atlas**, **Failover**, **Ark**, **Ballast**, **Vitals**, **Custodian** and **Crucible** — each in its own folder with its own package, CLI, model, tests and documentation.
+FortCloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. It contains all seven tools — **Atlas**, **Failover**, **Ark**, **Ballast**, **Vitals**, **Custodian** and **Crucible** — each in its own folder with its own package, CLI, model, tests and documentation.
 
 The common thread is simple: **no backend, no agent, no platform to adopt** — just versioned files, a CLI and CI checks.
 
@@ -24,13 +24,13 @@ The common thread is simple: **no backend, no agent, no platform to adopt** — 
 
 | # | Need | Tool | Folder | Status | Tagline |
 |---|---|---|---|---|---|
-| 1 | Map dependencies and risks | **Fortcloud Atlas** | [`atlas/`](atlas/README.md) | **Available — v0.1.0** | *Map every dependency. See every risk.* |
-| 2 | Eliminate single points of failure | **Fortcloud Failover** | [`failover/`](failover/README.md) | **Available — v0.1.0** | *Design out the single point of failure.* |
-| 3 | Protect data and prove restoration | **Fortcloud Ark** | [`ark/`](ark/README.md) | **Available — v0.1.0** | *Restore is a feature, not a hope.* |
-| 4 | Keep request paths stable under failure | **Fortcloud Ballast** | [`ballast/`](ballast/README.md) | **Available — v0.1.0** | *Keep workloads steady when parts fail.* |
-| 5 | Service and data quality monitoring | **Fortcloud Vitals** | [`vitals/`](vitals/README.md) | **Available — v0.1.0** | *Health and data quality, one signal.* |
-| 6 | Secure access and changes | **Fortcloud Custodian** | [`custodian/`](custodian/README.md) | **Available — v0.1.0** | *Guard access. Prove every change.* |
-| 7 | Exercise failure scenarios | **Fortcloud Crucible** | [`crucible/`](crucible/README.md) | **Available — v0.1.0** | *Rehearse the outage before it happens.* |
+| 1 | Map dependencies and risks | **FortCloud Atlas** | [`atlas/`](atlas/README.md) | **Available — v0.1.0** | *Map every dependency. See every risk.* |
+| 2 | Eliminate single points of failure | **FortCloud Failover** | [`failover/`](failover/README.md) | **Available — v0.1.0** | *Design out the single point of failure.* |
+| 3 | Protect data and prove restoration | **FortCloud Ark** | [`ark/`](ark/README.md) | **Available — v0.1.0** | *Restore is a feature, not a hope.* |
+| 4 | Keep request paths stable under failure | **FortCloud Ballast** | [`ballast/`](ballast/README.md) | **Available — v0.1.0** | *Keep workloads steady when parts fail.* |
+| 5 | Service and data quality monitoring | **FortCloud Vitals** | [`vitals/`](vitals/README.md) | **Available — v0.1.0** | *Health and data quality, one signal.* |
+| 6 | Secure access and changes | **FortCloud Custodian** | [`custodian/`](custodian/README.md) | **Available — v0.1.0** | *Guard access. Prove every change.* |
+| 7 | Exercise failure scenarios | **FortCloud Crucible** | [`crucible/`](crucible/README.md) | **Available — v0.1.0** | *Rehearse the outage before it happens.* |
 
 All seven tools are also available through one optional **web console** prototype: [`web/`](web/README.md) — a local FastAPI + React interface with guided forms, a YAML editor, dashboards, staged import review and generated artifacts. It consumes the tools; it does not change them. An optional local read-only AWS connector can propose an Atlas inventory, but no credentials reach the console.
 

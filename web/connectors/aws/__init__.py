@@ -1,4 +1,4 @@
-"""Read-only AWS inventory collector for Fortcloud Atlas."""
+"""Read-only AWS inventory collector for FortCloud Atlas."""
 
 from .collector import build_document
 

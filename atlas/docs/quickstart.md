@@ -1,4 +1,4 @@
-# Fortcloud Atlas — Quickstart
+# FortCloud Atlas — Quickstart
 
 ## 1. Install
 

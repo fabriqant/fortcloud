@@ -1,6 +1,6 @@
-# Fortcloud Ark — Documentation
+# FortCloud Ark — Documentation
 
-Fortcloud Ark checks whether declared backups can actually restore the data within the availability targets of the services that depend on it. It is standalone: it reads its own four YAML files and writes four artifacts.
+FortCloud Ark checks whether declared backups can actually restore the data within the availability targets of the services that depend on it. It is standalone: it reads its own four YAML files and writes four artifacts.
 
 ## Start here
 

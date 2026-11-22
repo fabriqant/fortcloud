@@ -37,7 +37,7 @@ def build_scenarios(model: dict, today: date | None = None) -> str:
     scenarios = core.scenario_map(model)
 
     doc = [
-        "# Fortcloud Crucible — Scenario Plan",
+        "# FortCloud Crucible — Scenario Plan",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-crucible scenarios`. Do not edit by hand.",
         "",
@@ -96,7 +96,7 @@ def build_roles(model: dict, today: date | None = None) -> str:
     people = core.participant_map(model)
 
     doc = [
-        "# Fortcloud Crucible — Roles Matrix",
+        "# FortCloud Crucible — Roles Matrix",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-crucible roles`. Do not edit by hand.",
         "",
@@ -144,7 +144,7 @@ def build_communication(model: dict, today: date | None = None) -> str:
     plan = communication.get("plan") or {}
 
     doc = [
-        "# Fortcloud Crucible — Communication Plan",
+        "# FortCloud Crucible — Communication Plan",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-crucible communication`. Do not edit by hand.",
         "",
@@ -202,7 +202,7 @@ def build_verification(model: dict, today: date | None = None) -> str:
     scenarios = core.scenario_map(model)
 
     doc = [
-        "# Fortcloud Crucible — Verification Report",
+        "# FortCloud Crucible — Verification Report",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-crucible verification`. Do not edit by hand.",
         "",

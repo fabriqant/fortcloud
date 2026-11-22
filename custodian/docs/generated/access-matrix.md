@@ -1,4 +1,4 @@
-# Fortcloud Custodian — Access Matrix
+# FortCloud Custodian — Access Matrix
 
 > Generated on 2026-11-21 by `fortcloud-custodian access`. Do not edit by hand.
 

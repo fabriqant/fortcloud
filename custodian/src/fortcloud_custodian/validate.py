@@ -1,4 +1,4 @@
-"""Structural and semantic validation of the Fortcloud Custodian model."""
+"""Structural and semantic validation of the FortCloud Custodian model."""
 
 from __future__ import annotations
 

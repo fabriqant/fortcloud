@@ -1,4 +1,4 @@
-"""Local API for the Fortcloud web console.
+"""Local API for the FortCloud web console.
 
 The API imports the seven tool packages directly. It never shells out to the tool
 CLIs and never modifies the tools' own example models. On explicit request it can
@@ -20,9 +20,9 @@ from . import catalog, connectors, registry, runner, snapshots, structured, work
 SUITE_VERSION = "0.1.0"
 
 app = FastAPI(
-    title="Fortcloud Console API",
+    title="FortCloud Console API",
     version=SUITE_VERSION,
-    description="Local API for the seven standalone Fortcloud resilience tools.",
+    description="Local API for the seven standalone FortCloud resilience tools.",
 )
 
 app.add_middleware(

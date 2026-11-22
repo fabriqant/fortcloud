@@ -1,4 +1,4 @@
-"""Data model and shared calculations for Fortcloud Ballast."""
+"""Data model and shared calculations for FortCloud Ballast."""
 
 from __future__ import annotations
 

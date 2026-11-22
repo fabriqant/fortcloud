@@ -382,7 +382,7 @@ export default function App() {
         <div className="text-center">
           <Activity className="mx-auto h-6 w-6 animate-pulse text-slate-400" />
           <p className="mt-3 text-sm text-slate-500">
-            {error || "Loading the Fortcloud console…"}
+            {error || "Loading the FortCloud console…"}
           </p>
         </div>
       </div>

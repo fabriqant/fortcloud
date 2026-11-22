@@ -1,1 +1,1 @@
-"""Optional local connectors for the Fortcloud web console."""
+"""Optional local connectors for the FortCloud web console."""

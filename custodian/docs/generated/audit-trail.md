@@ -1,4 +1,4 @@
-# Fortcloud Custodian — Audit Trail
+# FortCloud Custodian — Audit Trail
 
 > Generated on 2026-11-21 by `fortcloud-custodian audit`. Do not edit by hand.
 

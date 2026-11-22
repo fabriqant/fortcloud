@@ -1,4 +1,4 @@
-# Fortcloud Custodian
+# FortCloud Custodian
 
 ### Guard access. Prove every change.
 
@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Fortcloud Custodian turns a hand-maintained YAML model of identities, secrets, deployment pipelines and audit controls into an **access matrix**, a **secret inventory**, a **change-control report**, an **audit trail** and a **machine-readable CI status**. It answers four questions:
+FortCloud Custodian turns a hand-maintained YAML model of identities, secrets, deployment pipelines and audit controls into an **access matrix**, a **secret inventory**, a **change-control report**, an **audit trail** and a **machine-readable CI status**. It answers four questions:
 
 | Requirement | Where it is enforced | What Custodian checks |
 |---|---|---|
@@ -18,7 +18,7 @@ Fortcloud Custodian turns a hand-maintained YAML model of identities, secrets, d
 | **Log sensitive operations** | `audit.yaml` | Every sensitive operation logged into a declared, immutable, durable sink with fresh evidence |
 | **Automate deployments with review, tests and rollback** | `changes.yaml` | Required review, enough approvers, unit + integration + security tests, scoped deployer, verified automated rollback |
 
-[← Back to the Fortcloud-io family README](../README.md) · [Previous tool: Fortcloud Vitals](../vitals/README.md) · [Next tool: Fortcloud Crucible](../crucible/README.md) — rehearse the outage before it happens.
+[← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Vitals](../vitals/README.md) · [Next tool: FortCloud Crucible](../crucible/README.md) — rehearse the outage before it happens.
 
 > **Where the code lives:** this tool is the `custodian/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast or Vitals at runtime. The GitHub Actions workflow stays at the repository root.
 
@@ -298,4 +298,4 @@ python -m unittest discover -s tests -v
 
 MIT — see [LICENSE](LICENSE).
 
-Part of the **Fortcloud** tool family: *Keep the cloud standing.*
+Part of the **FortCloud** tool family: *Keep the cloud standing.*

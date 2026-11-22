@@ -1,4 +1,4 @@
-# Fortcloud Vitals
+# FortCloud Vitals
 
 ### Health and data quality, one signal
 
@@ -8,9 +8,9 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Fortcloud Vitals turns a hand-maintained YAML model of your services, signals, SLOs and verification checks into an **SLO dashboard**, a **signal catalog**, a **quality plan** and a **machine-readable CI status**. It finds the gaps that make monitoring theatre: an alert that fires after the budget is already spent, a signal sampled too coarsely to see the breach, a P0 service with no data-quality objective, or an SLO nobody has verified.
+FortCloud Vitals turns a hand-maintained YAML model of your services, signals, SLOs and verification checks into an **SLO dashboard**, a **signal catalog**, a **quality plan** and a **machine-readable CI status**. It finds the gaps that make monitoring theatre: an alert that fires after the budget is already spent, a signal sampled too coarsely to see the breach, a P0 service with no data-quality objective, or an SLO nobody has verified.
 
-[← Back to the Fortcloud-io family README](../README.md) · [Previous tool: Fortcloud Ballast](../ballast/README.md) · [Next tool: Fortcloud Custodian](../custodian/README.md) — guard access, prove every change.
+[← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Ballast](../ballast/README.md) · [Next tool: FortCloud Custodian](../custodian/README.md) — guard access, prove every change.
 
 > **Where the code lives:** this tool is the `vitals/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas, Failover, Ark or Ballast at runtime. The GitHub Actions workflow stays at the repository root.
 
@@ -213,4 +213,4 @@ python -m unittest discover -s tests -v
 
 MIT — see [LICENSE](LICENSE).
 
-Part of the **Fortcloud** tool family: *Keep the cloud standing.*
+Part of the **FortCloud** tool family: *Keep the cloud standing.*

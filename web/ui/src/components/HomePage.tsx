@@ -75,7 +75,7 @@ const PRINCIPLES: { index: string; title: string; body: string; icon: LucideIcon
   {
     index: "01",
     title: "Make the story explicit",
-    body: "Resilience usually lives in slides and headings. Fortcloud moves it into small, versioned files where intent, ownership and trade-offs can be read by a human.",
+    body: "Resilience usually lives in slides and headings. FortCloud moves it into small, versioned files where intent, ownership and trade-offs can be read by a human.",
     icon: FileDiff,
     tone: "bg-sky-50 text-sky-700",
   },
@@ -167,7 +167,7 @@ export function HomePage({
               Confidence should be <span className="text-sky-300">reviewable.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
-              Fortcloud turns the story you tell about your infrastructure into versioned models,
+              FortCloud turns the story you tell about your infrastructure into versioned models,
               readable checks and evidence your team can actually discuss — without sending your
               diagrams or credentials anywhere.
             </p>
@@ -233,11 +233,11 @@ export function HomePage({
             Why it exists
           </p>
           <h2 className="mt-3 text-4xl font-semibold leading-[1.14] tracking-[-0.035em] text-slate-900">
-            Resilience claims are easy. Resilience evidence is not.
+            Resilience claims are easy.<br/>Resilience evidence is not.
           </h2>
           <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">
             Diagrams age. Runbooks drift. A green dashboard rarely explains what happens when a
-            region disappears. Fortcloud keeps the decision close to the code: a model you can
+            region disappears. FortCloud keeps the decision close to the code: a model you can
             review, a check you can run and a report that can be questioned in a pull request.
           </p>
         </div>
@@ -320,27 +320,30 @@ export function HomePage({
                 key={tool.id}
                 type="button"
                 onClick={() => onOpenTool(tool.id)}
-                className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-card transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_40px_-24px_rgba(15,23,42,.35)] focus:outline-none focus:ring-2 focus:ring-slate-400/50"
+                className={cn(
+                  "group flex h-full flex-col rounded-2xl border border-white/20 p-6 text-left shadow-card transition duration-200 hover:-translate-y-0.5 hover:brightness-105 hover:shadow-[0_18px_40px_-24px_rgba(15,23,42,.45)] focus:outline-none focus:ring-2 focus:ring-white/70 focus:ring-offset-2",
+                  accent.solid,
+                )}
               >
                 <div className="flex items-start justify-between">
-                  <span className={cn("grid h-12 w-12 place-items-center rounded-xl", accent.soft, accent.text)}>
+                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-white/15 text-white ring-1 ring-white/25">
                     <Icon className="h-5 w-5" />
                   </span>
-                  <span className="font-mono text-3xs text-slate-400">
+                  <span className="font-mono text-3xs text-white/60">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
-                <h3 className="mt-6 text-xl font-semibold tracking-tight text-slate-900">
+                <h3 className="mt-6 text-xl font-semibold tracking-tight text-white">
                   {displayToolName(tool.name)}
                 </h3>
-                <p className={cn("mt-1 text-xs font-semibold", accent.text)}>{tool.tagline}</p>
-                <p className="mt-5 text-sm font-medium leading-relaxed text-slate-800">
+                <p className="mt-1 text-xs font-semibold text-white/80">{tool.tagline}</p>
+                <p className="mt-5 text-sm font-medium leading-relaxed text-white">
                   {story.question}
                 </p>
-                <p className="mt-2 text-xs leading-relaxed text-slate-500">{story.detail}</p>
-                <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-100 pt-5">
-                  <span className="text-3xs leading-snug text-slate-500">{story.evidence}</span>
-                  <span className="content-button border border-slate-200 bg-white text-slate-700 transition group-hover:border-slate-900 group-hover:bg-slate-900 group-hover:text-white">
+                <p className="mt-2 text-xs leading-relaxed text-white/75">{story.detail}</p>
+                <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/20 pt-5">
+                  <span className="text-3xs leading-snug text-white/70">{story.evidence}</span>
+                  <span className="content-button border border-white/30 bg-white/10 text-white transition group-hover:border-white group-hover:bg-white group-hover:text-slate-900">
                     Open
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
@@ -404,7 +407,7 @@ export function HomePage({
       </section>
 
       <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-6 text-2xs text-slate-500">
-        <span>Fortcloud suite · v{version ?? "0.1.0"}</span>
+        <span>FortCloud suite · v{version ?? "0.1.0"}</span>
         <span>Local console · models stay in web/workspaces/</span>
       </footer>
     </div>

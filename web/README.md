@@ -1,12 +1,12 @@
-# Fortcloud Console (web prototype)
+# FortCloud Console (web prototype)
 
-A single, calm interface for the seven standalone Fortcloud tools. It is a **consumer** of the tools, not an eighth tool: the CLIs, packages, schemas and examples stay untouched.
+A single, calm interface for the seven standalone FortCloud tools. It is a **consumer** of the tools, not an eighth tool: the CLIs, packages, schemas and examples stay untouched.
 
 The API imports the Python packages directly in-process. It does not spawn CLIs and does not change the tools' bundled example models. The optional AWS connector runs as a separate local command with your own AWS profile; the API and browser never handle credentials.
 
 ## What works in this prototype
 
-- Editorial home page at `#/`, reachable by clicking the Fortcloud logo or the Home sidebar item, presenting the seven tools, their audience and the model → check → review rhythm.
+- Editorial home page at `#/`, reachable by clicking the FortCloud logo or the Home sidebar item, presenting the seven tools, their audience and the model → check → review rhythm.
 - Seven-tool sidebar driven by [`api/tools.yaml`](api/tools.yaml).
 - One file-backed workspace per tool under `web/workspaces/<tool>/`.
 - Guided forms generated from each tool's JSON Schema: catalog-backed fields use the same select style as schema enums, with a custom-value fallback; arrays are compact accordion lists instead of nested cards. A local SQLite reference catalog seeds owners, teams, regions, zones, providers, roles, pairs, components, scenarios, risks, checks and more, and can be edited in a modal; the YAML source editor stays available with line numbers, dirty state and explicit save.

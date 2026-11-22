@@ -1,4 +1,4 @@
-"""Data model and error-budget calculations for Fortcloud Vitals."""
+"""Data model and error-budget calculations for FortCloud Vitals."""
 
 from __future__ import annotations
 

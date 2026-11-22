@@ -1,4 +1,4 @@
-# Fortcloud Vitals — SLO Dashboard
+# FortCloud Vitals — SLO Dashboard
 
 > Generated on 2026-11-21 by `fortcloud-vitals dashboard`. Do not edit by hand.
 

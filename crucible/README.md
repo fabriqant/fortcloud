@@ -1,4 +1,4 @@
-# Fortcloud Crucible
+# FortCloud Crucible
 
 ### Rehearse the outage before it happens.
 
@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Fortcloud Crucible turns a hand-maintained YAML model of failure drills into a **scenario plan**, a **who-does-what matrix**, a **communication plan**, a **service/data verification report** and a **machine-readable CI status**. It answers the questions an incident review always asks:
+FortCloud Crucible turns a hand-maintained YAML model of failure drills into a **scenario plan**, a **who-does-what matrix**, a **communication plan**, a **service/data verification report** and a **machine-readable CI status**. It answers the questions an incident review always asks:
 
 | Requirement | Where it is modelled | What Crucible checks |
 |---|---|---|
@@ -18,7 +18,7 @@ Fortcloud Crucible turns a hand-maintained YAML model of failure drills into a *
 | **Verify the service and the data are back to a correct state** | `verification.yaml` | Passed service check, passed data check, evidence link and an approved verifier sign-off after the scheduled date |
 | **Keep the plan credible over time** | all four files | No stale planned drills, no silently failed exercise, no longer-than-4h drill window |
 
-[← Back to the Fortcloud-io family README](../README.md) · [Previous tool: Fortcloud Custodian](../custodian/README.md)
+[← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Custodian](../custodian/README.md)
 
 > **Where the code lives:** this tool is the `crucible/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast, Vitals or Custodian at runtime. The GitHub Actions workflow stays at the repository root.
 
@@ -246,4 +246,4 @@ python -m unittest discover -s tests -v
 
 MIT — see [LICENSE](LICENSE).
 
-Part of the **Fortcloud** tool family: *Keep the cloud standing.*
+Part of the **FortCloud** tool family: *Keep the cloud standing.*

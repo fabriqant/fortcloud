@@ -1,4 +1,4 @@
-"""Command-line interface for Fortcloud Vitals."""
+"""Command-line interface for FortCloud Vitals."""
 
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ def _add_output_argument(parser: argparse.ArgumentParser) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="fortcloud-vitals",
-        description="Fortcloud Vitals — Health and data quality, one signal.",
+        description="FortCloud Vitals — Health and data quality, one signal.",
     )
     parser.add_argument("--version", action="version", version=f"fortcloud-vitals {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -85,7 +85,7 @@ def _display(label: str, items: list[str]) -> None:
 
 def _diagnose(args, strict: bool = False) -> tuple[dict | None, bool]:
     model, errors, warnings = validate.collect(args.model, args.schema_dir)
-    print("Fortcloud Vitals — model validation")
+    print("FortCloud Vitals — model validation")
     _display("ERRORS", errors)
     _display("WARNINGS", warnings)
     if errors:

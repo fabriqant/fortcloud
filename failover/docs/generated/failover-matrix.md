@@ -1,4 +1,4 @@
-# Fortcloud Failover — Coverage Matrix
+# FortCloud Failover — Coverage Matrix
 
 > Generated on 2026-11-21 by `fortcloud-failover matrix`. Do not edit by hand.
 

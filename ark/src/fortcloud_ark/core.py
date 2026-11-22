@@ -1,4 +1,4 @@
-"""Data model and shared rules for Fortcloud Ark."""
+"""Data model and shared rules for FortCloud Ark."""
 
 from __future__ import annotations
 

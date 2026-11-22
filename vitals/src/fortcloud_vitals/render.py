@@ -61,7 +61,7 @@ def build_dashboard(model: dict, today: date | None = None) -> str:
     signals = core.signal_map(model)
 
     doc = [
-        "# Fortcloud Vitals — SLO Dashboard",
+        "# FortCloud Vitals — SLO Dashboard",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-vitals dashboard`. Do not edit by hand.",
         "",
@@ -145,7 +145,7 @@ def build_signals(model: dict, today: date | None = None) -> str:
     objectives = core.objective_map(model)
 
     doc = [
-        "# Fortcloud Vitals — Signal Catalog",
+        "# FortCloud Vitals — Signal Catalog",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-vitals signals`. Do not edit by hand.",
         "",
@@ -211,7 +211,7 @@ def build_plan(model: dict, today: date | None = None) -> str:
         )
 
     doc = [
-        "# Fortcloud Vitals — Quality Plan",
+        "# FortCloud Vitals — Quality Plan",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-vitals plan`. Do not edit by hand.",
         "",

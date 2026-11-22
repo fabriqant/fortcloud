@@ -1,4 +1,4 @@
-# Fortcloud Atlas — Concepts and method
+# FortCloud Atlas — Concepts and method
 
 This method applies to hybrid and multi-cloud infrastructure: failure domains do not line up with team boundaries or provider boundaries.
 

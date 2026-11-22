@@ -1,4 +1,4 @@
-"""Direct in-process runner for the seven Fortcloud Python packages."""
+"""Direct in-process runner for the seven FortCloud Python packages."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Read-only Google Cloud inventory collector for Fortcloud Atlas."""
+"""Read-only Google Cloud inventory collector for FortCloud Atlas."""
 
 from .collector import build_document
 

@@ -4,7 +4,7 @@ PYTHON ?= python
 PIP ?= $(PYTHON) -m pip
 
 help:
-	@echo "Fortcloud Atlas — available commands:"
+	@echo "FortCloud Atlas — available commands:"
 	@echo "  make install   Install the package in editable mode"
 	@echo "  make validate  Validate the example model"
 	@echo "  make graph     Generate docs/generated/dependency-graph.md"

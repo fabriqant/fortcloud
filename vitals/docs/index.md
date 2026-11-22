@@ -1,6 +1,6 @@
-# Fortcloud Vitals — Documentation
+# FortCloud Vitals — Documentation
 
-Fortcloud Vitals checks whether service health and data-quality signals are backed by credible SLOs, early alerts and dated verification. It is standalone: it reads its own four YAML files and writes four artifacts.
+FortCloud Vitals checks whether service health and data-quality signals are backed by credible SLOs, early alerts and dated verification. It is standalone: it reads its own four YAML files and writes four artifacts.
 
 ## Start here
 

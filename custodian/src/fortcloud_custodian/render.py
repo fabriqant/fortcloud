@@ -40,7 +40,7 @@ def build_access(model: dict, today: date | None = None) -> str:
     principals = core.principal_map(model)
 
     doc = [
-        "# Fortcloud Custodian — Access Matrix",
+        "# FortCloud Custodian — Access Matrix",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-custodian access`. Do not edit by hand.",
         "",
@@ -128,7 +128,7 @@ def build_secrets(model: dict, today: date | None = None) -> str:
     _, _, issues = validate.analyse(model, today)
 
     doc = [
-        "# Fortcloud Custodian — Secret Inventory",
+        "# FortCloud Custodian — Secret Inventory",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-custodian secrets`. Do not edit by hand.",
         "",
@@ -178,7 +178,7 @@ def build_changes(model: dict, today: date | None = None) -> str:
     _, _, issues = validate.analyse(model, today)
 
     doc = [
-        "# Fortcloud Custodian — Change Control",
+        "# FortCloud Custodian — Change Control",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-custodian changes`. Do not edit by hand.",
         "",
@@ -232,7 +232,7 @@ def build_audit(model: dict, today: date | None = None) -> str:
     audit = model.get("audit") or {}
 
     doc = [
-        "# Fortcloud Custodian — Audit Trail",
+        "# FortCloud Custodian — Audit Trail",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-custodian audit`. Do not edit by hand.",
         "",

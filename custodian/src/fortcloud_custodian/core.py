@@ -1,4 +1,4 @@
-"""Data model and analysis helpers for Fortcloud Custodian."""
+"""Data model and analysis helpers for FortCloud Custodian."""
 
 from __future__ import annotations
 

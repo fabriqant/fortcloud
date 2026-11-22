@@ -1,6 +1,6 @@
-# Fortcloud Crucible — Documentation
+# FortCloud Crucible — Documentation
 
-Fortcloud Crucible checks that failure drills are rehearsed in a controlled environment first, that everyone knows their role, that communication is planned, and that the service and the data are verified before an exercise is called a success. It is standalone: it reads its own four YAML files and writes five artifacts.
+FortCloud Crucible checks that failure drills are rehearsed in a controlled environment first, that everyone knows their role, that communication is planned, and that the service and the data are verified before an exercise is called a success. It is standalone: it reads its own four YAML files and writes five artifacts.
 
 ## Start here
 

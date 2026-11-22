@@ -1,4 +1,4 @@
-# Fortcloud Crucible — Scenario Plan
+# FortCloud Crucible — Scenario Plan
 
 > Generated on 2026-11-21 by `fortcloud-crucible scenarios`. Do not edit by hand.
 

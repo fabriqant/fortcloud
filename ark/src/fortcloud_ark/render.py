@@ -49,7 +49,7 @@ def build_coverage(model: dict, today: date | None = None) -> str:
     at_risk = sum(1 for item in model.get("assets", []) if _status(item["id"], issues) == "AT RISK")
 
     doc = [
-        "# Fortcloud Ark — Backup Coverage",
+        "# FortCloud Ark — Backup Coverage",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-ark coverage`. Do not edit by hand.",
         "",
@@ -127,7 +127,7 @@ def build_evidence(model: dict, today: date | None = None) -> str:
     restores = sorted(model.get("restores", []), key=lambda item: (item.get("backup", ""), item["id"]))
 
     doc = [
-        "# Fortcloud Ark — Restore Evidence",
+        "# FortCloud Ark — Restore Evidence",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-ark evidence`. Do not edit by hand.",
         "",
@@ -208,7 +208,7 @@ def build_plan(model: dict, today: date | None = None) -> str:
         return (0 if asset.get("criticality") == "P0" else 1, rto if rto is not None else 10**9, asset["id"])
 
     doc = [
-        "# Fortcloud Ark — Recovery Plan",
+        "# FortCloud Ark — Recovery Plan",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-ark plan`. Do not edit by hand.",
         "",

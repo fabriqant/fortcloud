@@ -1,4 +1,4 @@
-"""Static registry of the seven Fortcloud tools."""
+"""Static registry of the seven FortCloud tools."""
 
 from __future__ import annotations
 

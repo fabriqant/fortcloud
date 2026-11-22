@@ -1,4 +1,4 @@
-"""Structural and semantic validation of the Fortcloud Crucible model."""
+"""Structural and semantic validation of the FortCloud Crucible model."""
 
 from __future__ import annotations
 

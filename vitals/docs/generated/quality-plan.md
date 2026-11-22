@@ -1,4 +1,4 @@
-# Fortcloud Vitals — Quality Plan
+# FortCloud Vitals — Quality Plan
 
 > Generated on 2026-11-21 by `fortcloud-vitals plan`. Do not edit by hand.
 

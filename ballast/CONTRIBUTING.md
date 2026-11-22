@@ -1,4 +1,4 @@
-# Contributing to Fortcloud Ballast
+# Contributing to FortCloud Ballast
 
 ## Setup
 

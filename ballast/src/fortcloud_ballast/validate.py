@@ -1,4 +1,4 @@
-"""Structural and semantic validation of the Fortcloud Ballast model."""
+"""Structural and semantic validation of the FortCloud Ballast model."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Data model and shared rules for Fortcloud Failover."""
+"""Data model and shared rules for FortCloud Failover."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-# Fortcloud Crucible — Verification Report
+# FortCloud Crucible — Verification Report
 
 > Generated on 2026-11-21 by `fortcloud-crucible verification`. Do not edit by hand.
 

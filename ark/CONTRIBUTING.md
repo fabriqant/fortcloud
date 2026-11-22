@@ -1,4 +1,4 @@
-# Contributing to Fortcloud Ark
+# Contributing to FortCloud Ark
 
 ## Setup
 

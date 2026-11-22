@@ -1,4 +1,4 @@
-# Fortcloud Atlas — Runbook template
+# FortCloud Atlas — Runbook template
 
 > Copy this template to `docs/runbooks/<flow-id>.md` in your own repository. A tested runbook beats a perfect one.
 

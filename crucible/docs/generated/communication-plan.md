@@ -1,4 +1,4 @@
-# Fortcloud Crucible — Communication Plan
+# FortCloud Crucible — Communication Plan
 
 > Generated on 2026-11-21 by `fortcloud-crucible communication`. Do not edit by hand.
 

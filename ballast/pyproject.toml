@@ -9,7 +9,7 @@ description = "Keep workloads steady when parts fail — timeout, retry, breaker
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Fortcloud contributors" }]
+authors = [{ name = "FortCloud contributors" }]
 keywords = [
   "resilience",
   "timeout",

@@ -2,7 +2,7 @@
 
 - **Status**: Accepted
 - **Date**: 2026-11-20
-- **Deciders**: Fortcloud contributors
+- **Deciders**: FortCloud contributors
 
 ## Context
 

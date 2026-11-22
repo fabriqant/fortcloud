@@ -1,4 +1,4 @@
-# Contributing to Fortcloud Vitals
+# Contributing to FortCloud Vitals
 
 ## Setup
 

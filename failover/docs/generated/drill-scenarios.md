@@ -1,4 +1,4 @@
-# Fortcloud Failover — Drill Scenarios
+# FortCloud Failover — Drill Scenarios
 
 > Generated on 2026-11-21 by `fortcloud-failover drills`. Do not edit by hand.
 

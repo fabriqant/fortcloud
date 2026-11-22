@@ -1,4 +1,4 @@
-# Fortcloud Custodian — Secret Inventory
+# FortCloud Custodian — Secret Inventory
 
 > Generated on 2026-11-21 by `fortcloud-custodian secrets`. Do not edit by hand.
 

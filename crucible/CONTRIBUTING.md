@@ -1,4 +1,4 @@
-# Contributing to Fortcloud Crucible
+# Contributing to FortCloud Crucible
 
 ## Setup
 
@@ -27,7 +27,7 @@ fortcloud-crucible check --strict --out ./artifacts
 4. **A drill is never green without evidence.** Do not relax the service check, data check or verifier sign-off rules.
 5. **Never let a production drill be the first of its kind.** Keep the controlled-first rule.
 6. **Generated files are disposable.** Never edit `docs/generated/` by hand; regenerate with `fortcloud-crucible check`.
-7. **Stay standalone.** Crucible must not import any other Fortcloud tool package, and does not read their models.
+7. **Stay standalone.** Crucible must not import any other FortCloud tool package, and does not read their models.
 8. **Keep exit codes stable.** `0` success, `1` validation failure, `2` CLI usage error.
 
 ## Commit and pull request

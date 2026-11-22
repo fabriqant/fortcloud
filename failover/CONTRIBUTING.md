@@ -1,4 +1,4 @@
-# Contributing to Fortcloud Failover
+# Contributing to FortCloud Failover
 
 ## Setup
 

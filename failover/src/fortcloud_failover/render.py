@@ -54,7 +54,7 @@ def build_matrix(model: dict, today: date | None = None) -> str:
     at_risk = sum(1 for item in strategies if _status(item["id"], issues) == "AT RISK")
 
     doc = [
-        "# Fortcloud Failover — Coverage Matrix",
+        "# FortCloud Failover — Coverage Matrix",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-failover matrix`. Do not edit by hand.",
         "",
@@ -148,7 +148,7 @@ def build_plan(model: dict, today: date | None = None) -> str:
         return (0 if critical else 1, rto if rto is not None else 10**9, strategy["id"])
 
     doc = [
-        "# Fortcloud Failover — Remediation Plan",
+        "# FortCloud Failover — Remediation Plan",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-failover plan`. Do not edit by hand.",
         "",
@@ -218,7 +218,7 @@ def build_drills(model: dict, today: date | None = None) -> str:
         by_strategy.setdefault(item["strategy"], []).append(item)
 
     doc = [
-        "# Fortcloud Failover — Drill Scenarios",
+        "# FortCloud Failover — Drill Scenarios",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-failover drills`. Do not edit by hand.",
         "",

@@ -1,4 +1,4 @@
-# Fortcloud Atlas — Resilience Report
+# FortCloud Atlas — Resilience Report
 
 > Generated on 2026-11-20 by `fortcloud-atlas report`. Do not edit by hand.
 

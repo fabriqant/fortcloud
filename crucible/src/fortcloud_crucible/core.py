@@ -1,4 +1,4 @@
-"""Data model and planning helpers for Fortcloud Crucible."""
+"""Data model and planning helpers for FortCloud Crucible."""
 
 from __future__ import annotations
 

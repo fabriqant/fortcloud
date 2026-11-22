@@ -44,8 +44,8 @@ export function ToolSidebar({
         <button
           type="button"
           onClick={onHome}
-          aria-label="Fortcloud home"
-          title="Fortcloud home"
+          aria-label="FortCloud home"
+          title="FortCloud home"
           className={cn(
             "group flex items-center justify-center rounded-lg px-3 py-2 transition hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-400/50",
             home && "bg-slate-900 ring-1 ring-slate-700",
@@ -54,7 +54,7 @@ export function ToolSidebar({
           <div
             className="sidebar-logo transition duration-200 group-hover:opacity-80"
             role="img"
-            aria-label="Fortcloud"
+            aria-label="FortCloud"
           />
         </button>
       </div>
@@ -144,7 +144,7 @@ export function ToolSidebar({
           </p>
           {version && (
             <div className="mt-2 flex items-center justify-between gap-2 text-footer text-slate-600">
-              <span>Fortcloud suite</span>
+              <span>FortCloud suite</span>
               <span className="font-mono text-slate-500">v{version}</span>
             </div>
           )}

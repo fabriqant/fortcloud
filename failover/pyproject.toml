@@ -9,7 +9,7 @@ description = "Design out the single point of failure — failover plans and cov
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Fortcloud contributors" }]
+authors = [{ name = "FortCloud contributors" }]
 keywords = [
   "resilience",
   "failover",

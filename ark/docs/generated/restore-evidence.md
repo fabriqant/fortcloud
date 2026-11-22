@@ -1,4 +1,4 @@
-# Fortcloud Ark — Restore Evidence
+# FortCloud Ark — Restore Evidence
 
 > Generated on 2026-11-21 by `fortcloud-ark evidence`. Do not edit by hand.
 

@@ -1,4 +1,4 @@
-# Fortcloud Atlas — Service levels and error budgets
+# FortCloud Atlas — Service levels and error budgets
 
 ## Criticality classes
 

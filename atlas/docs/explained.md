@@ -1,4 +1,4 @@
-# Fortcloud Atlas, explained simply
+# FortCloud Atlas, explained simply
 
 > **Map every dependency. See every risk.**
 
@@ -240,7 +240,7 @@ That is the whole method: one fact per file, assembled automatically into a deci
 No. It reads four YAML files. Nothing is installed on your infrastructure and no credentials are used.
 
 **Does Atlas measure my real RTO?**
-No. It checks the RTO/RPO you declared and whether a restore test is recent enough. Actually measuring recovery is what Fortcloud Crucible and Ark are for.
+No. It checks the RTO/RPO you declared and whether a restore test is recent enough. Actually measuring recovery is what FortCloud Crucible and Ark are for.
 
 **Can I use it with a single cloud provider?**
 Yes. The example is hybrid/multi-cloud, but the model has no such requirement.

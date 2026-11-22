@@ -9,7 +9,7 @@ description = "Rehearse the outage before it happens — controlled failure dril
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Fortcloud contributors" }]
+authors = [{ name = "FortCloud contributors" }]
 keywords = [
   "resilience",
   "chaos-engineering",

@@ -1,4 +1,4 @@
-# Fortcloud Custodian — Change Control
+# FortCloud Custodian — Change Control
 
 > Generated on 2026-11-21 by `fortcloud-custodian changes`. Do not edit by hand.
 

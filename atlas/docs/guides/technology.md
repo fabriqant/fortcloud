@@ -1,6 +1,6 @@
-# Fortcloud Atlas — Technology context (hybrid / multi-cloud)
+# FortCloud Atlas — Technology context (hybrid / multi-cloud)
 
-Principle: **start simple**, then add tools when the pain is measured. A Git repository with Mermaid and Prometheus beats an expensive platform nobody adopts. This guide places Atlas in the Fortcloud family; the other tools (Failover, Ark, Ballast, Vitals, Custodian, Crucible) are optional and independent.
+Principle: **start simple**, then add tools when the pain is measured. A Git repository with Mermaid and Prometheus beats an expensive platform nobody adopts. This guide places Atlas in the FortCloud family; the other tools (Failover, Ark, Ballast, Vitals, Custodian, Crucible) are optional and independent.
 
 ## Minimal stack for week one
 

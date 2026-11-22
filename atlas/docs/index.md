@@ -1,4 +1,4 @@
-# Fortcloud Atlas — Overview
+# FortCloud Atlas — Overview
 
 **Dependency & Risk Map for hybrid and multi-cloud infrastructure.**
 
@@ -21,7 +21,7 @@ model/*.yaml  ──►  validate  ──►  graph + report  ──►  CI arti
 - **Rendering** produces a Mermaid dependency graph and a Markdown resilience report.
 - Generated files are disposable: never edit them by hand.
 
-## Where it sits in the Fortcloud family
+## Where it sits in the FortCloud family
 
 Atlas is the mapping layer. It is intentionally standalone — no backend, no agent, no dependency on the other tools:
 

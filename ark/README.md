@@ -1,4 +1,4 @@
-# Fortcloud Ark
+# FortCloud Ark
 
 ### Restore is a feature, not a hope
 
@@ -8,9 +8,9 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Fortcloud Ark turns a hand-maintained YAML model of your data assets, backup policies and restore tests into a **backup coverage matrix**, a **restore evidence report**, a **recovery plan** and a **machine-readable CI status**. It catches the gaps that only show up during an incident: an untested restore, a backup schedule that cannot meet the RPO, a missing immutable copy, or a drill from four months ago.
+FortCloud Ark turns a hand-maintained YAML model of your data assets, backup policies and restore tests into a **backup coverage matrix**, a **restore evidence report**, a **recovery plan** and a **machine-readable CI status**. It catches the gaps that only show up during an incident: an untested restore, a backup schedule that cannot meet the RPO, a missing immutable copy, or a drill from four months ago.
 
-[← Back to the Fortcloud-io family README](../README.md) · [Previous tool: Fortcloud Failover](../failover/README.md) · [Next tool: Fortcloud Ballast](../ballast/README.md) — keep workloads steady when parts fail.
+[← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Failover](../failover/README.md) · [Next tool: FortCloud Ballast](../ballast/README.md) — keep workloads steady when parts fail.
 
 > **Where the code lives:** this tool is the `ark/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas or Failover at runtime. The GitHub Actions workflow stays at the repository root.
 
@@ -217,4 +217,4 @@ python -m unittest discover -s tests -v
 
 MIT — see [LICENSE](LICENSE).
 
-Part of the **Fortcloud** tool family: *Keep the cloud standing.*
+Part of the **FortCloud** tool family: *Keep the cloud standing.*

@@ -1,6 +1,6 @@
-# Fortcloud Custodian — Documentation
+# FortCloud Custodian — Documentation
 
-Fortcloud Custodian checks that access is least-privileged, environments are separated, secrets are referenced safely, deployments are reviewed and tested with a rollback, and sensitive operations are logged with evidence. It is standalone: it reads its own four YAML files and writes five artifacts.
+FortCloud Custodian checks that access is least-privileged, environments are separated, secrets are referenced safely, deployments are reviewed and tested with a rollback, and sensitive operations are logged with evidence. It is standalone: it reads its own four YAML files and writes five artifacts.
 
 ## Start here
 

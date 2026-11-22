@@ -1,4 +1,4 @@
-# Contributing to Fortcloud Custodian
+# Contributing to FortCloud Custodian
 
 ## Setup
 
@@ -26,7 +26,7 @@ fortcloud-custodian check --strict --out ./artifacts
 3. **Renderer changes require a test.** Add a case to `tests/test_render.py`.
 4. **Never allow secret values.** The secret schema intentionally rejects unknown keys; a `value` field must not be added.
 5. **Generated files are disposable.** Never edit `docs/generated/` by hand; regenerate with `fortcloud-custodian check`.
-6. **Stay standalone.** Custodian must not import any other Fortcloud tool package, and does not read their models.
+6. **Stay standalone.** Custodian must not import any other FortCloud tool package, and does not read their models.
 7. **Keep exit codes stable.** `0` success, `1` validation failure, `2` CLI usage error.
 
 ## Commit and pull request

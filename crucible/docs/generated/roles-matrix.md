@@ -1,4 +1,4 @@
-# Fortcloud Crucible — Roles Matrix
+# FortCloud Crucible — Roles Matrix
 
 > Generated on 2026-11-21 by `fortcloud-crucible roles`. Do not edit by hand.
 

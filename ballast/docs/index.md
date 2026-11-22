@@ -1,6 +1,6 @@
-# Fortcloud Ballast — Documentation
+# FortCloud Ballast — Documentation
 
-Fortcloud Ballast checks whether a request chain can still meet the latency promised by its service when dependencies are slow or failing. It is standalone: it reads its own four YAML files and writes four artifacts.
+FortCloud Ballast checks whether a request chain can still meet the latency promised by its service when dependencies are slow or failing. It is standalone: it reads its own four YAML files and writes four artifacts.
 
 ## Start here
 

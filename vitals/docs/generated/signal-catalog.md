@@ -1,4 +1,4 @@
-# Fortcloud Vitals — Signal Catalog
+# FortCloud Vitals — Signal Catalog
 
 > Generated on 2026-11-21 by `fortcloud-vitals signals`. Do not edit by hand.
 

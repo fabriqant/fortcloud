@@ -1,4 +1,4 @@
-# Contributing to Fortcloud Atlas
+# Contributing to FortCloud Atlas
 
 Thanks for helping make infrastructure risk visible.
 
@@ -20,7 +20,7 @@ make check
 2. **Changes to rules need a test.** Validation logic lives in `src/fortcloud_atlas/validate.py`; tests live in `tests/`.
 3. **Changes to the model format need a schema update** in `schema/` and a note in `CHANGELOG.md`.
 4. **Architectural choices go in an ADR** under `docs/adrs/` using the existing numbering.
-5. **Keep the tool standalone.** Atlas must not import or require another Fortcloud tool.
+5. **Keep the tool standalone.** Atlas must not import or require another FortCloud tool.
 
 ## Adding a validation rule
 

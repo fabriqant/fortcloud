@@ -90,7 +90,7 @@ def build_report(model: dict, today: date | None = None) -> str:
     critical_risks = [risk for risk in risks if core.risk_score(risk) >= 15]
 
     doc = [
-        "# Fortcloud Atlas — Resilience Report",
+        "# FortCloud Atlas — Resilience Report",
         "",
         f"> Generated on {today.isoformat()} by `fortcloud-atlas report`. Do not edit by hand.",
         "",

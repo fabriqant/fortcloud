@@ -1,6 +1,6 @@
-# Fortcloud Failover — Documentation
+# FortCloud Failover — Documentation
 
-Fortcloud Failover checks whether a declared failover design can actually meet the availability targets of the services it protects. It is standalone: it reads its own four YAML files and writes four artifacts.
+FortCloud Failover checks whether a declared failover design can actually meet the availability targets of the services it protects. It is standalone: it reads its own four YAML files and writes four artifacts.
 
 ## Start here
 

@@ -9,7 +9,7 @@ description = "Restore is a feature, not a hope — backup coverage and restore 
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Fortcloud contributors" }]
+authors = [{ name = "FortCloud contributors" }]
 keywords = [
   "resilience",
   "backup",

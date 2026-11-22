@@ -1,4 +1,4 @@
-"""Read-only Azure inventory collector for Fortcloud Atlas."""
+"""Read-only Azure inventory collector for FortCloud Atlas."""
 
 from .collector import build_document
 

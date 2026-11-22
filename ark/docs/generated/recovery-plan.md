@@ -1,4 +1,4 @@
-# Fortcloud Ark — Recovery Plan
+# FortCloud Ark — Recovery Plan
 
 > Generated on 2026-11-21 by `fortcloud-ark plan`. Do not edit by hand.
 

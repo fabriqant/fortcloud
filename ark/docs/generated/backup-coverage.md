@@ -1,4 +1,4 @@
-# Fortcloud Ark — Backup Coverage
+# FortCloud Ark — Backup Coverage
 
 > Generated on 2026-11-21 by `fortcloud-ark coverage`. Do not edit by hand.
 

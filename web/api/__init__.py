@@ -1,1 +1,1 @@
-"""Fortcloud Console API package."""
+"""FortCloud Console API package."""

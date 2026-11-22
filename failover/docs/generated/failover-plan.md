@@ -1,4 +1,4 @@
-# Fortcloud Failover — Remediation Plan
+# FortCloud Failover — Remediation Plan
 
 > Generated on 2026-11-21 by `fortcloud-failover plan`. Do not edit by hand.
 

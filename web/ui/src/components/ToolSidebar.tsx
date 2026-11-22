@@ -62,7 +62,7 @@ export function ToolSidebar({
                 <span className={cn("block truncate text-sm font-semibold", active ? "text-white" : "text-slate-300")}>
                   {displayToolName(tool.name)}
                 </span>
-                <span className="mt-0.5 block truncate text-sidebar-desc text-slate-500">
+                <span className="mt-0.5 block truncate text-sidebar-desc font-medium text-slate-500">
                   {tool.tagline}
                 </span>
               </span>

@@ -403,7 +403,7 @@ function ArrayField({
         </button>
       </div>
 
-      <div className="space-y-6 pt-1">
+      <div className="space-y-3 pt-1">
         {items.map((item, index) => {
           const expanded = open[index] === true;
           return (

@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AlertCircle, Database, Save } from "lucide-react";
+import { AlertCircle, Save } from "lucide-react";
 import { api } from "../lib/api";
 import type { Catalog, ModelFormat } from "../lib/types";
 import { cn } from "../lib/utils";
-import { CatalogModal } from "./CatalogModal";
 import { applyDefaults, cleanDocument, SchemaForm, type Schema } from "./SchemaForm";
 import { Button, EmptyState } from "./ui";
 
 export function FormView({
   toolId,
+  catalog,
   onSaved,
 }: {
   toolId: string;
+  catalog: Catalog;
   onSaved: () => void | Promise<void>;
 }) {
   const [formats, setFormats] = useState<ModelFormat[]>([]);
@@ -21,18 +22,7 @@ export function FormView({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [catalog, setCatalog] = useState<Catalog>({});
-  const [catalogOpen, setCatalogOpen] = useState(false);
   const formatToolRef = useRef("");
-
-  useEffect(() => {
-    api
-      .catalog()
-      .then(setCatalog)
-      .catch(() => {
-        // Suggestions remain optional if the catalog is unavailable.
-      });
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -105,16 +95,10 @@ export function FormView({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="max-w-2xl text-2xs leading-relaxed text-slate-500">
-          Fields suggest reusable values from your local reference catalog. You can still type any
-          value required by the schema.
-        </p>
-        <Button variant="ghost" onClick={() => setCatalogOpen(true)}>
-          <Database className="h-3.5 w-3.5" />
-          Reference data
-        </Button>
-      </div>
+      <p className="max-w-2xl text-2xs leading-relaxed text-slate-500">
+        Fields suggest reusable values from your local reference catalog. You can still type any
+        value required by the schema.
+      </p>
 
       <div className="flex flex-wrap gap-2">
         {formats.map((format) => (
@@ -161,13 +145,6 @@ export function FormView({
         />
       )}
 
-      {catalogOpen && (
-        <CatalogModal
-          catalog={catalog}
-          onClose={() => setCatalogOpen(false)}
-          onChange={setCatalog}
-        />
-      )}
     </div>
   );
 }

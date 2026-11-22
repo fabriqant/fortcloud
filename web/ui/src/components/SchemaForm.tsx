@@ -237,7 +237,7 @@ function PrimitiveField({
 }) {
   const type = schemaType(schema);
   const label = schema.title ?? labelFor(name);
-  const inputClass = "form-control w-full";
+  const inputClass = "form-control";
   const [customOpen, setCustomOpen] = useState(false);
 
   if (allowsNull(schema) && value === null) {
@@ -249,7 +249,7 @@ function PrimitiveField({
         <button
           type="button"
           onClick={() => onChange(blankFor(schema))}
-          className={cn(inputClass, "text-left text-slate-400 hover:border-slate-400")}
+          className={cn("w-full", inputClass, "text-left text-slate-400 hover:border-slate-400")}
         >
           Set a value
         </button>
@@ -265,7 +265,7 @@ function PrimitiveField({
   if (schema.enum) {
     control = (
       <select
-        className={inputClass}
+        className={cn(inputClass, "w-full")}
         value={String(value ?? "")}
         onChange={(event) => onChange(event.target.value)}
       >
@@ -279,7 +279,7 @@ function PrimitiveField({
     );
   } else if (schema.const !== undefined) {
     control = (
-      <input className={cn(inputClass, "bg-slate-50 text-slate-500")} value={String(schema.const)} disabled />
+      <input className={cn(inputClass, "w-14 bg-slate-50 text-slate-500")} value={String(schema.const)} disabled />
     );
   } else if (type === "boolean") {
     control = (
@@ -297,7 +297,7 @@ function PrimitiveField({
     control = (
       <input
         type="number"
-        className={inputClass}
+        className={cn(inputClass, "w-full")}
         value={current}
         min={schema.minimum}
         max={schema.maximum}
@@ -308,7 +308,7 @@ function PrimitiveField({
     control = (
       <div>
         <select
-          className={inputClass}
+          className={cn(inputClass, "w-full")}
           value={customActive ? "__custom__" : current}
           onChange={(event) => {
             if (event.target.value === "__custom__") {
@@ -330,7 +330,7 @@ function PrimitiveField({
         {customActive && (
           <input
             type="text"
-            className={cn(inputClass, "mt-1.5")}
+            className={cn(inputClass, "mt-1.5 w-full")}
             value={current}
             placeholder="Custom value"
             onChange={(event) => onChange(event.target.value)}
@@ -342,7 +342,7 @@ function PrimitiveField({
     control = (
       <input
         type="text"
-        className={inputClass}
+        className={cn(inputClass, "w-full")}
         value={current}
         placeholder={schema.pattern ? "Must match the schema pattern" : undefined}
         onChange={(event) => onChange(event.target.value)}

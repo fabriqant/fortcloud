@@ -39,6 +39,11 @@
     letter-spacing: normal;
   }
 
+  input.form-control,
+  select.form-control {
+    font-size: 14px;
+  }
+
   .accordion-row {
     min-height: var(--accordion-row-height);
     line-height: var(--leading-accordion-title);

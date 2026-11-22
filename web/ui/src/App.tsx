@@ -406,65 +406,95 @@ export default function App() {
             <HomePage tools={tools} version={suiteVersion} onOpenTool={(id) => navigate(id)} />
           ) : (
             <>
-              <header className="border-b border-slate-200 bg-white px-7 py-5">
-            <div className="flex flex-wrap items-start justify-between gap-5">
-              <div className="min-w-0">
-                <div className="flex items-center gap-3.5">
-                  <ToolIcon className={cn("h-10 w-10 shrink-0", accent.text)} />
-                  <h1 className="text-xl font-bold tracking-tight text-slate-900">
-                    {displayToolName(tool?.name ?? "")}
-                  </h1>
-                  {result && (
-                    <Badge tone={result.exit_code === 0 ? "green" : "rose"}>
-                      exit {result.exit_code}
-                    </Badge>
-                  )}
-                </div>
-              </div>
+              <header
+                className={cn(
+                  "border-b border-white/20 px-7 py-5",
+                  accent.solid,
+                )}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-5">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3.5">
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/15 text-white ring-1 ring-white/25">
+                        <ToolIcon className="h-5 w-5" />
+                      </span>
+                      <h1 className="text-xl font-bold tracking-tight text-white">
+                        {displayToolName(tool?.name ?? "")}
+                      </h1>
+                      {result && (
+                        <Badge tone={result.exit_code === 0 ? "green" : "rose"}>
+                          exit {result.exit_code}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
 
-              <div className="flex flex-wrap items-center gap-2">
-                <Button variant="ghost" onClick={() => setConnectorOpen(true)}>
-                  <Cloud className="h-3.5 w-3.5" />
-                  Cloud connectors
-                </Button>
-                <Button variant="ghost" onClick={() => setCatalogOpen(true)}>
-                  <Database className="h-3.5 w-3.5" />
-                  Reference data
-                </Button>
-                <div className="mr-2 flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2">
-                  <Switch.Root
-                    id="strict-mode"
-                    checked={strict}
-                    onCheckedChange={setStrict}
-                    className="relative h-4 w-7 rounded-full bg-slate-300 transition data-[state=checked]:bg-slate-900"
-                  >
-                    <Switch.Thumb className="block h-3 w-3 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-3.5" />
-                  </Switch.Root>
-                  <label htmlFor="strict-mode" className="cursor-pointer text-2xs font-semibold text-slate-600">
-                    Strict
-                  </label>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      className="text-white/80 hover:bg-white/15 hover:text-white focus:ring-white/60"
+                      onClick={() => setConnectorOpen(true)}
+                    >
+                      <Cloud className="h-3.5 w-3.5" />
+                      Cloud connectors
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="text-white/80 hover:bg-white/15 hover:text-white focus:ring-white/60"
+                      onClick={() => setCatalogOpen(true)}
+                    >
+                      <Database className="h-3.5 w-3.5" />
+                      Reference data
+                    </Button>
+                    <div className="mr-2 flex items-center gap-2 rounded-lg border border-white/30 bg-white/10 px-3 py-2">
+                      <Switch.Root
+                        id="strict-mode"
+                        checked={strict}
+                        onCheckedChange={setStrict}
+                        className="group relative h-4 w-7 rounded-full bg-white/30 transition data-[state=checked]:bg-white"
+                      >
+                        <Switch.Thumb className="block h-3 w-3 translate-x-0.5 rounded-full bg-white transition-transform group-data-[state=checked]:translate-x-3.5 group-data-[state=checked]:bg-slate-800" />
+                      </Switch.Root>
+                      <label htmlFor="strict-mode" className="cursor-pointer text-2xs font-semibold text-white/80">
+                        Strict
+                      </label>
+                    </div>
+                    <Button
+                      className="border-white/30 bg-white/10 text-white hover:bg-white/20 focus:ring-white/60"
+                      onClick={runValidate}
+                      loading={busy === "validate"}
+                    >
+                      <ShieldAlert className="h-3.5 w-3.5" />
+                      Validate
+                    </Button>
+                    <Button
+                      variant="primary"
+                      className={cn("bg-white hover:bg-white/90 focus:ring-white/70", accent.text)}
+                      onClick={runCheck}
+                      loading={busy === "check"}
+                    >
+                      <Play className="h-3.5 w-3.5" />
+                      Check
+                    </Button>
+                    <Button
+                      aria-label="Reset model"
+                      title="Reset to the bundled example"
+                      className="border-white/30 bg-white/10 text-white hover:bg-white/20 focus:ring-white/60"
+                      onClick={resetModel}
+                      loading={busy === "reset"}
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 </div>
-                <Button onClick={runValidate} loading={busy === "validate"}>
-                  <ShieldAlert className="h-3.5 w-3.5" />
-                  Validate
-                </Button>
-                <Button variant="primary" onClick={runCheck} loading={busy === "check"}>
-                  <Play className="h-3.5 w-3.5" />
-                  Check
-                </Button>
-                <Button aria-label="Reset model" title="Reset to the bundled example" onClick={resetModel} loading={busy === "reset"}>
-                  <RotateCcw className="h-3.5 w-3.5" />
-                </Button>
-              </div>
-            </div>
 
-            {error && (
-              <div className="mt-4 flex items-start gap-2 rounded-lg bg-rose-50 px-3 py-2.5 text-xs text-rose-700">
-                <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                {error}
-              </div>
-            )}
-          </header>
+                {error && (
+                  <div className="mt-4 flex items-start gap-2 rounded-lg bg-white/15 px-3 py-2.5 text-xs text-white ring-1 ring-white/25">
+                    <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    {error}
+                  </div>
+                )}
+              </header>
 
           <div className="flex-1 px-7 py-6">
             {tool?.description && (

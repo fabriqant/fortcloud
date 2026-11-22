@@ -122,7 +122,7 @@ export function CatalogModal({
                   }
                 }}
                 placeholder={`New ${labelFor(active).toLowerCase()} value`}
-                className="min-w-0 flex-1 rounded-md border border-slate-200 px-2.5 py-2 text-control outline-none focus:border-slate-400"
+                className="form-control min-w-0 flex-1"
               />
               <Button
                 variant="primary"
@@ -159,7 +159,7 @@ export function CatalogModal({
                           }
                           if (event.key === "Escape") setEditing(null);
                         }}
-                        className="min-w-0 flex-1 rounded border border-slate-300 bg-white px-1.5 py-1 text-control outline-none focus:border-slate-500"
+                        className="form-control min-w-0 flex-1"
                       />
                       <button
                         aria-label={`Save ${value}`}

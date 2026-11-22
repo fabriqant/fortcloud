@@ -153,7 +153,7 @@ export function ScenarioView({
               New scenario
             </span>
             <input
-              className="w-full rounded-md border border-slate-200 px-2.5 py-1.5 text-xs outline-none focus:border-slate-400"
+              className="form-control w-full"
               value={name}
               placeholder="e.g. cost-optimisation"
               onChange={(event) => setName(event.target.value)}
@@ -164,7 +164,7 @@ export function ScenarioView({
               Description
             </span>
             <input
-              className="w-full rounded-md border border-slate-200 px-2.5 py-1.5 text-xs outline-none focus:border-slate-400"
+              className="form-control w-full"
               value={description}
               placeholder="Optional"
               onChange={(event) => setDescription(event.target.value)}
@@ -194,7 +194,7 @@ export function ScenarioView({
           action={
             <div className="flex items-center gap-2">
               <input
-                className="w-40 rounded-md border border-slate-200 px-2 py-1.5 text-2xs outline-none focus:border-slate-400"
+                className="form-control w-40"
                 value={label}
                 placeholder="Label (optional)"
                 onChange={(event) => setLabel(event.target.value)}
@@ -244,7 +244,7 @@ export function ScenarioView({
               From
             </span>
             <select
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs outline-none focus:border-slate-400"
+              className="form-control w-full"
               value={left}
               onChange={(event) => setLeft(event.target.value)}
             >
@@ -260,7 +260,7 @@ export function ScenarioView({
               To
             </span>
             <select
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs outline-none focus:border-slate-400"
+              className="form-control w-full"
               value={right}
               onChange={(event) => setRight(event.target.value)}
             >

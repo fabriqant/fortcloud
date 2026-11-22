@@ -27,6 +27,18 @@
     @apply inline-flex h-[34px] w-[34px] items-center justify-center rounded-md border border-transparent text-xs transition;
   }
 
+  .form-control {
+    @apply rounded-md border border-slate-200 bg-white text-slate-800 outline-none focus:border-slate-400;
+    box-sizing: border-box;
+    height: 38px;
+    padding: 6px 10px;
+    font-family: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: normal;
+  }
+
   .accordion-row {
     min-height: var(--accordion-row-height);
     line-height: var(--leading-accordion-title);

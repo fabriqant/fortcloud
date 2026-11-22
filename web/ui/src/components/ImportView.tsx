@@ -164,7 +164,7 @@ export function ImportView({
               <select
                 value={target}
                 onChange={(event) => setTarget(event.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-2xs text-slate-700 outline-none focus:border-slate-400"
+                className="form-control w-full"
               >
                 {files.map((file) => (
                   <option key={file} value={file}>

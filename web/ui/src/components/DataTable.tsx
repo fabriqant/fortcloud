@@ -61,7 +61,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Filter rows"
-            className="w-52 rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-xs outline-none placeholder:text-slate-400 focus:border-slate-400 focus:bg-white"
+            className="form-control w-52 bg-slate-50 pl-8 focus:bg-white"
           />
         </label>
       </div>

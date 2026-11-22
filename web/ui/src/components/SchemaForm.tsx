@@ -237,8 +237,7 @@ function PrimitiveField({
 }) {
   const type = schemaType(schema);
   const label = schema.title ?? labelFor(name);
-  const inputClass =
-    "w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-control text-slate-800 outline-none focus:border-slate-400";
+  const inputClass = "form-control w-full";
   const [customOpen, setCustomOpen] = useState(false);
 
   if (allowsNull(schema) && value === null) {
@@ -331,7 +330,7 @@ function PrimitiveField({
         {customActive && (
           <input
             type="text"
-            className={cn(inputClass, "mt-1.5 font-mono")}
+            className={cn(inputClass, "mt-1.5")}
             value={current}
             placeholder="Custom value"
             onChange={(event) => onChange(event.target.value)}
@@ -343,7 +342,7 @@ function PrimitiveField({
     control = (
       <input
         type="text"
-        className={cn(inputClass, "font-mono")}
+        className={inputClass}
         value={current}
         placeholder={schema.pattern ? "Must match the schema pattern" : undefined}
         onChange={(event) => onChange(event.target.value)}

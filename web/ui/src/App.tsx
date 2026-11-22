@@ -418,7 +418,7 @@ export default function App() {
                           disabled={busy === "scenario"}
                           value={activeScenarioInfo.name}
                           onChange={(event) => void selectScenario(event.target.value)}
-                          className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-2xs font-semibold text-slate-700 outline-none focus:border-slate-400 disabled:opacity-50"
+                          className="form-control disabled:opacity-50"
                         >
                           {scenarioState?.scenarios.map((scenario) => (
                             <option key={scenario.name} value={scenario.name}>

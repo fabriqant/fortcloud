@@ -8,7 +8,7 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 
 - Seven-tool sidebar driven by [`api/tools.yaml`](api/tools.yaml).
 - One file-backed workspace per tool under `web/workspaces/<tool>/`.
-- Guided forms generated from each tool's JSON Schema, with suggestions from a local SQLite reference catalog (owners, teams, regions, zones, providers, environments, services) that you can edit in a modal; values remain optional suggestions and the YAML source editor stays available with line numbers, dirty state and explicit save.
+- Guided forms generated from each tool's JSON Schema: catalog-backed fields use the same select style as schema enums, with a custom-value fallback; arrays are compact accordion lists instead of nested cards. A local SQLite reference catalog seeds owners, teams, regions, zones, providers, roles, pairs, components, scenarios, risks, checks and more, and can be edited in a modal; the YAML source editor stays available with line numbers, dirty state and explicit save.
 - Staged YAML import: paste or upload a proposal, review a unified diff, then accept or discard it. Nothing is applied automatically.
 - `Validate`, `Check`, `Strict` and reset-to-example actions.
 - KPI cards, Mermaid dependency graph, Recharts charts and sortable/filterable TanStack tables.

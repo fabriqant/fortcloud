@@ -38,6 +38,12 @@ def test_defaults_are_seeded():
     assert "single DNS provider" in values["providers"]
     assert "prod" in values["environments"]
     assert "checkout" in values["services"]
+    assert "primary" in values["roles"]
+    assert "dns" in values["pairs"]
+    assert "dns-global-dr" in values["components"]
+    assert "war-room" in values["channels"]
+    assert "R-001" in values["risks"]
+    assert "slo-checkout-avail" in values["objectives"]
 
     # The fixture database was created on demand.
     assert catalog.DB_PATH.is_file()

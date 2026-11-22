@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
 import { api } from "../lib/api";
 import type { Catalog } from "../lib/types";
@@ -53,7 +54,7 @@ export function CatalogModal({
     }
   };
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4"
       onMouseDown={(event) => {
@@ -64,7 +65,7 @@ export function CatalogModal({
         role="dialog"
         aria-modal="true"
         aria-label="Reference data catalog"
-        className="flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
+        className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
       >
         <header className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
           <div>
@@ -212,6 +213,7 @@ export function CatalogModal({
           </Button>
         </footer>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

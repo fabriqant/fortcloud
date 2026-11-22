@@ -1,5 +1,5 @@
-import { useId } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react";
 import type { Catalog } from "../lib/types";
 import { cn } from "../lib/utils";
 
@@ -44,22 +44,134 @@ const SUGGESTION_CATEGORIES: Record<string, string> = {
   owners: "owners",
   team: "teams",
   teams: "teams",
+  escalation: "teams",
+  person: "people",
+  people: "people",
+  participant: "participants",
+  participants: "participants",
+  service: "services",
+  services: "services",
+  component: "components",
+  components: "components",
+  target: "components",
+  system: "components",
+  primary: "components",
+  standby: "components",
+  from: "components",
+  to: "components",
+  pair: "pairs",
+  pairs: "pairs",
+  provider: "providers",
+  providers: "providers",
   region: "regions",
   regions: "regions",
   zone: "zones",
   zones: "zones",
-  provider: "providers",
-  providers: "providers",
   environment: "environments",
   environments: "environments",
-  service: "services",
-  services: "services",
+  role: "roles",
+  roles: "roles",
+  audience: "audiences",
+  audiences: "audiences",
+  strategy: "strategies",
+  strategies: "strategies",
+  scenario: "scenarios",
+  scenarios: "scenarios",
+  channel: "channels",
+  channels: "channels",
+  notify: "channels",
+  stakeholder: "stakeholders",
+  stakeholders: "stakeholders",
+  contact: "stakeholders",
+  asset: "assets",
+  assets: "assets",
+  backup: "backups",
+  backups: "backups",
+  restore: "restores",
+  restores: "restores",
+  dependency: "dependencies",
+  dependencies: "dependencies",
+  flow: "flows",
+  flows: "flows",
+  risk: "risks",
+  risks: "risks",
+  check: "checks",
+  checks: "checks",
+  objective: "objectives",
+  objectives: "objectives",
+  signal: "signals",
+  signals: "signals",
+  sink: "sinks",
+  sinks: "sinks",
+  metric: "metrics",
+  metrics: "metrics",
+  operation: "operations",
+  operations: "operations",
+  pipeline: "pipelines",
+  pipelines: "pipelines",
+  secret: "secrets",
+  secrets: "secrets",
+  principal: "principals",
+  principals: "principals",
+  permission: "permissions",
+  permissions: "permissions",
+  grant: "permissions",
+  grants: "permissions",
+  runbook: "runbooks",
+  runbooks: "runbooks",
+  drill: "drills",
+  drills: "drills",
+  signoff: "signoffs",
+  signoffs: "signoffs",
+  approval: "signoffs",
+  approved_by: "signoffs",
+  assignment: "assignments",
+  assignments: "assignments",
+  action: "actions",
+  actions: "actions",
+  mitigation: "actions",
+  mitigations: "actions",
+  steps: "actions",
 };
 
 function suggestionsFor(name: string, catalog?: Catalog): string[] {
   const key = name.replace(/-\d+$/, "").toLowerCase();
   const category = SUGGESTION_CATEGORIES[key];
   return category ? catalog?.[category] ?? [] : [];
+}
+
+const TITLE_KEYS = [
+  "name",
+  "id",
+  "service",
+  "component",
+  "asset",
+  "primary",
+  "standby",
+  "scenario",
+  "metric",
+  "channel",
+  "principal",
+  "strategy",
+  "role",
+  "person",
+];
+
+function itemTitle(item: unknown, index: number): string {
+  if (isRecord(item)) {
+    for (const key of TITLE_KEYS) {
+      const candidate = item[key];
+      if (typeof candidate === "string" && candidate.trim()) return candidate.trim();
+      if (typeof candidate === "number") return String(candidate);
+    }
+    const fallback = Object.values(item).find(
+      (candidate) => typeof candidate === "string" && candidate.trim(),
+    );
+    if (typeof fallback === "string" && fallback.trim()) return fallback.trim();
+    return `Item ${index + 1}`;
+  }
+  if (item === undefined || item === null || item === "") return `Item ${index + 1}`;
+  return String(item);
 }
 
 function blankFor(schema: Schema): unknown {
@@ -125,9 +237,9 @@ function PrimitiveField({
 }) {
   const type = schemaType(schema);
   const label = schema.title ?? labelFor(name);
-  const listId = useId();
   const inputClass =
     "w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] text-slate-800 outline-none focus:border-slate-400";
+  const [customOpen, setCustomOpen] = useState(false);
 
   if (allowsNull(schema) && value === null) {
     return (
@@ -146,10 +258,18 @@ function PrimitiveField({
     );
   }
 
+  const current = value === undefined || value === null ? "" : String(value);
+  const options = suggestions.filter((option, index) => suggestions.indexOf(option) === index);
+  const customActive = customOpen || (current !== "" && !options.includes(current));
+
   let control;
   if (schema.enum) {
     control = (
-      <select className={inputClass} value={String(value ?? "")} onChange={(event) => onChange(event.target.value)}>
+      <select
+        className={inputClass}
+        value={String(value ?? "")}
+        onChange={(event) => onChange(event.target.value)}
+      >
         {!required && <option value="">—</option>}
         {schema.enum.map((option) => (
           <option key={String(option)} value={String(option)}>
@@ -159,7 +279,9 @@ function PrimitiveField({
       </select>
     );
   } else if (schema.const !== undefined) {
-    control = <input className={cn(inputClass, "bg-slate-50 text-slate-500")} value={String(schema.const)} disabled />;
+    control = (
+      <input className={cn(inputClass, "bg-slate-50 text-slate-500")} value={String(schema.const)} disabled />
+    );
   } else if (type === "boolean") {
     control = (
       <label className="flex items-center gap-2 pt-1 text-[11px] text-slate-600">
@@ -177,33 +299,55 @@ function PrimitiveField({
       <input
         type="number"
         className={inputClass}
-        value={value === undefined || value === null ? "" : String(value)}
+        value={current}
         min={schema.minimum}
         max={schema.maximum}
-        onChange={(event) =>
-          onChange(event.target.value === "" ? "" : Number(event.target.value))
-        }
+        onChange={(event) => onChange(event.target.value === "" ? "" : Number(event.target.value))}
       />
+    );
+  } else if (options.length) {
+    control = (
+      <div>
+        <select
+          className={inputClass}
+          value={customActive ? "__custom__" : current}
+          onChange={(event) => {
+            if (event.target.value === "__custom__") {
+              setCustomOpen(true);
+              return;
+            }
+            setCustomOpen(false);
+            onChange(event.target.value);
+          }}
+        >
+          {!required && <option value="">—</option>}
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+          <option value="__custom__">Type a custom value…</option>
+        </select>
+        {customActive && (
+          <input
+            type="text"
+            className={cn(inputClass, "mt-1.5 font-mono")}
+            value={current}
+            placeholder="Custom value"
+            onChange={(event) => onChange(event.target.value)}
+          />
+        )}
+      </div>
     );
   } else {
     control = (
-      <>
-        <input
-          type="text"
-          list={suggestions.length ? listId : undefined}
-          className={cn(inputClass, "font-mono")}
-          value={value === undefined || value === null ? "" : String(value)}
-          placeholder={schema.pattern ? "Must match the schema pattern" : undefined}
-          onChange={(event) => onChange(event.target.value)}
-        />
-        {suggestions.length > 0 && (
-          <datalist id={listId}>
-            {suggestions.map((option) => (
-              <option key={option} value={option} />
-            ))}
-          </datalist>
-        )}
-      </>
+      <input
+        type="text"
+        className={cn(inputClass, "font-mono")}
+        value={current}
+        placeholder={schema.pattern ? "Must match the schema pattern" : undefined}
+        onChange={(event) => onChange(event.target.value)}
+      />
     );
   }
 
@@ -214,6 +358,115 @@ function PrimitiveField({
       </span>
       {control}
     </label>
+  );
+}
+
+function ArrayField({
+  name,
+  schema,
+  value,
+  catalog,
+  onChange,
+}: {
+  name: string;
+  schema: Schema;
+  value: unknown;
+  catalog?: Catalog;
+  onChange: (value: unknown) => void;
+}) {
+  const items = Array.isArray(value) ? value : [];
+  const itemSchema = schema.items ?? {};
+  const objectItems = schemaType(itemSchema) === "object";
+  const label = schema.title ?? labelFor(name);
+  const [open, setOpen] = useState<Record<number, boolean>>({});
+
+  const setItem = (index: number, next: unknown) => {
+    const copy = [...items];
+    copy[index] = next;
+    onChange(copy);
+  };
+
+  return (
+    <div className="sm:col-span-2">
+      <div className="flex items-center justify-between gap-2 border-b border-slate-200 pb-1.5">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+          {label} <span className="text-slate-300">· {items.length}</span>
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen((previous) => ({ ...previous, [items.length]: true }));
+            onChange([...items, blankFor(itemSchema)]);
+          }}
+          className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] font-semibold text-slate-600 hover:border-slate-400"
+        >
+          <Plus className="h-3 w-3" /> Add
+        </button>
+      </div>
+
+      <div className="divide-y divide-slate-100">
+        {items.map((item, index) => {
+          const expanded = open[index] === true;
+          return (
+            <div key={index}>
+              <div className="flex items-center gap-2 py-1.5">
+                <button
+                  type="button"
+                  onClick={() => setOpen((previous) => ({ ...previous, [index]: !expanded }))}
+                  className="flex min-w-0 flex-1 items-center gap-1.5 text-left"
+                  aria-expanded={expanded}
+                >
+                  {expanded ? (
+                    <ChevronDown className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+                  ) : (
+                    <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+                  )}
+                  <span className="truncate text-[11px] font-medium text-slate-700">
+                    {itemTitle(item, index)}
+                  </span>
+                  {objectItems && isRecord(item) && (
+                    <span className="shrink-0 text-[10px] text-slate-400">
+                      · {Object.keys(item).length} fields
+                    </span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onChange(items.filter((_, position) => position !== index))}
+                  className="text-slate-400 hover:text-rose-600"
+                  aria-label={`Remove ${label} ${index + 1}`}
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              {expanded && (
+                <div className="pb-3 pl-5">
+                  {objectItems ? (
+                    <Fields
+                      schema={itemSchema}
+                      value={item}
+                      catalog={catalog}
+                      onChange={(next) => setItem(index, next)}
+                    />
+                  ) : (
+                    <PrimitiveField
+                      name={`${name}-${index}`}
+                      schema={itemSchema}
+                      value={item}
+                      required
+                      suggestions={suggestionsFor(name, catalog)}
+                      onChange={(next) => setItem(index, next)}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {!items.length && <p className="py-2 text-[11px] text-slate-400">No entries yet.</p>}
+      </div>
+    </div>
   );
 }
 
@@ -266,8 +519,8 @@ function Field({
 
   if (type === "object") {
     return (
-      <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3 sm:col-span-2">
-        <p className="mb-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+      <div className="border-l border-slate-200 pl-3 sm:col-span-2">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
           {label} {required && <span className="text-rose-400">*</span>}
         </p>
         <Fields
@@ -281,61 +534,14 @@ function Field({
   }
 
   if (type === "array") {
-    const items = Array.isArray(value) ? value : [];
-    const itemSchema = schema.items ?? {};
     return (
-      <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3 sm:col-span-2">
-        <div className="mb-2.5 flex items-center justify-between gap-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-            {label} <span className="text-slate-300">· {items.length}</span>
-          </p>
-          <button
-            type="button"
-            onClick={() => onChange([...items, blankFor(itemSchema)])}
-            className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] font-semibold text-slate-600 hover:border-slate-400"
-          >
-            <Plus className="h-3 w-3" /> Add
-          </button>
-        </div>
-        <div className="space-y-2">
-          {items.map((item, index) => (
-            <div key={index} className="rounded-md border border-slate-200 bg-white p-3">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="font-mono text-[10px] text-slate-400">#{index + 1}</span>
-                <button
-                  type="button"
-                  onClick={() => onChange(items.filter((_, position) => position !== index))}
-                  className="text-slate-400 hover:text-rose-600"
-                  aria-label={`Remove ${name} ${index + 1}`}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
-              </div>
-              {schemaType(itemSchema) === "object" ? (
-                <Fields schema={itemSchema} value={item} catalog={catalog} onChange={(next) => {
-                  const copy = [...items];
-                  copy[index] = next;
-                  onChange(copy);
-                }} />
-              ) : (
-                <PrimitiveField
-                  name={`${name}-${index}`}
-                  schema={itemSchema}
-                  value={item}
-                  required
-                  suggestions={suggestionsFor(name, catalog)}
-                  onChange={(next) => {
-                    const copy = [...items];
-                    copy[index] = next;
-                    onChange(copy);
-                  }}
-                />
-              )}
-            </div>
-          ))}
-          {!items.length && <p className="py-2 text-center text-[11px] text-slate-400">No entry yet.</p>}
-        </div>
-      </div>
+      <ArrayField
+        name={name}
+        schema={schema}
+        value={value}
+        catalog={catalog}
+        onChange={(next) => onChange(next)}
+      />
     );
   }
 

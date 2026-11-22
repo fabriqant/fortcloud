@@ -6,7 +6,7 @@
   </tr>
 </table>
 
-# FortCloud-io
+# FortCloud
 
 ### Cloud resilience tooling for hybrid and multi-cloud infrastructure
 

@@ -18,7 +18,7 @@ FortCloud Custodian turns a hand-maintained YAML model of identities, secrets, d
 | **Log sensitive operations** | `audit.yaml` | Every sensitive operation logged into a declared, immutable, durable sink with fresh evidence |
 | **Automate deployments with review, tests and rollback** | `changes.yaml` | Required review, enough approvers, unit + integration + security tests, scoped deployer, verified automated rollback |
 
-[← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Vitals](../vitals/README.md) · [Next tool: FortCloud Crucible](../crucible/README.md) — rehearse the outage before it happens.
+[← Back to the FortCloud family README](../README.md) · [Previous tool: FortCloud Vitals](../vitals/README.md) · [Next tool: FortCloud Crucible](../crucible/README.md) — rehearse the outage before it happens.
 
 > **Where the code lives:** this tool is the `custodian/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast or Vitals at runtime. The GitHub Actions workflow stays at the repository root.
 

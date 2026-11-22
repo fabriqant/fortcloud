@@ -18,7 +18,7 @@ FortCloud Crucible turns a hand-maintained YAML model of failure drills into a *
 | **Verify the service and the data are back to a correct state** | `verification.yaml` | Passed service check, passed data check, evidence link and an approved verifier sign-off after the scheduled date |
 | **Keep the plan credible over time** | all four files | No stale planned drills, no silently failed exercise, no longer-than-4h drill window |
 
-[← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Custodian](../custodian/README.md)
+[← Back to the FortCloud family README](../README.md) · [Previous tool: FortCloud Custodian](../custodian/README.md)
 
 > **Where the code lives:** this tool is the `crucible/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast, Vitals or Custodian at runtime. The GitHub Actions workflow stays at the repository root.
 

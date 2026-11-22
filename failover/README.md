@@ -10,7 +10,7 @@
 
 FortCloud Failover turns a hand-maintained YAML model of your failover topology into a **coverage matrix**, a **remediation plan**, a **drill checklist** and a **machine-readable CI status**. It catches false redundancy before an outage does: a standby in the same region, a capacity too small to absorb the load, a switchover slower than the RTO, or a drill that has gone stale.
 
-[← Back to the FortCloud-io family README](../README.md) · [Next tool: FortCloud Ark](../ark/README.md) — restore is a feature, not a hope.
+[← Back to the FortCloud family README](../README.md) · [Next tool: FortCloud Ark](../ark/README.md) — restore is a feature, not a hope.
 
 > **Where the code lives:** this tool is the `failover/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its **own model** and does not depend on Atlas at runtime. The GitHub Actions workflow stays at the repository root.
 

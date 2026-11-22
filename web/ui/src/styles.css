@@ -9,9 +9,22 @@
     height: 100vh;
     height: 100dvh;
   }
+
+  .sidebar-logo {
+    width: var(--sidebar-logo-size);
+    height: var(--sidebar-logo-size);
+    background-image: url("../../../logo-white.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 }
 
 @layer base {
+  :root {
+    --sidebar-logo-size: 128px;
+  }
+
   html,
   body,
   #root {

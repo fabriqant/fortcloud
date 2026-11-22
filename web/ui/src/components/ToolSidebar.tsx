@@ -57,16 +57,8 @@ export function ToolSidebar({
 
   return (
     <aside className="app-sidebar sticky top-0 flex w-[268px] shrink-0 flex-col border-r border-slate-200 bg-slate-950 text-slate-300">
-      <div className="shrink-0 border-b border-slate-800 px-5 py-5">
-        <div className="flex items-center gap-2.5">
-          <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-sky-400 to-indigo-600 text-sm font-black text-white">
-            F
-          </div>
-          <div>
-            <p className="text-sm font-bold tracking-[0.18em] text-white">FORTCLOUD</p>
-            <p className="text-[10px] tracking-[0.18em] text-slate-500">by fabriqant</p>
-          </div>
-        </div>
+      <div className="flex shrink-0 items-center justify-center border-b border-slate-800 px-5 py-5">
+        <div className="sidebar-logo" role="img" aria-label="Fortcloud" />
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">

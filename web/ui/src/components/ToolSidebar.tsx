@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ToolInfo } from "../lib/types";
-import { accentFor, cn } from "../lib/utils";
+import { accentFor, cn, displayToolName } from "../lib/utils";
 
 const ICONS: Record<string, LucideIcon> = {
   network: Network,
@@ -62,9 +62,6 @@ export function ToolSidebar({
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-          Tools · {tools.length}
-        </p>
         {tools.map((tool) => {
           const Icon = ICONS[tool.icon] ?? Boxes;
           const accent = accentFor(tool.accent);
@@ -87,10 +84,10 @@ export function ToolSidebar({
                 <Icon className={cn("h-3.5 w-3.5", active ? accent.text : "text-slate-400")} />
               </span>
               <span className="min-w-0">
-                <span className={cn("block truncate text-xs font-semibold", active ? "text-white" : "text-slate-300")}>
-                  {tool.name}
+                <span className={cn("block truncate text-sm font-semibold", active ? "text-white" : "text-slate-300")}>
+                  {displayToolName(tool.name)}
                 </span>
-                <span className="mt-0.5 block truncate text-[10px] leading-snug text-slate-500">
+                <span className="mt-0.5 block truncate text-sidebar-desc text-slate-500">
                   {tool.tagline}
                 </span>
               </span>
@@ -107,7 +104,7 @@ export function ToolSidebar({
               href={href}
               target={external ? "_blank" : undefined}
               rel={external ? "noreferrer" : undefined}
-              className="group flex items-center gap-2 rounded-md px-2 py-1.5 text-[11px] text-slate-400 transition hover:bg-slate-900 hover:text-white"
+              className="group flex items-center gap-2 rounded-md px-2 py-1.5 text-footer text-slate-400 transition hover:bg-slate-900 hover:text-white"
             >
               <Icon className="h-3.5 w-3.5 shrink-0 text-slate-500 group-hover:text-sky-400" />
               <span className="min-w-0 flex-1 truncate">{label}</span>
@@ -117,11 +114,11 @@ export function ToolSidebar({
         </div>
 
         <div className="mt-3 border-t border-slate-800 pt-3">
-          <div className="flex items-center gap-2 text-[11px] text-slate-400">
+          <div className="flex items-center gap-2 text-footer text-slate-400">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />
             Local mode · no cloud access
           </div>
-          <p className="mt-1.5 text-[10px] leading-relaxed text-slate-600">
+          <p className="mt-1.5 text-footer text-slate-600">
             Models stay in <span className="font-mono text-slate-500">web/workspaces/</span>
           </p>
         </div>

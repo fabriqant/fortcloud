@@ -18,3 +18,7 @@ export const ACCENT: Record<string, { bar: string; dot: string; soft: string; te
 export function accentFor(name: string) {
   return ACCENT[name] ?? ACCENT.blue;
 }
+
+export function displayToolName(name: string) {
+  return name.replace(/^Fortcloud\s+/i, "");
+}

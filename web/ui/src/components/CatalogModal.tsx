@@ -70,7 +70,7 @@ export function CatalogModal({
         <header className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
           <div>
             <h2 className="text-sm font-semibold text-slate-900">Reference data</h2>
-            <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
+            <p className="mt-1 text-2xs leading-relaxed text-slate-500">
               Reusable values suggested in guided forms. Stored locally in{" "}
               <span className="font-mono text-slate-600">web/catalog.sqlite3</span>. You can always
               type a different value in a form.
@@ -96,7 +96,7 @@ export function CatalogModal({
                   setError("");
                 }}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-[11px] font-semibold transition",
+                  "flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-control font-semibold transition",
                   category === active
                     ? "bg-slate-900 text-white"
                     : "text-slate-500 hover:bg-white hover:text-slate-800",
@@ -122,7 +122,7 @@ export function CatalogModal({
                   }
                 }}
                 placeholder={`New ${labelFor(active).toLowerCase()} value`}
-                className="min-w-0 flex-1 rounded-md border border-slate-200 px-2.5 py-2 text-xs outline-none focus:border-slate-400"
+                className="min-w-0 flex-1 rounded-md border border-slate-200 px-2.5 py-2 text-control outline-none focus:border-slate-400"
               />
               <Button
                 variant="primary"
@@ -135,7 +135,7 @@ export function CatalogModal({
               </Button>
             </div>
 
-            {error && <p className="mb-3 rounded-md bg-rose-50 px-3 py-2 text-[11px] text-rose-700">{error}</p>}
+            {error && <p className="mb-3 rounded-md bg-rose-50 px-3 py-2 text-2xs text-rose-700">{error}</p>}
 
             <div className="grid gap-1.5 sm:grid-cols-2">
               {values.map((value) => (
@@ -159,7 +159,7 @@ export function CatalogModal({
                           }
                           if (event.key === "Escape") setEditing(null);
                         }}
-                        className="min-w-0 flex-1 rounded border border-slate-300 bg-white px-1.5 py-1 text-[11px] outline-none focus:border-slate-500"
+                        className="min-w-0 flex-1 rounded border border-slate-300 bg-white px-1.5 py-1 text-control outline-none focus:border-slate-500"
                       />
                       <button
                         aria-label={`Save ${value}`}
@@ -174,7 +174,7 @@ export function CatalogModal({
                     </>
                   ) : (
                     <>
-                      <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-slate-700">
+                      <span className="min-w-0 flex-1 truncate font-mono text-control text-slate-700">
                         {value}
                       </span>
                       <button
@@ -200,13 +200,13 @@ export function CatalogModal({
                 </div>
               ))}
               {!values.length && (
-                <p className="text-[11px] text-slate-400">No values in this category yet.</p>
+                <p className="text-2xs text-slate-400">No values in this category yet.</p>
               )}
             </div>
           </div>
         </div>
 
-        <footer className="flex items-center justify-between border-t border-slate-200 px-5 py-3 text-[10px] text-slate-400">
+        <footer className="flex items-center justify-between border-t border-slate-200 px-5 py-3 text-footer text-slate-400">
           <span>Defaults are restored only when the database is deleted.</span>
           <Button variant="ghost" onClick={onClose}>
             Done

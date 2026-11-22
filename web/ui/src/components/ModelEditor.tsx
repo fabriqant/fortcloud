@@ -35,7 +35,7 @@ export function ModelEditor({
       <div className="flex h-[560px] bg-slate-950 text-slate-100">
         <div
           ref={gutter}
-          className="w-14 shrink-0 select-none overflow-hidden border-r border-slate-800 bg-slate-900/60 py-4 text-right font-mono text-[12px] leading-6 text-slate-600"
+          className="w-14 shrink-0 select-none overflow-hidden border-r border-slate-800 bg-slate-900/60 py-4 text-right font-mono text-xs leading-6 text-slate-600"
         >
           {Array.from({ length: lineCount }, (_, index) => (
             <div key={index} className="pr-3">
@@ -50,10 +50,10 @@ export function ModelEditor({
           onScroll={(event) => {
             if (gutter.current) gutter.current.scrollTop = event.currentTarget.scrollTop;
           }}
-          className="h-full flex-1 resize-none bg-transparent py-4 pl-4 pr-6 font-mono text-[12px] leading-6 text-slate-100 outline-none"
+          className="h-full flex-1 resize-none bg-transparent py-4 pl-4 pr-6 font-mono text-xs leading-6 text-slate-100 outline-none"
         />
       </div>
-      <p className="border-t border-slate-100 px-5 py-3 text-[11px] text-slate-500">
+      <p className="border-t border-slate-100 px-5 py-3 text-2xs text-slate-500">
         YAML is the source of truth. Generated artifacts are rebuilt by <span className="font-mono">Check</span>.
       </p>
     </Card>

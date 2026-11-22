@@ -68,7 +68,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left text-xs">
-          <thead className="bg-slate-50/80 text-[10px] uppercase tracking-wider text-slate-500">
+          <thead className="bg-slate-50/80 text-3xs uppercase tracking-wider text-slate-500">
             {reactTable.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -120,7 +120,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
         </table>
       </div>
 
-      <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3 text-[11px] text-slate-500">
+      <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3 text-2xs text-slate-500">
         <span>
           Page {reactTable.getState().pagination.pageIndex + 1} of {reactTable.getPageCount() || 1}
         </span>

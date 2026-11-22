@@ -103,7 +103,7 @@ export function FormView({
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="max-w-2xl text-[11px] leading-relaxed text-slate-500">
+        <p className="max-w-2xl text-2xs leading-relaxed text-slate-500">
           Fields suggest reusable values from your local reference catalog. You can still type any
           value required by the schema.
         </p>
@@ -122,7 +122,7 @@ export function FormView({
               setNotice("");
             }}
             className={cn(
-              "rounded-lg border px-3 py-2 font-mono text-[11px] font-semibold transition",
+              "rounded-lg border px-3 py-2 font-mono text-2xs font-semibold transition",
               format.file === activeFile
                 ? "border-slate-900 bg-slate-900 text-white"
                 : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",

@@ -238,13 +238,13 @@ function PrimitiveField({
   const type = schemaType(schema);
   const label = schema.title ?? labelFor(name);
   const inputClass =
-    "w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] text-slate-800 outline-none focus:border-slate-400";
+    "w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-control text-slate-800 outline-none focus:border-slate-400";
   const [customOpen, setCustomOpen] = useState(false);
 
   if (allowsNull(schema) && value === null) {
     return (
       <label className="block">
-        <span className="mb-1 block text-[10px] font-semibold text-slate-500">
+        <span className="mb-1 block text-3xs font-semibold text-slate-500">
           {label} <span className="font-normal text-slate-400">· null</span>
         </span>
         <button
@@ -284,7 +284,7 @@ function PrimitiveField({
     );
   } else if (type === "boolean") {
     control = (
-      <label className="flex items-center gap-2 pt-1 text-[11px] text-slate-600">
+      <label className="flex items-center gap-2 pt-1 text-control text-slate-600">
         <input
           type="checkbox"
           checked={Boolean(value)}
@@ -353,7 +353,7 @@ function PrimitiveField({
 
   return (
     <label className="block">
-      <span className="mb-1 block text-[10px] font-semibold text-slate-500">
+      <span className="mb-1 block text-3xs font-semibold text-slate-500">
         {label} {required && <span className="text-rose-400">*</span>}
       </span>
       {control}
@@ -389,7 +389,7 @@ function ArrayField({
   return (
     <div className="sm:col-span-2">
       <div className="flex items-center justify-between gap-2 border-b border-slate-200 pb-1.5">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+        <p className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
           {label} <span className="text-slate-300">· {items.length}</span>
         </p>
         <button
@@ -398,7 +398,7 @@ function ArrayField({
             setOpen((previous) => ({ ...previous, [items.length]: true }));
             onChange([...items, blankFor(itemSchema)]);
           }}
-          className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] font-semibold text-slate-600 hover:border-slate-400"
+          className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-control font-semibold text-slate-600 hover:border-slate-400"
         >
           <Plus className="h-3 w-3" /> Add
         </button>
@@ -409,7 +409,7 @@ function ArrayField({
           const expanded = open[index] === true;
           return (
             <div key={index}>
-              <div className="flex items-center gap-2 py-1.5">
+              <div className="accordion-row flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setOpen((previous) => ({ ...previous, [index]: !expanded }))}
@@ -421,11 +421,11 @@ function ArrayField({
                   ) : (
                     <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                   )}
-                  <span className="truncate text-[11px] font-medium text-slate-700">
+                  <span className="truncate text-accordion-title font-medium text-slate-700">
                     {itemTitle(item, index)}
                   </span>
                   {objectItems && isRecord(item) && (
-                    <span className="shrink-0 text-[10px] text-slate-400">
+                    <span className="shrink-0 text-3xs text-slate-400">
                       · {Object.keys(item).length} fields
                     </span>
                   )}
@@ -464,7 +464,7 @@ function ArrayField({
             </div>
           );
         })}
-        {!items.length && <p className="py-2 text-[11px] text-slate-400">No entries yet.</p>}
+        {!items.length && <p className="py-2 text-2xs text-slate-400">No entries yet.</p>}
       </div>
     </div>
   );
@@ -520,7 +520,7 @@ function Field({
   if (type === "object") {
     return (
       <div className="border-l border-slate-200 pl-3 sm:col-span-2">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+        <p className="mb-2 text-3xs font-semibold uppercase tracking-wider text-slate-400">
           {label} {required && <span className="text-rose-400">*</span>}
         </p>
         <Fields

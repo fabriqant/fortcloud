@@ -32,9 +32,9 @@ export function FindingsPanel({ result }: { result: RunResult | null }) {
 
       {errors.length > 0 && (
         <div className="space-y-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-600">Errors</p>
+          <p className="text-3xs font-semibold uppercase tracking-wider text-rose-600">Errors</p>
           {errors.map((message, index) => (
-            <div key={`e-${index}`} className="flex gap-2 rounded-lg bg-rose-50 p-2.5 text-[11px] leading-relaxed text-rose-900">
+            <div key={`e-${index}`} className="flex gap-2 rounded-lg bg-rose-50 p-2.5 text-2xs leading-relaxed text-rose-900">
               <CircleX className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-500" />
               <span className="break-words">{message}</span>
             </div>
@@ -44,9 +44,9 @@ export function FindingsPanel({ result }: { result: RunResult | null }) {
 
       {warnings.length > 0 && (
         <div className="mt-4 space-y-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-600">Warnings</p>
+          <p className="text-3xs font-semibold uppercase tracking-wider text-amber-600">Warnings</p>
           {warnings.map((message, index) => (
-            <div key={`w-${index}`} className="flex gap-2 rounded-lg bg-amber-50 p-2.5 text-[11px] leading-relaxed text-amber-900">
+            <div key={`w-${index}`} className="flex gap-2 rounded-lg bg-amber-50 p-2.5 text-2xs leading-relaxed text-amber-900">
               <TriangleAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
               <span className="break-words">{message}</span>
             </div>

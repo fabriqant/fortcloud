@@ -23,7 +23,7 @@ export function KpiCards({ kpis }: { kpis: Kpi[] }) {
             </span>
             <div className="min-w-0">
               <p className="text-2xl font-bold tabular-nums tracking-tight text-slate-900">{kpi.value}</p>
-              <p className="truncate text-[11px] font-medium text-slate-500">{kpi.label}</p>
+              <p className="truncate text-2xs font-medium text-slate-500">{kpi.label}</p>
             </div>
           </Card>
         );

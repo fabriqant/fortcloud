@@ -13,7 +13,7 @@ import type {
   ToolInfo,
   ViewData,
 } from "./lib/types";
-import { accentFor, cn } from "./lib/utils";
+import { accentFor, cn, displayToolName } from "./lib/utils";
 import { ArtifactView } from "./components/ArtifactView";
 import { ChartCard } from "./components/ChartCard";
 import { DataTable } from "./components/DataTable";
@@ -277,14 +277,16 @@ export default function App() {
             <div className="min-w-0">
               <div className="flex items-center gap-2.5">
                 <span className={cn("h-2.5 w-2.5 rounded-full", accent.dot)} />
-                <h1 className="text-xl font-bold tracking-tight text-slate-900">{tool?.name}</h1>
+                <h1 className="text-xl font-bold tracking-tight text-slate-900">
+                  {displayToolName(tool?.name ?? "")}
+                </h1>
                 {result && (
                   <Badge tone={result.exit_code === 0 ? "green" : "rose"}>
                     exit {result.exit_code}
                   </Badge>
                 )}
               </div>
-              <p className="mt-1 text-xs font-medium text-slate-500">{tool?.tagline}</p>
+              <p className="mt-1 text-sm font-medium text-slate-500">{tool?.tagline}</p>
               <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-slate-400">
                 {tool?.description}
               </p>
@@ -300,7 +302,7 @@ export default function App() {
                 >
                   <Switch.Thumb className="block h-3 w-3 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-3.5" />
                 </Switch.Root>
-                <label htmlFor="strict-mode" className="cursor-pointer text-[11px] font-semibold text-slate-600">
+                <label htmlFor="strict-mode" className="cursor-pointer text-2xs font-semibold text-slate-600">
                   Strict
                 </label>
               </div>
@@ -346,13 +348,13 @@ export default function App() {
                   {activeScenarioInfo && (
                     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-card">
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                        <p className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
                           Scenario
                         </p>
                         <p className="mt-0.5 text-sm font-semibold text-slate-800">
                           {activeScenarioInfo.name}
                         </p>
-                        <p className="mt-0.5 text-[11px] text-slate-500">
+                        <p className="mt-0.5 text-2xs text-slate-500">
                           {activeScenarioInfo.description || "Bundled example model"}
                         </p>
                       </div>
@@ -362,7 +364,7 @@ export default function App() {
                           disabled={busy === "scenario"}
                           value={activeScenarioInfo.name}
                           onChange={(event) => void selectScenario(event.target.value)}
-                          className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 outline-none focus:border-slate-400 disabled:opacity-50"
+                          className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-2xs font-semibold text-slate-700 outline-none focus:border-slate-400 disabled:opacity-50"
                         >
                           {scenarioState?.scenarios.map((scenario) => (
                             <option key={scenario.name} value={scenario.name}>
@@ -401,7 +403,7 @@ export default function App() {
                             key={table.id}
                             onClick={() => setActiveTable(table.id)}
                             className={cn(
-                              "rounded-full border px-3 py-1.5 text-[11px] font-semibold transition",
+                              "rounded-full border px-3 py-1.5 text-2xs font-semibold transition",
                               table.id === activeTable
                                 ? "border-slate-900 bg-slate-900 text-white"
                                 : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800",
@@ -453,7 +455,7 @@ export default function App() {
                         </button>
                       ))}
                     </div>
-                    <p className="max-w-md text-[11px] leading-relaxed text-slate-500">
+                    <p className="max-w-md text-2xs leading-relaxed text-slate-500">
                       {modelMode === "form"
                         ? "Fill in the fields, then save. Validation still runs through the tool."
                         : "Edit the YAML directly, then Save. Check regenerates the artifacts."}
@@ -470,7 +472,7 @@ export default function App() {
                     />
                   ) : (
                     <>
-                      <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
+                      <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
                         Edit a YAML file below, then select <span className="font-semibold">Save</span>. The
                         model changes only after <span className="font-semibold">Check</span> regenerates the
                         artifacts. Use <span className="font-semibold">Reset</span> to restore the bundled
@@ -482,7 +484,7 @@ export default function App() {
                             key={filename}
                             onClick={() => setActiveFile(filename)}
                             className={cn(
-                              "rounded-lg border px-3 py-2 font-mono text-[11px] font-semibold transition",
+                              "rounded-lg border px-3 py-2 font-mono text-2xs font-semibold transition",
                               filename === activeFile
                                 ? "border-slate-900 bg-slate-900 text-white"
                                 : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
@@ -529,7 +531,7 @@ export default function App() {
                               <span className="block truncate text-xs font-semibold text-slate-700">
                                 {artifact.label}
                               </span>
-                              <span className="block truncate font-mono text-[10px] text-slate-400">
+                              <span className="block truncate font-mono text-3xs text-slate-400">
                                 {artifact.name}
                               </span>
                             </span>
@@ -559,7 +561,7 @@ export default function App() {
                         key={filename}
                         onClick={() => setActiveSchema(filename)}
                         className={cn(
-                          "rounded-lg border px-3 py-2 font-mono text-[11px] font-semibold transition",
+                          "rounded-lg border px-3 py-2 font-mono text-2xs font-semibold transition",
                           filename === activeSchema
                             ? "border-slate-900 bg-slate-900 text-white"
                             : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
@@ -571,7 +573,7 @@ export default function App() {
                   </div>
                   <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-card">
                     <h2 className="mb-3 text-sm font-semibold">{activeSchema || "JSON Schema"}</h2>
-                    <pre className="max-h-[600px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-[11px] leading-relaxed text-slate-200">
+                    <pre className="max-h-[600px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-2xs leading-relaxed text-slate-200">
                       {activeSchema ? schemas[activeSchema] : "No schema available."}
                     </pre>
                   </div>

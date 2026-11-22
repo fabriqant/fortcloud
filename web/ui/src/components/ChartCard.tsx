@@ -64,7 +64,7 @@ export function ChartCard({ chart }: { chart: ChartSeries }) {
       {chart.type === "donut" && (
         <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1.5">
           {display.map((entry, index) => (
-            <span key={entry.name} className="flex items-center gap-1.5 text-[11px] text-slate-600">
+            <span key={entry.name} className="flex items-center gap-1.5 text-2xs text-slate-600">
               <span className="h-2 w-2 rounded-full" style={{ background: COLORS[index % COLORS.length] }} />
               {entry.name} · {entry.value}
             </span>

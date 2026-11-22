@@ -86,7 +86,7 @@ export function ScenarioView({
 
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
+      <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
         Scenarios keep independent copies of this tool's model. Switching one restores its latest
         version; <span className="font-semibold">Snapshot</span> records the current files as a new
         version before you continue.
@@ -115,14 +115,14 @@ export function ScenarioView({
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-xs font-semibold">{scenario.name}</span>
                   {scenario.active && <Badge tone="green">active</Badge>}
-                  <span className="text-[10px] text-slate-400">
+                  <span className="text-3xs text-slate-400">
                     {scenario.versions.length} version{scenario.versions.length === 1 ? "" : "s"}
                   </span>
                 </div>
                 {scenario.description && (
-                  <p className="mt-0.5 text-[11px] text-slate-500">{scenario.description}</p>
+                  <p className="mt-0.5 text-2xs text-slate-500">{scenario.description}</p>
                 )}
-                <p className="mt-0.5 text-[10px] text-slate-400">
+                <p className="mt-0.5 text-3xs text-slate-400">
                   Updated {dateLabel(scenario.updated_at || scenario.created_at)}
                 </p>
               </div>
@@ -149,7 +149,7 @@ export function ScenarioView({
         </div>
         <div className="mt-4 flex flex-wrap items-end gap-2 border-t border-slate-100 pt-4">
           <label className="min-w-[180px] flex-1">
-            <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
               New scenario
             </span>
             <input
@@ -160,7 +160,7 @@ export function ScenarioView({
             />
           </label>
           <label className="min-w-[220px] flex-1">
-            <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
               Description
             </span>
             <input
@@ -194,7 +194,7 @@ export function ScenarioView({
           action={
             <div className="flex items-center gap-2">
               <input
-                className="w-40 rounded-md border border-slate-200 px-2 py-1.5 text-[11px] outline-none focus:border-slate-400"
+                className="w-40 rounded-md border border-slate-200 px-2 py-1.5 text-2xs outline-none focus:border-slate-400"
                 value={label}
                 placeholder="Label (optional)"
                 onChange={(event) => setLabel(event.target.value)}
@@ -227,7 +227,7 @@ export function ScenarioView({
                 <span className="min-w-0 flex-1 truncate text-slate-500">
                   {version.label || "Automatic version"}
                 </span>
-                <span className="text-[10px] text-slate-400">{dateLabel(version.created_at)}</span>
+                <span className="text-3xs text-slate-400">{dateLabel(version.created_at)}</span>
               </div>
             ))}
           </div>
@@ -240,7 +240,7 @@ export function ScenarioView({
         <CardTitle title="Compare" subtitle="Unified diff of two model states" />
         <div className="flex flex-wrap items-end gap-2">
           <label className="min-w-[200px] flex-1">
-            <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
               From
             </span>
             <select
@@ -256,7 +256,7 @@ export function ScenarioView({
             </select>
           </label>
           <label className="min-w-[200px] flex-1">
-            <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
               To
             </span>
             <select
@@ -276,7 +276,7 @@ export function ScenarioView({
           </Button>
         </div>
         {diff && (
-          <pre className="mt-4 max-h-[420px] overflow-auto rounded-lg bg-slate-950 p-3 font-mono text-[10px] leading-relaxed text-slate-200">
+          <pre className="mt-4 max-h-[420px] overflow-auto rounded-lg bg-slate-950 p-3 font-mono text-3xs leading-relaxed text-slate-200">
             {diff}
           </pre>
         )}

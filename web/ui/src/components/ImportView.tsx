@@ -134,14 +134,14 @@ export function ImportView({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-start gap-2 rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
+      <div className="flex items-start gap-2 rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
         <div>
           <p>
             Imports are never applied automatically. Stage YAML, review the diff, then accept it.
             The console never receives cloud credentials.
           </p>
-          <p className="mt-1.5 font-mono text-[10px] text-sky-800">
+          <p className="mt-1.5 font-mono text-3xs text-sky-800">
             Local AWS connector: python -m connectors.aws --profile &lt;profile&gt; --region &lt;region&gt;
           </p>
         </div>
@@ -158,13 +158,13 @@ export function ImportView({
         <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)]">
           <div className="space-y-3">
             <label className="block">
-              <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+              <span className="mb-1.5 block text-3xs font-semibold uppercase tracking-wider text-slate-400">
                 Target file
               </span>
               <select
                 value={target}
                 onChange={(event) => setTarget(event.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-[11px] text-slate-700 outline-none focus:border-slate-400"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-2xs text-slate-700 outline-none focus:border-slate-400"
               >
                 {files.map((file) => (
                   <option key={file} value={file}>
@@ -174,10 +174,10 @@ export function ImportView({
               </select>
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+              <span className="mb-1.5 block text-3xs font-semibold uppercase tracking-wider text-slate-400">
                 Or upload
               </span>
-              <span className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-[11px] text-slate-500 hover:border-slate-400 hover:text-slate-700">
+              <span className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-2xs text-slate-500 hover:border-slate-400 hover:text-slate-700">
                 <FileUp className="h-3.5 w-3.5" />
                 Choose a YAML file
                 <input
@@ -190,7 +190,7 @@ export function ImportView({
             </label>
           </div>
           <div>
-            <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="mb-1.5 block text-3xs font-semibold uppercase tracking-wider text-slate-400">
               Proposed content
             </span>
             <textarea
@@ -198,7 +198,7 @@ export function ImportView({
               onChange={(event) => setContent(event.target.value)}
               spellCheck={false}
               placeholder={"version: 1\ncomponents:\n  - id: ..."}
-              className="h-56 w-full resize-y rounded-lg border border-slate-200 bg-slate-950 p-3 font-mono text-[11px] leading-relaxed text-slate-200 outline-none placeholder:text-slate-600 focus:border-slate-500"
+              className="h-56 w-full resize-y rounded-lg border border-slate-200 bg-slate-950 p-3 font-mono text-2xs leading-relaxed text-slate-200 outline-none placeholder:text-slate-600 focus:border-slate-500"
             />
           </div>
         </div>
@@ -213,7 +213,7 @@ export function ImportView({
         <Card padded={false} className="overflow-hidden">
           <div className="border-b border-slate-200 px-4 py-3">
             <p className="text-xs font-semibold text-slate-800">Staged proposals</p>
-            <p className="mt-0.5 text-[10px] text-slate-400">{staged.length} waiting for review</p>
+            <p className="mt-0.5 text-3xs text-slate-400">{staged.length} waiting for review</p>
           </div>
           <div className="space-y-1 p-2">
             {staged.length ? (
@@ -222,20 +222,20 @@ export function ImportView({
                   key={item.name}
                   onClick={() => setSelected(item.name)}
                   className={cn(
-                    "w-full rounded-md px-2.5 py-2 text-left font-mono text-[11px] transition",
+                    "w-full rounded-md px-2.5 py-2 text-left font-mono text-2xs transition",
                     item.name === selected
                       ? "bg-slate-900 text-white"
                       : "text-slate-600 hover:bg-slate-100",
                   )}
                 >
                   <span className="block truncate">{item.name}</span>
-                  <span className={cn("block text-[9px]", item.name === selected ? "text-slate-400" : "text-slate-400")}>
+                  <span className={cn("block text-4xs", item.name === selected ? "text-slate-400" : "text-slate-400")}>
                     {item.size} bytes
                   </span>
                 </button>
               ))
             ) : (
-              <p className="px-2.5 py-3 text-[11px] leading-relaxed text-slate-400">
+              <p className="px-2.5 py-3 text-2xs leading-relaxed text-slate-400">
                 No proposal staged. Paste YAML above or run a local connector.
               </p>
             )}
@@ -267,7 +267,7 @@ export function ImportView({
             }
           />
           {diff ? (
-            <pre className="max-h-[440px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-[11px] leading-relaxed">
+            <pre className="max-h-[440px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-2xs leading-relaxed">
               {diff.diff.split("\n").map((line, index) => (
                 <div key={index} className={cn("px-1", diffTone(line))}>
                   {line || " "}

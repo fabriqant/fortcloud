@@ -62,7 +62,7 @@ export function Button({
       {...props}
       disabled={disabled || loading}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-slate-400/40 disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-control font-semibold transition focus:outline-none focus:ring-2 focus:ring-slate-400/40 disabled:cursor-not-allowed disabled:opacity-50",
         variant === "primary" && "bg-slate-900 text-white hover:bg-slate-800",
         variant === "secondary" && "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50",
         variant === "ghost" && "text-slate-600 hover:bg-slate-100",
@@ -90,7 +90,7 @@ export function Badge({
     blue: "bg-sky-50 text-sky-700 ring-1 ring-sky-200",
   };
   return (
-    <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold", tones[tone])}>
+    <span className={cn("rounded-full px-2 py-0.5 text-3xs font-semibold", tones[tone])}>
       {children}
     </span>
   );

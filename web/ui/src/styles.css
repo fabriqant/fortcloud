@@ -18,11 +18,49 @@
     background-repeat: no-repeat;
     background-size: contain;
   }
+
+  .accordion-row {
+    min-height: var(--accordion-row-height);
+    line-height: var(--leading-accordion-title);
+  }
 }
 
 @layer base {
   :root {
-    --sidebar-logo-size: 128px;
+    --sidebar-logo-size: 188px;
+
+    --text-4xs: 0.64rem;
+    --leading-4xs: 1.25;
+    --text-3xs: 0.71rem;
+    --leading-3xs: 1.35;
+    --text-2xs: 0.78rem;
+    --leading-2xs: 1.4;
+    --text-xs: 0.85rem;
+    --leading-xs: 1.45;
+    --text-sm: 0.99rem;
+    --leading-sm: 1.45;
+    --text-base: 1.13rem;
+    --leading-base: 1.55;
+    --text-lg: 1.28rem;
+    --leading-lg: 1.45;
+    --text-xl: 2.45rem;
+    --leading-xl: 2.75rem;
+    --text-2xl: 1.7rem;
+    --leading-2xl: 1.25;
+    --text-3xl: 2.13rem;
+    --leading-3xl: 1.2;
+    --text-4xl: 2.55rem;
+    --leading-4xl: 1.18;
+
+    --text-sidebar-desc: 0.75rem;
+    --leading-sidebar-desc: 1.5;
+    --text-accordion-title: 0.875rem;
+    --leading-accordion-title: 2.5rem;
+    --accordion-row-height: 2.5rem;
+    --text-control: 0.85rem;
+    --leading-control: 1.45;
+    --text-footer: 0.75rem;
+    --leading-footer: 1.5;
   }
 
   html,

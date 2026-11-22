@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Switch from "@radix-ui/react-switch";
 import { Activity, AlertCircle, CheckCircle2, Cloud, Database, Play, RotateCcw, ShieldAlert } from "lucide-react";
@@ -99,6 +99,12 @@ export default function App() {
   const [error, setError] = useState("");
   const activeIdRef = useRef("");
   const artifactToolRef = useRef("");
+  const wasHomeRef = useRef(home);
+
+  useLayoutEffect(() => {
+    if (wasHomeRef.current && !home) window.scrollTo(0, 0);
+    wasHomeRef.current = home;
+  }, [home]);
 
   const tool = useMemo(
     () => tools.find((entry) => entry.id === activeToolId) ?? null,

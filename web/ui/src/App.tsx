@@ -414,7 +414,7 @@ export default function App() {
             <>
               <header
                 className={cn(
-                  "border-b border-white/20 px-7 py-5",
+                  "sticky top-0 z-30 border-b border-white/20 px-7 py-5",
                   accent.solid,
                 )}
               >
@@ -485,7 +485,7 @@ export default function App() {
                     <Button
                       aria-label="Reset model"
                       title="Reset to the bundled example"
-                      className="border-white/30 bg-white/10 text-white hover:bg-white/20 focus:ring-white/60"
+                      className="h-[34px] w-[34px] p-0 border-white/30 bg-white/10 text-white hover:bg-white/20 focus:ring-white/60"
                       onClick={resetModel}
                       loading={busy === "reset"}
                     >

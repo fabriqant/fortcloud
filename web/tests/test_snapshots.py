@@ -40,7 +40,12 @@ def _scenario(client: TestClient, name: str):
 def test_scenarios_snapshots_and_compare():
     initial = client.get("/api/atlas/scenarios").json()
     assert initial["active"] == "base"
-    assert [item["name"] for item in initial["scenarios"]] == ["base"]
+    assert [item["name"] for item in initial["scenarios"]] == [
+        "base",
+        "idp-outage-failover",
+        "ransomware-restore",
+        "region-loss-eu-west-1",
+    ]
 
     payload = _scenario(client, "variant-a")
     assert payload["active"] == "variant-a"
@@ -91,7 +96,12 @@ def test_scenarios_snapshots_and_compare():
     client.post("/api/atlas/scenarios/variant-a/activate")
     deleted = client.delete("/api/atlas/scenarios/variant-a").json()
     assert deleted["active"] == "base"
-    assert [item["name"] for item in deleted["scenarios"]] == ["base"]
+    assert [item["name"] for item in deleted["scenarios"]] == [
+        "base",
+        "idp-outage-failover",
+        "ransomware-restore",
+        "region-loss-eu-west-1",
+    ]
     assert "criticality: P9" not in client.get("/api/atlas/model").json()["files"]["components.yaml"]
 
 
@@ -102,3 +112,36 @@ def test_scenario_validation():
     assert (
         client.get("/api/atlas/compare?left=base&right=missing").status_code == 400
     )
+
+
+STARTER_SCENARIOS = (
+    "idp-outage-failover",
+    "ransomware-restore",
+    "region-loss-eu-west-1",
+)
+
+
+def test_starter_scenarios_are_seeded_for_every_tool():
+    for tool in ("atlas", "failover", "ark", "ballast", "vitals", "custodian", "crucible"):
+        state = client.get(f"/api/{tool}/scenarios").json()
+        assert state["active"] == "base"
+        entries = {item["name"]: item for item in state["scenarios"]}
+        for name in STARTER_SCENARIOS:
+            entry = entries[name]
+            assert entry["description"]
+            assert entry["active"] is False
+            assert [version["version"] for version in entry["versions"]] == [1]
+            assert entry["versions"][0]["label"] == "starter"
+
+        activated = client.post(f"/api/{tool}/scenarios/{STARTER_SCENARIOS[0]}/activate").json()
+        assert activated["active"] == STARTER_SCENARIOS[0]
+        entry = next(
+            item for item in activated["scenarios"] if item["name"] == STARTER_SCENARIOS[0]
+        )
+        assert entry["active"] is True
+
+
+def test_deleting_a_starter_scenario_keeps_it_deleted():
+    client.delete("/api/atlas/scenarios/ransomware-restore")
+    state = client.get("/api/atlas/scenarios").json()
+    assert "ransomware-restore" not in [item["name"] for item in state["scenarios"]]

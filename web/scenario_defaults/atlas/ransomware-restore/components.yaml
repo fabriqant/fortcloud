@@ -1,0 +1,208 @@
+# Component inventory — SOURCE OF TRUTH
+# Categories  : storage | processing | orchestration | network | identity | external_service
+# Criticality : P0 (critical) | P1 (important) | P2 (support)
+# Dependency direction: see dependencies.yaml
+version: 1
+components:
+  - id: pg-core
+    name: Primary transactional database
+    category: storage
+    criticality: P0
+    owner: data-platform
+    provider: hybrid (on-prem DC1 + cloud eu-west-3)
+    environments: [prod, dr]
+    regions: [eu-west-3, on-prem-dc1]
+    zones: [az1, az2]
+    redundancy:
+      instances: 2
+      active_passive: true
+      replication: async
+    backup:
+      enabled: true
+      immutable: true
+      retention_days: 90
+      last_restore_test: "2026-11-20"
+    notes: Immutable offline copies verified by a ransomware restore rehearsal; real RPO measured, not assumed.
+
+  - id: obj-lake
+    name: Object data lake
+    category: storage
+    criticality: P0
+    owner: data-platform
+    provider: multi-cloud (S3 + GCS)
+    environments: [prod]
+    regions: [eu-west-3, europe-west1]
+    zones: [az1, az2, az3]
+    redundancy:
+      instances: 2
+      active_passive: true
+      replication: multi_region
+    backup:
+      enabled: true
+      immutable: true
+      retention_days: 90
+      last_restore_test: "2026-11-18"
+
+  - id: kafka-bus
+    name: Event bus
+    category: processing
+    criticality: P0
+    owner: data-platform
+    provider: cloud (MSK eu-west-3)
+    environments: [prod]
+    regions: [eu-west-3]
+    zones: [az1, az2, az3]
+    redundancy:
+      instances: 3
+      active_passive: false
+      replication: sync
+    backup:
+      enabled: false
+      immutable: false
+      retention_days: 7
+      last_restore_test: null
+    notes: Replication factor 3 within the region; no cross-region replication.
+
+  - id: etl-workers
+    name: ETL / processing workers
+    category: processing
+    criticality: P1
+    owner: data-platform
+    provider: hybrid Kubernetes
+    environments: [prod]
+    regions: [on-prem-dc1, eu-west-3]
+    zones: [az1, az2]
+    redundancy:
+      instances: 6
+      active_passive: false
+      replication: none
+    notes: Stateless and replaceable; restarts managed by the orchestrator.
+
+  - id: k8s-control
+    name: Kubernetes control plane
+    category: orchestration
+    criticality: P0
+    owner: platform
+    provider: cloud (EKS eu-west-1)
+    environments: [prod]
+    regions: [eu-west-1]
+    zones: [az1, az2, az3]
+    redundancy:
+      instances: 3
+      active_passive: false
+      replication: none
+    notes: HA within the region but no standby control plane in another region.
+
+  - id: argocd
+    name: GitOps orchestrator (Argo CD)
+    category: orchestration
+    criticality: P1
+    owner: platform
+    provider: on-prem DC1
+    environments: [prod]
+    regions: [on-prem-dc1]
+    zones: [az1]
+    redundancy:
+      instances: 1
+      active_passive: false
+      replication: none
+    backup:
+      enabled: true
+      immutable: false
+      retention_days: 14
+      last_restore_test: "2026-06-20"
+    notes: Single instance; deployments can continue without it, but no new release.
+
+  - id: dns-global
+    name: Global DNS / name resolution
+    category: network
+    criticality: P0
+    owner: net-team
+    provider: single DNS provider
+    environments: [prod, dr]
+    regions: [global]
+    zones: []
+    redundancy:
+      instances: 1
+      active_passive: false
+      replication: none
+    notes: "Critical invisible dependency: every downstream flow is affected."
+
+  - id: network-hub
+    name: Inter-site network hub (on-prem)
+    category: network
+    criticality: P0
+    owner: net-team
+    provider: on-prem DC1
+    environments: [prod, dr]
+    regions: [on-prem-dc1]
+    zones: [az1]
+    redundancy:
+      instances: 1
+      active_passive: false
+      replication: none
+    notes: VPN / Direct Connect convergence point between the DC and the clouds.
+
+  - id: idp-oidc
+    name: OIDC identity provider
+    category: identity
+    criticality: P0
+    owner: sec-team
+    provider: single SaaS
+    environments: [prod, dr]
+    regions: [eu-west-3]
+    zones: [az1, az2]
+    redundancy:
+      instances: 1
+      active_passive: false
+      replication: none
+    notes: Single SaaS provider, no federated backup IdP.
+
+  - id: vault-secrets
+    name: Secrets vault / KMS
+    category: identity
+    criticality: P1
+    owner: sec-team
+    provider: hybrid (on-prem Vault + cloud KMS)
+    environments: [prod]
+    regions: [on-prem-dc1, eu-west-3]
+    zones: [az1, az2]
+    redundancy:
+      instances: 3
+      active_passive: true
+      replication: async
+    backup:
+      enabled: true
+      immutable: true
+      retention_days: 30
+      last_restore_test: "2026-10-05"
+
+  - id: payments-api
+    name: External payments API
+    category: external_service
+    criticality: P0
+    owner: payments-team
+    provider: third party (SaaS)
+    environments: [prod]
+    regions: [eu-west-3]
+    zones: []
+    redundancy:
+      instances: 1
+      active_passive: false
+      replication: none
+    notes: Outside our control; contractual SLA and circuit breaker required.
+
+  - id: observability
+    name: Observability (metrics, logs, traces)
+    category: processing
+    criticality: P1
+    owner: platform
+    provider: hybrid (Prometheus/Thanos + Loki + Tempo)
+    environments: [prod]
+    regions: [on-prem-dc1, eu-west-3]
+    zones: [az1]
+    redundancy:
+      instances: 2
+      active_passive: true
+      replication: async
+    notes: "Comfort dependency: losing it blinds us but does not break the flow."

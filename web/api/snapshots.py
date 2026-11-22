@@ -21,6 +21,9 @@ from . import registry, workspaces
 INDEX_FILE = "index.json"
 SCENARIO_FILE = "scenario.json"
 DEFAULT_SCENARIO = "base"
+DEFAULT_SCENARIOS_DIR = Path(__file__).resolve().parents[1] / "scenario_defaults"
+DEFAULT_SCENARIOS_FILE = DEFAULT_SCENARIOS_DIR / "scenarios.json"
+_SEED_MARKER = ".seeded-defaults"
 _NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 _MAX_SNAPSHOTS = 50
 
@@ -103,6 +106,52 @@ def _copy_model(tool: registry.Tool, destination: Path) -> None:
     _copy_files(tool.model_dir, destination, workspaces.model_files(tool))
 
 
+def _ensure_default_scenarios(tool: registry.Tool) -> None:
+    """Materialize the tracked starter scenarios once in the local workspace."""
+    marker = scenarios_dir(tool) / _SEED_MARKER
+    if marker.exists() or not DEFAULT_SCENARIOS_FILE.is_file():
+        return
+    try:
+        data = json.loads(DEFAULT_SCENARIOS_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    entries = data.get("scenarios") if isinstance(data, dict) else None
+    if not isinstance(entries, list):
+        return
+    filenames = workspaces.model_files(tool)
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        raw_name = entry.get("name")
+        if not isinstance(raw_name, str):
+            continue
+        try:
+            name = _check_name(raw_name)
+        except SnapshotError:
+            continue
+        source = DEFAULT_SCENARIOS_DIR / tool.id / name
+        if not source.is_dir():
+            continue
+        target = _scenario_dir(tool, name)
+        if (target / SCENARIO_FILE).is_file():
+            continue
+        timestamp = _now()
+        _save_metadata(
+            target,
+            {
+                "description": str(entry.get("description", "")),
+                "created_at": timestamp,
+                "updated_at": timestamp,
+                "versions": [
+                    {"version": 1, "label": "starter", "created_at": timestamp}
+                ],
+            },
+        )
+        _copy_files(source, target / "v001", filenames)
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    marker.write_text("ok\n", encoding="utf-8")
+
+
 def _ensure_scenario(tool: registry.Tool, name: str, description: str = "") -> Path:
     path = _scenario_dir(tool, name)
     if not (path / SCENARIO_FILE).is_file():
@@ -131,6 +180,7 @@ def _prune(versions: list[dict], scenario_path: Path) -> list[dict]:
 
 def list_scenarios(tool: registry.Tool) -> dict:
     """List scenarios, their versions and the active scenario name."""
+    _ensure_default_scenarios(tool)
     index = _read_index(tool)
     active = index.get("active", DEFAULT_SCENARIO)
     scenarios = []
@@ -195,6 +245,7 @@ def create_scenario(tool: registry.Tool, name: str, description: str = "", activ
 
 
 def delete_scenario(tool: registry.Tool, name: str) -> dict:
+    _ensure_default_scenarios(tool)
     name = _check_name(name)
     if name == DEFAULT_SCENARIO:
         raise SnapshotError("The base scenario cannot be deleted")

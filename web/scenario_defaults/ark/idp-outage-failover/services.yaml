@@ -1,0 +1,39 @@
+# Business services depending on data assets — SOURCE OF TRUTH
+# rto : maximum time to restore; rpo : maximum acceptable data loss
+version: 1
+services:
+  - id: identity-auth
+    name: User authentication
+    description: Sign-in, session renewal, and token revocation.
+    criticality: P0
+    owner: sec-team
+    rto: 15m
+    rpo: "0"
+    assets: [idp-db, vault-secrets]
+
+  - id: order-to-cash
+    name: Order to cash
+    description: Order persistence, payment, and accounting entry.
+    criticality: P0
+    owner: commerce-team
+    rto: 30m
+    rpo: 5m
+    assets: [pg-core]
+
+  - id: analytics-ingestion
+    name: Analytics ingestion
+    description: Feeds the data lake for dashboards.
+    criticality: P1
+    owner: data-platform
+    rto: 4h
+    rpo: 1h
+    assets: [obj-lake, kafka-events]
+
+  - id: platform-config
+    name: Platform configuration and logs
+    description: GitOps manifests, audit archives, and reporting exports.
+    criticality: P2
+    owner: platform
+    rto: 8h
+    rpo: 24h
+    assets: [config-repo, logs-archive, report-exports]

@@ -1,0 +1,61 @@
+# Outbound dependencies — SOURCE OF TRUTH
+# operation  : read | write
+# idempotent : a write can be safely replayed (idempotency key, upsert, etc.)
+version: 1
+dependencies:
+  - id: dep-auth
+    name: Authentication service
+    type: http_api
+    criticality: P0
+    operation: read
+    idempotent: true
+    owner: sec-team
+
+  - id: dep-inventory
+    name: Inventory service
+    type: grpc
+    criticality: P0
+    operation: read
+    idempotent: true
+    owner: inventory-team
+
+  - id: dep-payment
+    name: Payment gateway
+    type: http_api
+    criticality: P0
+    operation: write
+    idempotent: false
+    owner: payments-team
+    notes: Non-idempotent — replay only from the durable queue after a clean restore.
+
+  - id: dep-pricing
+    name: Pricing engine
+    type: http_api
+    criticality: P1
+    operation: read
+    idempotent: true
+    owner: pricing-team
+
+  - id: dep-catalog
+    name: Catalog database
+    type: database
+    criticality: P1
+    operation: read
+    idempotent: true
+    owner: catalog-team
+
+  - id: dep-search
+    name: Search index
+    type: search
+    criticality: P2
+    operation: read
+    idempotent: true
+    owner: search-team
+
+  - id: dep-audit
+    name: Audit event queue
+    type: queue
+    criticality: P2
+    operation: write
+    idempotent: true
+    owner: platform

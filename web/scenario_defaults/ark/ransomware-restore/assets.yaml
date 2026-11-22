@@ -1,0 +1,84 @@
+# Data asset inventory — SOURCE OF TRUTH
+# criticality   : P0 (critical) | P1 (important) | P2 (support)
+# classification: public | internal | confidential | restricted
+version: 1
+assets:
+  - id: pg-core
+    name: Primary transactional database
+    category: database
+    criticality: P0
+    classification: confidential
+    owner: data-platform
+    provider: cloud eu-west-1
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: obj-lake
+    name: Object data lake
+    category: object_store
+    criticality: P0
+    classification: confidential
+    owner: data-platform
+    provider: multi-cloud (S3 + GCS)
+    region: eu-west-3
+    encryption_at_rest: true
+
+  - id: vault-secrets
+    name: Secrets vault
+    category: secrets
+    criticality: P0
+    classification: restricted
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: idp-db
+    name: Identity database
+    category: database
+    criticality: P0
+    classification: restricted
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: kafka-events
+    name: Event queue
+    category: queue
+    criticality: P1
+    classification: internal
+    owner: data-platform
+    provider: cloud eu-west-3
+    region: eu-west-3
+    encryption_at_rest: true
+
+  - id: config-repo
+    name: GitOps configuration repository
+    category: config
+    criticality: P1
+    classification: internal
+    owner: platform
+    provider: Git SaaS
+    region: eu-west-1
+    encryption_at_rest: true
+
+  - id: logs-archive
+    name: Audit log archive
+    category: log
+    criticality: P2
+    classification: internal
+    owner: platform
+    provider: cold object storage
+    region: eu-west-3
+    encryption_at_rest: true
+
+  - id: report-exports
+    name: Reporting exports
+    category: file_share
+    criticality: P2
+    classification: internal
+    owner: analytics-team
+    provider: SaaS file sharing
+    region: europe-west1
+    encryption_at_rest: true

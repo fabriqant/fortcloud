@@ -10,7 +10,7 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 - Seven-tool sidebar driven by [`api/tools.yaml`](api/tools.yaml).
 - One file-backed workspace per tool under `web/workspaces/<tool>/`.
 - Guided forms generated from each tool's JSON Schema: catalog-backed fields use the same select style as schema enums, with a custom-value fallback; arrays are compact accordion lists instead of nested cards. A local SQLite reference catalog seeds owners, teams, regions, zones, providers, roles, pairs, components, scenarios, risks, checks and more, and can be edited in a modal; the YAML source editor stays available with line numbers, dirty state and explicit save.
-- Named scenarios per tool with independent model copies, automatic version snapshots on every save, manual labelled snapshots and a Scenarios tab (before Model) that compares any two versions with a unified diff. The Overview tab has a scenario selector: KPIs, charts, tables and outputs follow the chosen scenario; switching back restores its latest version exactly.
+- Named scenarios per tool with independent model copies, automatic version snapshots on every save, manual labelled snapshots and a Scenarios tab (before Model) that compares any two versions with a unified diff. Three tracked starter scenarios (`region-loss-eu-west-1`, `ransomware-restore`, `idp-outage-failover`) are seeded into every new workspace from `web/scenario_defaults/` and stay inactive until selected. The Overview tab has a scenario selector: KPIs, charts, tables and outputs follow the chosen scenario; switching back restores its latest version exactly.
 - Staged YAML import: paste or upload a proposal, review a unified diff, then accept or discard it. Nothing is applied automatically.
 - `Validate`, `Check`, `Strict` and reset-to-example actions.
 - KPI cards, Mermaid dependency graph, Recharts charts and sortable/filterable TanStack tables.
@@ -35,6 +35,7 @@ web/workspaces/<tool>/model/*.yaml         <- editable source of truth
 web/workspaces/<tool>/artifacts/*          <- generated, disposable
 web/workspaces/<tool>/imports/*            <- staged proposals, never auto-applied
 web/workspaces/<tool>/scenarios/<name>/    <- version snapshots per scenario
+web/scenario_defaults/<tool>/<name>/       <- tracked starter model copies
 web/catalog.sqlite3                        <- reusable reference values for guided forms
 ```
 
@@ -175,6 +176,9 @@ web/
 │   ├── requirements-aws.txt
 │   ├── requirements-azure.txt
 │   └── requirements-gcp.txt
+├── scenario_defaults/
+│   ├── scenarios.json    starter names and descriptions
+│   └── <tool>/<name>/    tracked starter model copies for each tool
 ├── tests/
 │   ├── test_api.py       API and import smoke tests
 │   ├── test_catalog.py   reference catalog CRUD tests
@@ -187,4 +191,4 @@ web/
 └── README.md             this file
 ```
 
-Generated workspaces and the local reference catalog are ignored by Git. Delete `web/workspaces/` at any time: the next request recreates the model from the examples, and all scenarios, snapshots and staged proposals disappear with it. Delete `web/catalog.sqlite3` to restore the default reference values; edits made in the Reference data modal are otherwise kept locally.
+Generated workspaces and the local reference catalog are ignored by Git. Delete `web/workspaces/` at any time: the next request recreates the model from the examples, custom scenarios, snapshots and staged proposals disappear, and the three tracked starter scenarios are re-seeded. Delete `web/catalog.sqlite3` to restore the default reference values; edits made in the Reference data modal are otherwise kept locally.

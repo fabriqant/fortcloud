@@ -1,0 +1,40 @@
+# Request call chains — SOURCE OF TRUTH
+# Each step references a dependency and the policy that guards it.
+# The sum of worst-case step times must stay below the service latency budget.
+version: 1
+flows:
+  - id: flow-checkout
+    name: Order placement
+    service: checkout
+    steps:
+      - dependency: dep-auth
+        policy: pol-auth
+      - dependency: dep-inventory
+        policy: pol-inventory
+      - dependency: dep-payment
+        policy: pol-payment
+
+  - id: flow-login
+    name: User login
+    service: identity-auth
+    steps:
+      - dependency: dep-auth
+        policy: pol-auth
+
+  - id: flow-browse
+    name: Catalog search
+    service: catalog-browse
+    steps:
+      - dependency: dep-catalog
+        policy: pol-catalog
+      - dependency: dep-search
+        policy: pol-search
+
+  - id: flow-reporting
+    name: Report consolidation
+    service: checkout-reporting
+    steps:
+      - dependency: dep-pricing
+        policy: pol-pricing
+      - dependency: dep-audit
+        policy: pol-audit

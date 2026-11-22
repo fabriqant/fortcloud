@@ -1,0 +1,101 @@
+# Resilience policies — SOURCE OF TRUTH
+# Worst case per step = timeout * (retries + 1) + backoff delays.
+# Durations: 0 or <number><ms|s|m|h|d>. Quote zero values in YAML where needed.
+version: 1
+policies:
+  - id: pol-auth
+    dependency: dep-auth
+    timeout: 150ms
+    retries: 1
+    backoff: 25ms
+    backoff_multiplier: 2
+    jitter: true
+    circuit_breaker: true
+    failure_threshold: 5
+    reset_timeout: 10s
+    bulkhead: auth-pool
+    fallback: none
+
+  - id: pol-inventory
+    dependency: dep-inventory
+    timeout: 200ms
+    retries: 2
+    backoff: 25ms
+    backoff_multiplier: 2
+    jitter: true
+    circuit_breaker: true
+    failure_threshold: 5
+    reset_timeout: 10s
+    bulkhead: inventory-pool
+    fallback: cached
+    notes: Cached inventory used when the primary store was encrypted.
+
+  - id: pol-payment
+    dependency: dep-payment
+    timeout: 500ms
+    retries: 0
+    backoff: 100ms
+    backoff_multiplier: 2
+    jitter: false
+    circuit_breaker: true
+    failure_threshold: 5
+    reset_timeout: 10s
+    bulkhead: payment-pool
+    fallback: queue
+    notes: Non-idempotent charges queued for replay after the ransomware-induced gateway outage.
+
+  - id: pol-pricing
+    dependency: dep-pricing
+    timeout: 200ms
+    retries: 4
+    backoff: 50ms
+    backoff_multiplier: 1
+    jitter: true
+    circuit_breaker: true
+    failure_threshold: 5
+    reset_timeout: 10s
+    bulkhead: pricing-pool
+    fallback: degraded
+    notes: Too many retries with no exponential backoff.
+
+  - id: pol-catalog
+    dependency: dep-catalog
+    timeout: 300ms
+    retries: 3
+    backoff: 40ms
+    backoff_multiplier: 2
+    jitter: true
+    circuit_breaker: true
+    failure_threshold: 5
+    reset_timeout: 10s
+    bulkhead: catalog-pool
+    fallback: cached
+    notes: Dominates the browse latency budget.
+
+  - id: pol-search
+    dependency: dep-search
+    timeout: 250ms
+    retries: 0
+    backoff: 50ms
+    backoff_multiplier: 2
+    jitter: true
+    circuit_breaker: false
+    failure_threshold: 5
+    reset_timeout: 10s
+    bulkhead: ""
+    fallback: none
+    notes: No bulkhead and no fallback for an optional dependency.
+
+  - id: pol-audit
+    dependency: dep-audit
+    timeout: 500ms
+    retries: 2
+    backoff: 100ms
+    backoff_multiplier: 2
+    jitter: true
+    circuit_breaker: true
+    failure_threshold: 5
+    reset_timeout: 10s
+    bulkhead: audit-pool
+    fallback: queue
+    notes: Jittered retries protected the audit queue during the ransomware rehearsal.

@@ -1,0 +1,104 @@
+# Service and data verification + sign-off — SOURCE OF TRUTH
+# A passed exercise needs a passed service check, a passed data check
+# and an approved sign-off from the verifier.
+version: 1
+checks:
+  - id: chk-restore-service
+    scenario: ex-restore-sandbox
+    kind: service
+    metric: http_5xx_rate
+    expected: "0"
+    result: passed
+    evidence: https://ci.example.com/crucible/restore-service-25
+    owner: dave
+
+  - id: chk-restore-data
+    scenario: ex-restore-sandbox
+    kind: data
+    metric: order_count_after_restore
+    expected: equal
+    result: passed
+    evidence: https://ci.example.com/crucible/restore-data-25
+    owner: erin
+
+  - id: chk-failover-service
+    scenario: ex-failover-staging
+    kind: service
+    metric: auth_success_rate
+    expected: 100%
+    result: passed
+    evidence: https://ci.example.com/crucible/failover-service-26
+    owner: dave
+
+  - id: chk-failover-data
+    scenario: ex-failover-staging
+    kind: data
+    metric: session_count
+    expected: equal
+    result: passed
+    evidence: https://ci.example.com/crucible/failover-data-26
+    owner: erin
+
+  - id: chk-recovery-service
+    scenario: ex-recovery-sandbox
+    kind: service
+    metric: dashboard_freshness
+    expected: 5m
+    result: passed
+    evidence: https://ci.example.com/crucible/recovery-service-27
+    owner: dave
+
+  - id: chk-recovery-data
+    scenario: ex-recovery-sandbox
+    kind: data
+    metric: export_checksum
+    expected: match
+    result: passed
+    evidence: ""
+    owner: erin
+    notes: Missing evidence link.
+
+  - id: chk-idp-failover-service
+    scenario: ex-idp-outage-staging
+    kind: service
+    metric: auth_success_rate
+    expected: 100%
+    result: passed
+    evidence: https://ci.example.com/crucible/idp-failover-service-28
+    owner: dave
+
+  - id: chk-idp-failover-data
+    scenario: ex-idp-outage-staging
+    kind: data
+    metric: session_count
+    expected: equal
+    result: passed
+    evidence: https://ci.example.com/crucible/idp-failover-data-28
+    owner: erin
+
+signoffs:
+  - scenario: ex-restore-sandbox
+    person: dave
+    role: verifier
+    date: "2026-11-24"
+    decision: approved
+    notes: Signed the day before the drill.
+
+  - scenario: ex-failover-staging
+    person: dave
+    role: verifier
+    date: "2026-11-26"
+    decision: approved
+
+  - scenario: ex-idp-outage-staging
+    person: dave
+    role: verifier
+    date: "2026-11-28"
+    decision: approved
+    notes: Signed after the federated IdP promotion drill.
+
+  - scenario: ex-recovery-sandbox
+    person: erin
+    role: verifier
+    date: "2026-11-27"
+    decision: approved

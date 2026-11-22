@@ -1,0 +1,121 @@
+# FMEA risk register — SOURCE OF TRUTH
+# likelihood: 1 (rare) to 5 (frequent)
+# impact    : 1 (low) to 5 (critical) business impact
+# Score is computed by the CLI: likelihood × impact.
+# status: open | in_progress | mitigated | accepted | closed
+version: 1
+risks:
+  - id: R-001
+    title: Single identity provider
+    components: [idp-oidc]
+    flows: [identity-auth, order-to-cash]
+    failure_mode: Identity SaaS unavailable — no user or service can authenticate.
+    likelihood: 3
+    impact: 5
+    status: in_progress
+    owner: sec-team
+    mitigations:
+      - Local session caches on the platform.
+      - Break-glass accounts documented in the runbook.
+    action: Federate a backup IdP and test the failover.
+    target_date: "2026-12-15"
+
+  - id: R-002
+    title: Single DNS provider
+    components: [dns-global]
+    flows: [order-to-cash, analytics-ingestion, identity-auth, deploy-pipeline]
+    failure_mode: DNS provider outage — every name resolution fails, including in the DR site.
+    likelihood: 3
+    impact: 5
+    status: in_progress
+    owner: net-team
+    mitigations:
+      - Short TTLs on critical records.
+    action: Deploy a second anycast DNS provider and test a full failover.
+    target_date: "2026-12-20"
+
+  - id: R-003
+    title: Single inter-site network hub
+    components: [network-hub]
+    flows: [order-to-cash, analytics-ingestion]
+    failure_mode: Hub appliance failure — on-prem to cloud connectivity is lost.
+    likelihood: 2
+    impact: 5
+    status: open
+    owner: net-team
+    mitigations:
+      - Redundant links to the cloud.
+    action: Duplicate the hub and enable redundant BGP.
+    target_date: "2026-12-31"
+
+  - id: R-004
+    title: Single-region event bus
+    components: [kafka-bus]
+    flows: [order-to-cash, analytics-ingestion]
+    failure_mode: Loss of eu-west-3 — no event flow and no replay possible.
+    likelihood: 3
+    impact: 4
+    status: in_progress
+    owner: data-platform
+    mitigations:
+      - 7-day retention to allow replay.
+    action: Replicate topics to a secondary region (MirrorMaker 2) and measure the lag.
+    target_date: "2026-12-10"
+
+  - id: R-005
+    title: Single-region Kubernetes control plane
+    components: [k8s-control]
+    flows: [analytics-ingestion, identity-auth, deploy-pipeline]
+    failure_mode: Loss of eu-west-1 — no deployment or rescheduling possible.
+    likelihood: 2
+    impact: 5
+    status: open
+    owner: platform
+    mitigations:
+      - Etcd backed up every 6 hours.
+    action: Plan a standby cluster in another region with a tested etcd restore.
+    target_date: "2027-01-15"
+
+  - id: R-006
+    title: Single-instance GitOps orchestrator
+    components: [argocd]
+    flows: [deploy-pipeline]
+    failure_mode: Argo CD failure — deployments are frozen.
+    likelihood: 3
+    impact: 2
+    status: in_progress
+    owner: platform
+    mitigations:
+      - Daily backup.
+    action: Run 2 replicas and restore from Git in under 8 hours.
+    target_date: "2026-11-30"
+
+  - id: R-007
+    title: External payments API unavailable
+    components: [payments-api]
+    flows: [order-to-cash]
+    failure_mode: Third-party outage or degradation — payments fail and orders are blocked.
+    likelihood: 4
+    impact: 4
+    status: in_progress
+    owner: payments-team
+    mitigations:
+      - Circuit breaker, short timeout and retry with backoff.
+      - Local queue to replay payments.
+    action: Negotiate a contractual SLA and a second payment processor.
+    target_date: "2026-11-30"
+
+  - id: R-008
+    title: Analytics restore not validated
+    components: [obj-lake]
+    flows: [analytics-ingestion]
+    failure_mode: The backup exists but nobody verified that it restores within the advertised RTO.
+    likelihood: 3
+    impact: 3
+    status: mitigated
+    owner: data-platform
+    mitigations:
+      - Immutable backup with 90-day retention.
+      - Clean-room ransomware restore verified with checksums.
+    action: Automated a quarterly ransomware restore test and published the result.
+    target_date: "2026-11-20"

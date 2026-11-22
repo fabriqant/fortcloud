@@ -1,0 +1,96 @@
+# Backup policies — SOURCE OF TRUTH
+# schedule  : 0 (continuous/CDC) or <number><s|m|h|d>
+# A schedule longer than the service RPO cannot satisfy that RPO.
+version: 1
+backups:
+  - id: bk-pg
+    asset: pg-core
+    type: cdc
+    schedule: 5m
+    retention_days: 35
+    immutable: true
+    cross_region: true
+    encrypted: true
+    last_successful: "2026-11-20"
+    provider: cloud-native PITR
+    notes: PITR 5 minutes with immutable snapshots replicated to eu-west-3.
+
+  - id: bk-lake
+    asset: obj-lake
+    type: incremental
+    schedule: 1h
+    retention_days: 90
+    immutable: true
+    cross_region: true
+    encrypted: true
+    last_successful: "2026-11-19"
+    provider: multi-cloud replication
+
+  - id: bk-vault
+    asset: vault-secrets
+    type: cdc
+    schedule: "0"
+    retention_days: 30
+    immutable: true
+    cross_region: true
+    encrypted: true
+    last_successful: "2026-11-18"
+    provider: SaaS continuous replication
+    notes: Continuous replication but last successful checkpoint is too old.
+
+  - id: bk-idp
+    asset: idp-db
+    type: cdc
+    schedule: "0"
+    retention_days: 30
+    immutable: true
+    cross_region: true
+    encrypted: true
+    last_successful: "2026-11-20"
+    provider: SaaS continuous replication
+    notes: Identity database checkpoint verified during the IdP outage rehearsal.
+
+  - id: bk-kafka
+    asset: kafka-events
+    type: incremental
+    schedule: 1h
+    retention_days: 7
+    immutable: false
+    cross_region: false
+    encrypted: true
+    last_successful: "2026-11-20"
+    provider: cloud snapshot
+    notes: Replay from the source of truth is acceptable for P1.
+
+  - id: bk-config
+    asset: config-repo
+    type: snapshot
+    schedule: 24h
+    retention_days: 30
+    immutable: true
+    cross_region: false
+    encrypted: true
+    last_successful: "2026-11-20"
+    provider: Git mirror
+
+  - id: bk-logs
+    asset: logs-archive
+    type: snapshot
+    schedule: 24h
+    retention_days: 365
+    immutable: true
+    cross_region: false
+    encrypted: true
+    last_successful: "2026-11-20"
+    provider: cold object storage
+
+  - id: bk-exports
+    asset: report-exports
+    type: snapshot
+    schedule: 24h
+    retention_days: 7
+    immutable: false
+    cross_region: false
+    encrypted: true
+    last_successful: "2026-11-15"
+    provider: SaaS snapshot

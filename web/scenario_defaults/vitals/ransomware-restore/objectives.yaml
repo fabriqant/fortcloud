@@ -1,0 +1,70 @@
+# Service-level objectives — SOURCE OF TRUTH
+# Percent kinds (availability/completeness/validity): numeric target and alert_threshold.
+# Duration kinds (latency/freshness): duration target and alert_threshold.
+# The alert must always be tighter than the target.
+version: 1
+objectives:
+  - id: slo-checkout-avail
+    service: checkout
+    signal: sig-checkout-availability
+    kind: availability
+    target: 99.9
+    alert_threshold: 99.95
+    window: 30d
+    owner: commerce-team
+
+  - id: slo-checkout-latency
+    service: checkout
+    signal: sig-checkout-latency
+    kind: latency
+    target: 300ms
+    alert_threshold: 240ms
+    window: 30d
+    owner: commerce-team
+
+  - id: slo-checkout-freshness
+    service: checkout
+    signal: sig-checkout-freshness
+    kind: freshness
+    target: 5m
+    alert_threshold: 4m
+    window: 30d
+    owner: data-platform
+    notes: Provides the P0 data-quality signal for checkout.
+
+  - id: slo-auth-avail
+    service: identity-auth
+    signal: sig-auth-availability
+    kind: availability
+    target: 99.99
+    alert_threshold: 99.995
+    window: 30d
+    owner: sec-team
+
+  - id: slo-auth-completeness
+    service: identity-auth
+    signal: sig-auth-completeness
+    kind: completeness
+    target: 99.5
+    alert_threshold: 99.6
+    window: 30d
+    owner: sec-team
+    notes: Alert fires after 80% of the error budget is already spent.
+
+  - id: slo-catalog-avail
+    service: catalog-browse
+    signal: sig-catalog-availability
+    kind: availability
+    target: 99.9
+    alert_threshold: 99.95
+    window: 30d
+    owner: catalog-team
+
+  - id: slo-reporting-validity
+    service: reporting
+    signal: sig-reporting-validity
+    kind: validity
+    target: 99.0
+    alert_threshold: 99.5
+    window: 14d
+    owner: analytics-team

@@ -1,0 +1,69 @@
+# Health and data-quality signals — SOURCE OF TRUTH
+# interval : 0 or <number><ms|s|m|h|d>, combinable
+# kind     : availability | latency | freshness | completeness | validity
+version: 1
+signals:
+  - id: sig-checkout-availability
+    name: Order API availability
+    kind: availability
+    source: prometheus
+    query: sum(rate(http_requests_total{job="checkout",code!~"5.."}[5m])) / sum(rate(http_requests_total{job="checkout"}[5m]))
+    interval: 30s
+    unit: percent
+    owner: commerce-team
+
+  - id: sig-checkout-latency
+    name: Order API p99 latency
+    kind: latency
+    source: prometheus
+    query: histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job="checkout"}[5m])) by (le))
+    interval: 15s
+    unit: ms
+    owner: commerce-team
+
+  - id: sig-checkout-freshness
+    name: Order database freshness
+    kind: freshness
+    source: sql
+    query: SELECT now() - max(updated_at) FROM orders
+    interval: 1m
+    unit: duration
+    owner: data-platform
+
+  - id: sig-auth-availability
+    name: Identity service availability
+    kind: availability
+    source: datadog
+    query: avg:trace.http.request.errors{service:identity-auth}
+    interval: 15s
+    unit: percent
+    owner: sec-team
+
+  - id: sig-auth-completeness
+    name: Identity record completeness
+    kind: completeness
+    source: sql
+    query: SELECT count(*) FILTER (WHERE email IS NULL) / count(*) FROM identities
+    interval: 5m
+    unit: percent
+    owner: sec-team
+
+  - id: sig-catalog-availability
+    name: Catalog availability
+    kind: availability
+    source: cloudwatch
+    query: Availability +{service=catalog-browse}
+    interval: 15m
+    unit: percent
+    owner: catalog-team
+    notes: Sampled too coarsely for the declared error budget.
+
+  - id: sig-reporting-validity
+    name: Analytics export validity
+    kind: validity
+    source: sql
+    query: SELECT count(*) FILTER (WHERE amount < 0) / count(*) FROM daily_exports
+    interval: 15m
+    unit: percent
+    owner: analytics-team
+    notes: Tighter sampling for the post-restore validity signal.

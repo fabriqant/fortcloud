@@ -1,0 +1,70 @@
+# Deployment pipelines — SOURCE OF TRUTH
+# A restricted environment requires review, unit + integration tests,
+# an automated rollback and a recent verification of it.
+version: 1
+pipelines:
+  - id: pipe-checkout-prod
+    name: Checkout deployment in production
+    environment: prod
+    trigger: tag
+    deployer: ci-deploy
+    owner: commerce-team
+    review:
+      required: true
+      approvers: 2
+    tests: [unit, integration, security, e2e]
+    rollback:
+      enabled: true
+      target: previous-release
+      verified: "2026-11-15"
+      automate: true
+
+  - id: pipe-checkout-staging
+    name: Checkout deployment in staging
+    environment: staging
+    trigger: pull_request
+    deployer: ci-staging
+    owner: commerce-team
+    review:
+      required: true
+      approvers: 1
+    tests: [unit, integration, security]
+    rollback:
+      enabled: true
+      target: previous-release
+      verified: "2026-11-01"
+      automate: true
+
+  - id: pipe-reporting-prod
+    name: Analytics deployment in production
+    environment: prod
+    trigger: manual
+    deployer: ci-deploy
+    owner: analytics-team
+    review:
+      required: true
+      approvers: 1
+    tests: [unit, integration, security]
+    rollback:
+      enabled: true
+      target: previous-release
+      verified: "2026-01-01"
+      automate: true
+    notes: Single approver and stale rollback verification.
+
+  - id: pipe-legacy-prod
+    name: Legacy deployment in production
+    environment: prod
+    trigger: manual
+    deployer: ci-legacy
+    owner: platform-team
+    review:
+      required: true
+      approvers: 2
+    tests: [unit, integration, security]
+    rollback:
+      enabled: true
+      target: previous-release
+      verified: "2026-11-10"
+      automate: false
+    notes: Rollback is a manual runbook.

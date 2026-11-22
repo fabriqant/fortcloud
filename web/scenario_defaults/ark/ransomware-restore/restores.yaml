@@ -1,0 +1,86 @@
+# Restore test evidence — SOURCE OF TRUTH
+# Measured RTO/RPO are compared with the tightest target of the services using the asset.
+version: 1
+restores:
+  - id: rst-pg
+    backup: bk-pg
+    scenario: point_in_time
+    last: "2026-11-08"
+    measured_rto: 26m
+    measured_rpo: 4m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-pg-42
+    owner: data-platform
+
+  - id: rst-pg-ransomware
+    backup: bk-pg
+    scenario: ransomware
+    last: "2026-11-20"
+    measured_rto: 25m
+    measured_rpo: 4m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-pg-ransomware-12
+    owner: sec-team
+
+  - id: rst-lake
+    backup: bk-lake
+    scenario: ransomware
+    last: "2026-11-18"
+    measured_rto: 2h30m
+    measured_rpo: 30m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-lake-24
+    owner: data-platform
+
+  - id: rst-vault
+    backup: bk-vault
+    scenario: region_loss
+    last: "2026-07-15"
+    measured_rto: 12m
+    measured_rpo: "0"
+    result: passed
+    evidence: https://ci.example.com/restores/rst-vault-08
+    owner: sec-team
+    notes: Region-loss drill refreshed; ransomware restore covered by rst-vault-ransomware.
+
+  - id: rst-vault-ransomware
+    backup: bk-vault
+    scenario: ransomware
+    last: "2026-11-20"
+    measured_rto: 14m
+    measured_rpo: "0"
+    result: passed
+    evidence: https://ci.example.com/restores/rst-vault-ransomware-12
+    owner: sec-team
+    notes: Clean-room restore verified before reconnecting the vault.
+
+  - id: rst-idp
+    backup: bk-idp
+    scenario: deletion
+    last: "2026-11-02"
+    measured_rto: 12m
+    measured_rpo: "0"
+    result: passed
+    evidence: https://ci.example.com/restores/rst-idp-23
+    owner: sec-team
+
+  - id: rst-kafka
+    backup: bk-kafka
+    scenario: point_in_time
+    last: "2026-10-30"
+    measured_rto: 45m
+    measured_rpo: 30m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-kafka-09
+    owner: data-platform
+
+  - id: rst-config
+    backup: bk-config
+    scenario: point_in_time
+    last: "2026-10-20"
+    measured_rto: 2h
+    measured_rpo: "0"
+    result: partial
+    evidence: https://ci.example.com/restores/rst-config-04
+    owner: platform
+    notes: Restoration worked but the Git mirror was 20 minutes behind.

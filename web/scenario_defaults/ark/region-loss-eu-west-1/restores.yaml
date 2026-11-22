@@ -1,0 +1,75 @@
+# Restore test evidence — SOURCE OF TRUTH
+# Measured RTO/RPO are compared with the tightest target of the services using the asset.
+version: 1
+restores:
+  - id: rst-pg
+    backup: bk-pg
+    scenario: point_in_time
+    last: "2026-11-08"
+    measured_rto: 26m
+    measured_rpo: 4m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-pg-42
+    owner: data-platform
+
+  - id: rst-pg-ransomware
+    backup: bk-pg
+    scenario: ransomware
+    last: "2026-09-30"
+    measured_rto: 28m
+    measured_rpo: 5m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-pg-ransomware-11
+    owner: sec-team
+
+  - id: rst-lake
+    backup: bk-lake
+    scenario: ransomware
+    last: "2026-10-25"
+    measured_rto: 3h
+    measured_rpo: 50m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-lake-17
+    owner: data-platform
+
+  - id: rst-vault
+    backup: bk-vault
+    scenario: region_loss
+    last: "2026-11-20"
+    measured_rto: 10m
+    measured_rpo: "0"
+    result: passed
+    evidence: https://ci.example.com/restores/rst-vault-42
+    owner: sec-team
+    notes: Region-loss restore verified in eu-west-3 after the eu-west-1 outage.
+
+  - id: rst-idp
+    backup: bk-idp
+    scenario: deletion
+    last: "2026-11-02"
+    measured_rto: 12m
+    measured_rpo: "0"
+    result: passed
+    evidence: https://ci.example.com/restores/rst-idp-23
+    owner: sec-team
+
+  - id: rst-kafka
+    backup: bk-kafka
+    scenario: point_in_time
+    last: "2026-10-30"
+    measured_rto: 45m
+    measured_rpo: 30m
+    result: passed
+    evidence: https://ci.example.com/restores/rst-kafka-09
+    owner: data-platform
+
+  - id: rst-config
+    backup: bk-config
+    scenario: point_in_time
+    last: "2026-10-20"
+    measured_rto: 2h
+    measured_rpo: "0"
+    result: partial
+    evidence: https://ci.example.com/restores/rst-config-04
+    owner: platform
+    notes: Restoration worked but the Git mirror was 20 minutes behind.

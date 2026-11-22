@@ -1,0 +1,27 @@
+# Services followed by Vitals — SOURCE OF TRUTH
+# P0 services require an availability objective and a data-quality objective.
+version: 1
+services:
+  - id: checkout
+    name: Order API
+    description: Order placement and payment.
+    criticality: P0
+    owner: commerce-team
+
+  - id: identity-auth
+    name: Authentication
+    description: Login, sessions, and token revocation.
+    criticality: P0
+    owner: sec-team
+
+  - id: catalog-browse
+    name: Catalog browsing
+    description: Product search and display.
+    criticality: P1
+    owner: catalog-team
+
+  - id: reporting
+    name: Analytics reporting
+    description: Dashboards and daily exports.
+    criticality: P2
+    owner: analytics-team

@@ -1,0 +1,172 @@
+# Failure scenarios, roster and who does what — SOURCE OF TRUTH
+# kind     : restore | failover | recovery
+# status   : planned | running | passed | failed
+# durations: 0 or <number><ms|s|m|h|d>, combinable — quote zero in YAML.
+# Every exercise needs a coordinator, operator, communicator and verifier.
+version: 1
+participants:
+  - id: alice
+    name: Alice Martin
+    team: platform-team
+    contact: alice@example.com
+
+  - id: bob
+    name: Bernard Lefevre
+    team: platform-team
+    contact: bob@example.com
+
+  - id: carol
+    name: Carole Ndiaye
+    team: communications
+    contact: carol@example.com
+
+  - id: dave
+    name: David Chen
+    team: sre
+    contact: dave@example.com
+
+  - id: erin
+    name: Erin Novak
+    team: data-platform
+    contact: erin@example.com
+
+scenarios:
+  - id: ex-restore-sandbox
+    name: Checkout API restore
+    kind: restore
+    environment: sandbox
+    system: checkout
+    scheduled: "2026-11-25"
+    status: passed
+    target_rto: 30m
+    target_rpo: 5m
+    duration: 2h
+    blast_radius: contained
+    channel: war-room
+    owner: platform-team
+    assignments:
+      - person: alice
+        role: coordinator
+      - person: bob
+        role: operator
+      - person: carol
+        role: communicator
+      - person: dave
+        role: verifier
+
+  - id: ex-failover-staging
+    name: Identity service failover
+    kind: failover
+    environment: staging
+    system: identity-auth
+    scheduled: "2026-11-26"
+    status: passed
+    target_rto: 15m
+    target_rpo: "0"
+    duration: 1h
+    blast_radius: limited
+    channel: war-room
+    owner: sec-team
+    assignments:
+      - person: alice
+        role: coordinator
+      - person: bob
+        role: operator
+      - person: carol
+        role: communicator
+      - person: dave
+        role: verifier
+
+  - id: ex-recovery-sandbox
+    name: eu-west-1 region loss recovery
+    kind: recovery
+    environment: staging
+    system: checkout-reporting
+    scheduled: "2026-11-28"
+    status: passed
+    target_rto: 30m
+    target_rpo: 5m
+    duration: 1h30m
+    blast_radius: limited
+    channel: war-room
+    owner: platform-team
+    assignments:
+      - person: alice
+        role: coordinator
+      - person: bob
+        role: operator
+      - person: carol
+        role: communicator
+      - person: dave
+        role: verifier
+    notes: Promoted eu-west-3 standbys and verified no data beyond the 5m RPO was lost.
+
+  - id: ex-restore-prod
+    name: Checkout API restore in production
+    kind: restore
+    environment: prod
+    system: checkout
+    scheduled: "2026-11-20"
+    status: failed
+    target_rto: 30m
+    target_rpo: 5m
+    duration: 2h
+    blast_radius: limited
+    channel: war-room
+    owner: platform-team
+    assignments:
+      - person: alice
+        role: coordinator
+      - person: bob
+        role: operator
+      - person: carol
+        role: communicator
+      - person: dave
+        role: verifier
+    notes: Failed drill — the finding must be fixed before the next attempt.
+
+  - id: ex-failover-prod
+    name: Identity service failover in production
+    kind: failover
+    environment: prod
+    system: identity-auth
+    scheduled: "2026-10-15"
+    status: planned
+    target_rto: 15m
+    target_rpo: "0"
+    duration: 1h
+    blast_radius: limited
+    channel: war-room
+    owner: sec-team
+    assignments:
+      - person: alice
+        role: coordinator
+      - person: bob
+        role: operator
+      - person: carol
+        role: communicator
+      - person: dave
+        role: verifier
+
+  - id: ex-recovery-prod
+    name: Reporting recovery in production
+    kind: recovery
+    environment: prod
+    system: reporting
+    scheduled: "2026-11-30"
+    status: planned
+    target_rto: 1h
+    target_rpo: 15m
+    duration: 2h
+    blast_radius: limited
+    channel: war-room
+    owner: analytics-team
+    assignments:
+      - person: alice
+        role: coordinator
+      - person: bob
+        role: operator
+      - person: carol
+        role: communicator
+      - person: erin
+        role: verifier

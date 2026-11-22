@@ -1,0 +1,63 @@
+# Verification evidence for the SLOs — SOURCE OF TRUTH
+# result : passed | partial | failed
+# On a P0 service, a failed result or a missing runbook is an error.
+version: 1
+checks:
+  - id: chk-checkout-avail
+    objective: slo-checkout-avail
+    last: "2026-11-18"
+    result: passed
+    evidence: https://ci.example.com/vitals/checkout-availability-118
+    owner: commerce-team
+    runbook: ../templates/check.md
+
+  - id: chk-checkout-latency
+    objective: slo-checkout-latency
+    last: "2026-11-18"
+    result: passed
+    evidence: https://ci.example.com/vitals/checkout-latency-118
+    owner: commerce-team
+    runbook: ../templates/check.md
+
+  - id: chk-checkout-freshness
+    objective: slo-checkout-freshness
+    last: "2026-10-10"
+    result: passed
+    evidence: https://ci.example.com/vitals/checkout-freshness-091
+    owner: data-platform
+    runbook: ../templates/check.md
+
+  - id: chk-auth-avail
+    objective: slo-auth-avail
+    last: "2026-11-20"
+    result: passed
+    evidence: https://ci.example.com/vitals/auth-availability-120
+    owner: sec-team
+    runbook: ../templates/check.md
+    notes: Availability held while the backup IdP was promoted.
+
+  - id: chk-auth-completeness
+    objective: slo-auth-completeness
+    last: "2026-11-20"
+    result: passed
+    evidence: https://ci.example.com/vitals/auth-completeness-120
+    owner: sec-team
+    runbook: ../templates/check.md
+    notes: Completeness held through the IdP failover.
+
+  - id: chk-catalog-avail
+    objective: slo-catalog-avail
+    last: "2026-11-18"
+    result: passed
+    evidence: https://ci.example.com/vitals/catalog-availability-118
+    owner: catalog-team
+    runbook: ""
+    notes: No runbook for the alert.
+
+  - id: chk-reporting-validity
+    objective: slo-reporting-validity
+    last: "2026-11-18"
+    result: failed
+    evidence: https://ci.example.com/vitals/reporting-validity-118
+    owner: analytics-team
+    runbook: ../templates/check.md

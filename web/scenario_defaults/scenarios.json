@@ -1,0 +1,16 @@
+{
+  "scenarios": [
+    {
+      "name": "region-loss-eu-west-1",
+      "description": "Primary region eu-west-1 is lost: promote the eu-west-3 standbys, verify RTO/RPO and refresh evidence."
+    },
+    {
+      "name": "ransomware-restore",
+      "description": "Ransomware on production data: restore from immutable offline copies in a clean room and verify checksums before cutover."
+    },
+    {
+      "name": "idp-outage-failover",
+      "description": "Primary IdP outage: federate the backup IdP, rely on local session caches and prove sign-in stays within RTO."
+    }
+  ]
+}

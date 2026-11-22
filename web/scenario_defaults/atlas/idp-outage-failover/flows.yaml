@@ -1,0 +1,77 @@
+# Business flows and availability targets — SOURCE OF TRUTH
+# availability_target: target availability (success SLI)
+# rto: maximum time to restore; rpo: maximum acceptable data loss
+# Accepted rto/rpo format: 0 or <number><s|m|h|d>
+version: 1
+flows:
+  - id: order-to-cash
+    name: Order to cash
+    description: Receive the order, validate it, charge the customer and post the accounting entry.
+    criticality: P0
+    owner: commerce-team
+    availability_target: 99.95%
+    rto: 30m
+    rpo: 5m
+    strategy: Multi-AZ + asynchronous replication to the secondary DC + immutable backups + circuit breaker on the payment API.
+    components: [pg-core, kafka-bus, etl-workers, idp-oidc, payments-api, dns-global, network-hub, vault-secrets]
+    steps:
+      - Order received and persisted in pg-core.
+      - Event published on kafka-bus and consumed by etl-workers.
+      - Authentication via idp-oidc and secrets via vault-secrets.
+      - Call to payments-api with timeout and circuit breaker.
+      - Accounting entry written to pg-core and replicated to the DC.
+    external_dependencies: [payments-api]
+    last_restore_test: "2026-10-12"
+    notes: The 5m RPO assumes replication latency is measured continuously.
+
+  - id: analytics-ingestion
+    name: Analytics ingestion
+    description: Feed the data lake for dashboards and reporting.
+    criticality: P1
+    owner: data-platform
+    availability_target: 99.50%
+    rto: 4h
+    rpo: 1h
+    strategy: Kafka event replay + reconciliation from pg-core; acceptable loss limited to the lake.
+    components: [kafka-bus, etl-workers, obj-lake, k8s-control, network-hub]
+    steps:
+      - Kafka events consumed by etl-workers.
+      - Transformations applied.
+      - Results written to obj-lake.
+    external_dependencies: []
+    last_restore_test: "2026-08-14"
+    notes: Restore test older than 90 days — refresh it.
+
+  - id: identity-auth
+    name: User authentication
+    description: Sign-in of internal users and services to the platforms.
+    criticality: P0
+    owner: sec-team
+    availability_target: 99.99%
+    rto: 15m
+    rpo: "0"
+    strategy: Local session cache + federated backup IdP in eu-west-1; RPO 0 because identity has no critical state on the platform side.
+    components: [idp-oidc, vault-secrets, dns-global, k8s-control]
+    steps:
+      - Redirect to idp-oidc.
+      - Verify the token and the permissions.
+      - Retrieve secrets via vault-secrets.
+    external_dependencies: [idp-oidc]
+    last_restore_test: "2026-11-20"
+
+  - id: deploy-pipeline
+    name: Deployment pipeline
+    description: From source code to production via GitOps.
+    criticality: P2
+    owner: platform
+    availability_target: 99.00%
+    rto: 8h
+    rpo: 24h
+    strategy: Re-apply manifests from the Git repository; no business data loss.
+    components: [argocd, k8s-control, obj-lake]
+    steps:
+      - Git commit detected by argocd.
+      - Manifests applied to k8s-control.
+      - Artifacts read back from obj-lake.
+    external_dependencies: []
+    last_restore_test: "2026-07-01"

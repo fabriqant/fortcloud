@@ -1,0 +1,41 @@
+# Drill evidence — SOURCE OF TRUTH
+# A strategy needs a drill younger than 90 days with result: passed and an evidence link.
+version: 1
+drills:
+  - id: drill-idp
+    strategy: fo-idp
+    scenario: primary-loss
+    last: "2026-11-05"
+    duration: 2m12s
+    result: passed
+    evidence: https://ci.example.com/drills/fo-idp-42
+    owner: sec-team
+
+  - id: drill-dns
+    strategy: fo-dns
+    scenario: dns-failover
+    last: "2026-10-28"
+    duration: 4m40s
+    result: passed
+    evidence: https://ci.example.com/drills/fo-dns-17
+    owner: net-team
+
+  - id: drill-vault
+    strategy: fo-vault
+    scenario: manual
+    last: "2026-11-20"
+    duration: 8m40s
+    result: passed
+    evidence: https://ci.example.com/drills/fo-vault-43
+    owner: sec-team
+    notes: Isolated vault promotion after a simulated ransomware encryption of the primary.
+
+  - id: drill-pg
+    strategy: fo-pg
+    scenario: manual
+    last: "2026-11-20"
+    duration: 24m10s
+    result: passed
+    evidence: https://ci.example.com/drills/fo-pg-44
+    owner: data-platform
+    notes: Clean standby promotion after ransomware; checksums verified before the cutover.

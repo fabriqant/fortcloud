@@ -1,0 +1,129 @@
+# Failover topology — SOURCE OF TRUTH
+# role      : primary | standby | standalone
+# pair      : identifier shared by a primary and its standby (null if none)
+# capacity  : relative capacity units — the standby must absorb the primary load
+# health_check : probe used to detect a failure (null if not instrumented)
+version: 1
+topology:
+  - id: idp-oidc
+    name: OIDC identity provider
+    criticality: P0
+    owner: sec-team
+    provider: single SaaS
+    region: eu-west-1
+    zone: az1
+    role: primary
+    pair: idp
+    capacity: 100
+    health_check: https://idp.internal/healthz
+    notes: Platform-side stateless sessions — RPO 0 is achievable.
+
+  - id: idp-oidc-dr
+    name: OIDC identity provider (standby)
+    criticality: P0
+    owner: sec-team
+    provider: single SaaS
+    region: eu-west-3
+    zone: az1
+    role: standby
+    pair: idp
+    capacity: 100
+    health_check: https://idp-dr.internal/healthz
+
+  - id: dns-global
+    name: Global DNS / resolution
+    criticality: P0
+    owner: net-team
+    provider: DNS provider A
+    region: global-a
+    zone: anycast
+    role: primary
+    pair: dns
+    capacity: 100
+    health_check: https://dns-a.internal/health
+
+  - id: dns-global-dr
+    name: Global DNS (second provider)
+    criticality: P0
+    owner: net-team
+    provider: DNS provider B
+    region: global-b
+    zone: anycast
+    role: standby
+    pair: dns
+    capacity: 100
+    health_check: https://dns-b.internal/health
+
+  - id: vault-secrets
+    name: Secrets vault
+    criticality: P0
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-1
+    zone: az1
+    role: primary
+    pair: vault
+    capacity: 100
+    health_check: https://vault.internal/v1/health
+
+  - id: vault-secrets-dr
+    name: Secrets vault (replica)
+    criticality: P0
+    owner: sec-team
+    provider: SaaS
+    region: eu-west-3
+    zone: az1
+    role: standby
+    pair: vault
+    capacity: 100
+    health_check: https://vault-dr.internal/v1/health
+    notes: Synchronous replication, but the regional drill needs refreshing.
+
+  - id: pg-core
+    name: Primary transactional database
+    criticality: P0
+    owner: data-platform
+    provider: cloud eu-west-1
+    region: eu-west-1
+    zone: az1
+    role: primary
+    pair: pg
+    capacity: 100
+    health_check: https://pg.internal/health
+
+  - id: pg-core-dr
+    name: Transactional database (standby)
+    criticality: P0
+    owner: data-platform
+    provider: cloud eu-west-3
+    region: eu-west-3
+    zone: az1
+    role: standby
+    pair: pg
+    capacity: 100
+    health_check: https://pg-dr.internal/health
+    notes: Standby sized to absorb primary load during the eu-west-1 loss.
+
+  - id: kafka-bus
+    name: Event bus
+    criticality: P1
+    owner: data-platform
+    provider: cloud eu-west-3
+    region: eu-west-3
+    zone: az1
+    role: standalone
+    pair: null
+    capacity: 100
+    health_check: https://kafka.internal/health
+
+  - id: obj-lake
+    name: Object data lake
+    criticality: P1
+    owner: data-platform
+    provider: multi-cloud
+    region: europe-west1
+    zone: az1
+    role: standalone
+    pair: null
+    capacity: 100
+    health_check: null

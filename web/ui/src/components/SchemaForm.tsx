@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import type { Catalog } from "../lib/types";
 import { cn } from "../lib/utils";
@@ -226,6 +226,7 @@ function PrimitiveField({
   value,
   required,
   suggestions = [],
+  compact = false,
   onChange,
 }: {
   name: string;
@@ -233,6 +234,7 @@ function PrimitiveField({
   value: unknown;
   required: boolean;
   suggestions?: string[];
+  compact?: boolean;
   onChange: (value: unknown) => void;
 }) {
   const type = schemaType(schema);
@@ -242,10 +244,14 @@ function PrimitiveField({
 
   if (allowsNull(schema) && value === null) {
     return (
-      <label className="block">
-        <span className="mb-1 block text-3xs font-semibold text-slate-500">
-          {label} <span className="font-normal text-slate-400">· null</span>
-        </span>
+      <label className={cn("block", compact && "min-w-0")}>
+        {compact ? (
+          <span className="sr-only">{label}</span>
+        ) : (
+          <span className="mb-1 block text-3xs font-semibold text-slate-500">
+            {label} <span className="font-normal text-slate-400">· null</span>
+          </span>
+        )}
         <button
           type="button"
           onClick={() => onChange(blankFor(schema))}
@@ -351,10 +357,16 @@ function PrimitiveField({
   }
 
   return (
-    <label className="block">
-      <span className="mb-1 block text-3xs font-semibold text-slate-500">
-        {label} {required && <span className="text-rose-400">*</span>}
-      </span>
+    <label className={cn("block", compact && "min-w-0")}>
+      {compact ? (
+        <span className="sr-only">
+          {label} {required && "*"}
+        </span>
+      ) : (
+        <span className="mb-1 block text-3xs font-semibold text-slate-500">
+          {label} {required && <span className="text-rose-400">*</span>}
+        </span>
+      )}
       {control}
     </label>
   );
@@ -377,13 +389,76 @@ function ArrayField({
   const itemSchema = schema.items ?? {};
   const objectItems = schemaType(itemSchema) === "object";
   const label = schema.title ?? labelFor(name);
+
+  // Stable keys keep the enter/leave animation on the right row after removals.
+  const idsRef = useRef<number[]>([]);
+  const nextIdRef = useRef(0);
+  while (idsRef.current.length < items.length) idsRef.current.push(nextIdRef.current++);
+  if (idsRef.current.length > items.length) idsRef.current = idsRef.current.slice(0, items.length);
+  const ids = idsRef.current;
+
   const [open, setOpen] = useState<Record<number, boolean>>({});
+  const [entering, setEntering] = useState<Record<number, boolean>>({});
+  const [exiting, setExiting] = useState<Record<number, boolean>>({});
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  useEffect(() => {
+    const doomed = new Set(
+      Object.entries(exiting)
+        .filter(([, active]) => active)
+        .map(([id]) => Number(id)),
+    );
+    if (!doomed.size) return;
+    const timer = window.setTimeout(() => {
+      const currentItems = itemsRef.current;
+      const currentIds = idsRef.current;
+      const nextItems = currentItems.filter((_, index) => !doomed.has(currentIds[index]));
+      idsRef.current = currentIds.filter((id) => !doomed.has(id));
+      setOpen((previous) => {
+        const next = { ...previous };
+        doomed.forEach((id) => delete next[id]);
+        return next;
+      });
+      setExiting((previous) => {
+        const next = { ...previous };
+        doomed.forEach((id) => delete next[id]);
+        return next;
+      });
+      onChangeRef.current(nextItems);
+    }, 220);
+    return () => window.clearTimeout(timer);
+  }, [exiting]);
+
+  useEffect(() => {
+    if (!Object.values(entering).some(Boolean)) return;
+    const timer = window.setTimeout(() => setEntering({}), 280);
+    return () => window.clearTimeout(timer);
+  }, [entering]);
 
   const setItem = (index: number, next: unknown) => {
     const copy = [...items];
     copy[index] = next;
     onChange(copy);
   };
+
+  const add = () => {
+    const id = nextIdRef.current++;
+    idsRef.current = [...ids, id];
+    setEntering((previous) => ({ ...previous, [id]: true }));
+    onChange([...items, blankFor(itemSchema)]);
+  };
+
+  const remove = (id: number) => {
+    setExiting((previous) => ({ ...previous, [id]: true }));
+  };
+
+  const animationProps = (id: number) => ({
+    "data-entering": entering[id] === true ? "true" : undefined,
+    "data-exiting": exiting[id] === true ? "true" : undefined,
+  });
 
   return (
     <div className="sm:col-span-2">
@@ -393,25 +468,55 @@ function ArrayField({
         </p>
         <button
           type="button"
-          onClick={() => {
-            setOpen((previous) => ({ ...previous, [items.length]: true }));
-            onChange([...items, blankFor(itemSchema)]);
-          }}
+          onClick={add}
           className="content-button border-slate-200 bg-white text-slate-600 hover:border-slate-400"
         >
           <Plus className="h-3 w-3" /> Add
         </button>
       </div>
 
-      <div className="space-y-3 pt-1">
+      <div className={cn("grid gap-3 pt-1", objectItems ? "grid-cols-1" : "grid-cols-3")}>
         {items.map((item, index) => {
-          const expanded = open[index] === true;
+          const id = ids[index];
+
+          if (!objectItems) {
+            return (
+              <div
+                key={id}
+                {...animationProps(id)}
+                className="array-item flex min-w-0 items-start gap-2"
+              >
+                <div className="min-w-0 flex-1">
+                  <PrimitiveField
+                    name={`${name}-${index}`}
+                    schema={itemSchema}
+                    value={item}
+                    required
+                    compact
+                    suggestions={suggestionsFor(name, catalog)}
+                    onChange={(next) => setItem(index, next)}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => remove(id)}
+                  disabled={exiting[id] === true}
+                  className="content-icon-button h-[38px] w-[38px] shrink-0 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                  aria-label={`Remove ${label} ${index + 1}`}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            );
+          }
+
+          const expanded = open[id] !== false;
           return (
-            <div key={index}>
+            <div key={id} {...animationProps(id)} className="array-item">
               <div className="accordion-row flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setOpen((previous) => ({ ...previous, [index]: !expanded }))}
+                  onClick={() => setOpen((previous) => ({ ...previous, [id]: !expanded }))}
                   className="flex min-w-0 flex-1 items-center gap-1.5 text-left"
                   aria-expanded={expanded}
                 >
@@ -424,7 +529,7 @@ function ArrayField({
                   <span className="truncate text-accordion-title font-medium text-slate-700">
                     {itemTitle(item, index)}
                   </span>
-                  {objectItems && isRecord(item) && (
+                  {isRecord(item) && (
                     <span className="shrink-0 text-3xs text-slate-400">
                       · {Object.keys(item).length} fields
                     </span>
@@ -432,7 +537,8 @@ function ArrayField({
                 </button>
                 <button
                   type="button"
-                  onClick={() => onChange(items.filter((_, position) => position !== index))}
+                  onClick={() => remove(id)}
+                  disabled={exiting[id] === true}
                   className="content-icon-button text-slate-400 hover:bg-rose-50 hover:text-rose-600"
                   aria-label={`Remove ${label} ${index + 1}`}
                 >
@@ -443,23 +549,12 @@ function ArrayField({
               <div className="accordion-panel" data-open={expanded}>
                 <div>
                   <div className="pb-3 pl-5 pt-3">
-                    {objectItems ? (
-                      <Fields
-                        schema={itemSchema}
-                        value={item}
-                        catalog={catalog}
-                        onChange={(next) => setItem(index, next)}
-                      />
-                    ) : (
-                      <PrimitiveField
-                        name={`${name}-${index}`}
-                        schema={itemSchema}
-                        value={item}
-                        required
-                        suggestions={suggestionsFor(name, catalog)}
-                        onChange={(next) => setItem(index, next)}
-                      />
-                    )}
+                    <Fields
+                      schema={itemSchema}
+                      value={item}
+                      catalog={catalog}
+                      onChange={(next) => setItem(index, next)}
+                    />
                   </div>
                 </div>
               </div>

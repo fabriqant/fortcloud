@@ -46,9 +46,9 @@ dev = [
 fortcloud-custodian = "fortcloud_custodian.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/fabriqant/fortcloud-io/tree/main/custodian"
-Issues = "https://github.com/fabriqant/fortcloud-io/issues"
-Changelog = "https://github.com/fabriqant/fortcloud-io/blob/main/custodian/CHANGELOG.md"
+Homepage = "https://github.com/fabriqant/fortcloud/tree/main/custodian"
+Issues = "https://github.com/fabriqant/fortcloud/issues"
+Changelog = "https://github.com/fabriqant/fortcloud/blob/main/custodian/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

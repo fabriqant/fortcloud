@@ -16,4 +16,4 @@ All notable changes to this tool are documented here. The format is based on
 - Generated artifacts: `timeout-budget.md`, `policy-matrix.md`, `resilience-plan.md`, `ballast-status.json`.
 - Working hybrid/multi-cloud example, 19 unit tests, documentation and root CI job.
 
-[0.1.0]: https://github.com/fabriqant/fortcloud-io/releases/tag/ballast-v0.1.0
+[0.1.0]: https://github.com/fabriqant/fortcloud/releases/tag/ballast-v0.1.0

@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-cd fortcloud-io/crucible
+cd fortcloud/crucible
 python -m pip install -e .
 fortcloud-crucible --version
 ```

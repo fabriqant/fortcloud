@@ -4,7 +4,7 @@
 
 > **A retry without a budget is an outage with a delay.**
 
-[![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
+[![CI](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -12,7 +12,7 @@ FortCloud Ballast turns a hand-maintained YAML model of your outbound dependenci
 
 [← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Ark](../ark/README.md) · [Next tool: FortCloud Vitals](../vitals/README.md) — health and data quality, one signal.
 
-> **Where the code lives:** this tool is the `ballast/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas, Failover or Ark at runtime. The GitHub Actions workflow stays at the repository root.
+> **Where the code lives:** this tool is the `ballast/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its own model and does not depend on Atlas, Failover or Ark at runtime. The GitHub Actions workflow stays at the repository root.
 
 ## Why
 
@@ -29,8 +29,8 @@ Ballast makes those trade-offs explicit and reviewable in a pull request.
 ## 30-second quickstart
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/ballast
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/ballast
 python -m pip install -e .
 
 fortcloud-ballast check
@@ -182,7 +182,7 @@ The root workflow has a dedicated job with `working-directory: ballast`, `cache-
 ## Repository layout
 
 ```text
-fortcloud-io/
+fortcloud/
 ├── .github/workflows/ci.yml
 ├── README.md                   # family overview
 ├── atlas/                      # dependency and risk map

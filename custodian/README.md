@@ -4,7 +4,7 @@
 
 > **A control that cannot be shown in a pull request is a control that does not exist.**
 
-[![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
+[![CI](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -20,7 +20,7 @@ FortCloud Custodian turns a hand-maintained YAML model of identities, secrets, d
 
 [← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Vitals](../vitals/README.md) · [Next tool: FortCloud Crucible](../crucible/README.md) — rehearse the outage before it happens.
 
-> **Where the code lives:** this tool is the `custodian/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast or Vitals at runtime. The GitHub Actions workflow stays at the repository root.
+> **Where the code lives:** this tool is the `custodian/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast or Vitals at runtime. The GitHub Actions workflow stays at the repository root.
 
 ## Why
 
@@ -36,8 +36,8 @@ Custodian makes these trade-offs explicit and reviewable before the next access 
 ## 30-second quickstart
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/custodian
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/custodian
 python -m pip install -e .
 
 fortcloud-custodian check
@@ -256,7 +256,7 @@ The root workflow has a dedicated job with `working-directory: custodian`, `cach
 ## Repository layout
 
 ```text
-fortcloud-io/
+fortcloud/
 ├── .github/workflows/ci.yml
 ├── README.md                   # family overview
 ├── atlas/                      # dependency and risk map

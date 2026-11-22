@@ -15,4 +15,4 @@ All notable changes to this tool are documented here. The format is based on
 - Generated artifacts: `backup-coverage.md`, `restore-evidence.md`, `recovery-plan.md`, `restore-status.json`.
 - Working hybrid/multi-cloud example, 19 unit tests, documentation and root CI job.
 
-[0.1.0]: https://github.com/fabriqant/fortcloud-io/releases/tag/ark-v0.1.0
+[0.1.0]: https://github.com/fabriqant/fortcloud/releases/tag/ark-v0.1.0

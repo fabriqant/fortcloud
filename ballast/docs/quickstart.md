@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-cd fortcloud-io/ballast
+cd fortcloud/ballast
 python -m pip install -e .
 fortcloud-ballast --version
 ```

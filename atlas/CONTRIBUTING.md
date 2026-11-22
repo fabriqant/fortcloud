@@ -5,7 +5,7 @@ Thanks for helping make infrastructure risk visible.
 ## Setup
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
+git clone https://github.com/fabriqant/fortcloud.git
 cd atlas
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate

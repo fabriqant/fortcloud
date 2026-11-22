@@ -47,9 +47,9 @@ dev = [
 fortcloud-ark = "fortcloud_ark.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/fabriqant/fortcloud-io/tree/main/ark"
-Issues = "https://github.com/fabriqant/fortcloud-io/issues"
-Changelog = "https://github.com/fabriqant/fortcloud-io/blob/main/ark/CHANGELOG.md"
+Homepage = "https://github.com/fabriqant/fortcloud/tree/main/ark"
+Issues = "https://github.com/fabriqant/fortcloud/issues"
+Changelog = "https://github.com/fabriqant/fortcloud/blob/main/ark/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

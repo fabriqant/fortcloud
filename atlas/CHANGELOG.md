@@ -21,5 +21,5 @@ All notable changes to FortCloud Atlas are documented here. The format follows [
 - Documentation: overview, quickstart, concepts, service levels, C4 views, ADRs and runbook template.
 - GitHub Actions CI with unit tests and published artifacts.
 
-[Unreleased]: https://github.com/fabriqant/fortcloud-io/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/fabriqant/fortcloud-io/releases/tag/v0.1.0
+[Unreleased]: https://github.com/fabriqant/fortcloud/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/fabriqant/fortcloud/releases/tag/v0.1.0

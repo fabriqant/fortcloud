@@ -46,9 +46,9 @@ dev = [
 fortcloud-vitals = "fortcloud_vitals.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/fabriqant/fortcloud-io/tree/main/vitals"
-Issues = "https://github.com/fabriqant/fortcloud-io/issues"
-Changelog = "https://github.com/fabriqant/fortcloud-io/blob/main/vitals/CHANGELOG.md"
+Homepage = "https://github.com/fabriqant/fortcloud/tree/main/vitals"
+Issues = "https://github.com/fabriqant/fortcloud/issues"
+Changelog = "https://github.com/fabriqant/fortcloud/blob/main/vitals/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

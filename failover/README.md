@@ -4,7 +4,7 @@
 
 > **A redundancy claim is not a failover plan.**
 
-[![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
+[![CI](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -12,7 +12,7 @@ FortCloud Failover turns a hand-maintained YAML model of your failover topology 
 
 [← Back to the FortCloud-io family README](../README.md) · [Next tool: FortCloud Ark](../ark/README.md) — restore is a feature, not a hope.
 
-> **Where the code lives:** this tool is the `failover/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its **own model** and does not depend on Atlas at runtime. The GitHub Actions workflow stays at the repository root.
+> **Where the code lives:** this tool is the `failover/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its **own model** and does not depend on Atlas at runtime. The GitHub Actions workflow stays at the repository root.
 
 ## Why
 
@@ -27,8 +27,8 @@ Atlas tells you *where* the single point of failure is. Failover tells you *what
 ## 30-second quickstart
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/failover
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/failover
 python -m pip install -e .
 
 fortcloud-failover check
@@ -176,7 +176,7 @@ The root workflow has a dedicated job with `working-directory: failover`, `cache
 ## Repository layout
 
 ```text
-fortcloud-io/
+fortcloud/
 ├── .github/workflows/ci.yml
 ├── README.md                  # family overview
 ├── atlas/                     # dependency and risk map

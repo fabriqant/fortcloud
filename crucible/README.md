@@ -4,7 +4,7 @@
 
 > **A recovery plan that has never been rehearsed is a document, not a capability.**
 
-[![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
+[![CI](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -20,7 +20,7 @@ FortCloud Crucible turns a hand-maintained YAML model of failure drills into a *
 
 [← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Custodian](../custodian/README.md)
 
-> **Where the code lives:** this tool is the `crucible/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast, Vitals or Custodian at runtime. The GitHub Actions workflow stays at the repository root.
+> **Where the code lives:** this tool is the `crucible/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its own model and does not depend on Atlas, Failover, Ark, Ballast, Vitals or Custodian at runtime. The GitHub Actions workflow stays at the repository root.
 
 ## Why
 
@@ -34,8 +34,8 @@ A declared RTO is a hypothesis. It becomes a fact only when someone has actually
 ## 30-second quickstart
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/crucible
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/crucible
 python -m pip install -e .
 
 fortcloud-crucible check
@@ -203,7 +203,7 @@ The root workflow has a dedicated job with `working-directory: crucible`, `cache
 ## Repository layout
 
 ```text
-fortcloud-io/
+fortcloud/
 ├── .github/workflows/ci.yml
 ├── README.md                   # family overview
 ├── atlas/                      # dependency and risk map

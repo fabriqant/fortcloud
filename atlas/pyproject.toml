@@ -47,9 +47,9 @@ dev = [
 fortcloud-atlas = "fortcloud_atlas.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/fabriqant/fortcloud-io/tree/main/atlas"
-Issues = "https://github.com/fabriqant/fortcloud-io/issues"
-Changelog = "https://github.com/fabriqant/fortcloud-io/blob/main/atlas/CHANGELOG.md"
+Homepage = "https://github.com/fabriqant/fortcloud/tree/main/atlas"
+Issues = "https://github.com/fabriqant/fortcloud/issues"
+Changelog = "https://github.com/fabriqant/fortcloud/blob/main/atlas/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

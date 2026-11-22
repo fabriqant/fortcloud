@@ -15,4 +15,4 @@ All notable changes to this tool are documented here. The format is based on
 - Generated artifacts: `failover-matrix.md`, `failover-plan.md`, `drill-scenarios.md`, `failover-status.json`.
 - Working hybrid/multi-cloud example, 20 unit tests, documentation and root CI job.
 
-[0.1.0]: https://github.com/fabriqant/fortcloud-io/releases/tag/failover-v0.1.0
+[0.1.0]: https://github.com/fabriqant/fortcloud/releases/tag/failover-v0.1.0

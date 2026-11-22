@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-cd fortcloud-io/custodian
+cd fortcloud/custodian
 python -m pip install -e .
 fortcloud-custodian --version
 ```

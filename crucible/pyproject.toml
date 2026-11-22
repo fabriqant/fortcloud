@@ -46,9 +46,9 @@ dev = [
 fortcloud-crucible = "fortcloud_crucible.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/fabriqant/fortcloud-io/tree/main/crucible"
-Issues = "https://github.com/fabriqant/fortcloud-io/issues"
-Changelog = "https://github.com/fabriqant/fortcloud-io/blob/main/crucible/CHANGELOG.md"
+Homepage = "https://github.com/fabriqant/fortcloud/tree/main/crucible"
+Issues = "https://github.com/fabriqant/fortcloud/issues"
+Changelog = "https://github.com/fabriqant/fortcloud/blob/main/crucible/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

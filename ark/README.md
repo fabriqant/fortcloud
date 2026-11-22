@@ -4,7 +4,7 @@
 
 > **A backup you have never restored is a rumour.**
 
-[![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
+[![CI](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -12,7 +12,7 @@ FortCloud Ark turns a hand-maintained YAML model of your data assets, backup pol
 
 [← Back to the FortCloud-io family README](../README.md) · [Previous tool: FortCloud Failover](../failover/README.md) · [Next tool: FortCloud Ballast](../ballast/README.md) — keep workloads steady when parts fail.
 
-> **Where the code lives:** this tool is the `ark/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. It has its own model and does not depend on Atlas or Failover at runtime. The GitHub Actions workflow stays at the repository root.
+> **Where the code lives:** this tool is the `ark/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. It has its own model and does not depend on Atlas or Failover at runtime. The GitHub Actions workflow stays at the repository root.
 
 ## Why
 
@@ -29,8 +29,8 @@ A backup is only real when a dated test has measured the restore. Ark makes that
 ## 30-second quickstart
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/ark
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/ark
 python -m pip install -e .
 
 fortcloud-ark check
@@ -180,7 +180,7 @@ The root workflow has a dedicated job with `working-directory: ark`, `cache-depe
 ## Repository layout
 
 ```text
-fortcloud-io/
+fortcloud/
 ├── .github/workflows/ci.yml
 ├── README.md                  # family overview
 ├── atlas/                     # dependency and risk map

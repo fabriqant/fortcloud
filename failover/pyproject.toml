@@ -47,9 +47,9 @@ dev = [
 fortcloud-failover = "fortcloud_failover.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/fabriqant/fortcloud-io/tree/main/failover"
-Issues = "https://github.com/fabriqant/fortcloud-io/issues"
-Changelog = "https://github.com/fabriqant/fortcloud-io/blob/main/failover/CHANGELOG.md"
+Homepage = "https://github.com/fabriqant/fortcloud/tree/main/failover"
+Issues = "https://github.com/fabriqant/fortcloud/issues"
+Changelog = "https://github.com/fabriqant/fortcloud/blob/main/failover/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

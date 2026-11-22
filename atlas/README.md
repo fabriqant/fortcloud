@@ -4,7 +4,7 @@
 
 > **Map every dependency. See every risk.**
 
-[![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
+[![CI](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -12,7 +12,7 @@ FortCloud Atlas turns a hand-maintained YAML model of your infrastructure into a
 
 [← Back to the FortCloud-io family README](../README.md) · [Next tool: FortCloud Failover](../failover/README.md) — design out the single point of failure.
 
-> **Where the code lives:** this tool is the `atlas/` folder of the [`fabriqant/fortcloud-io`](https://github.com/fabriqant/fortcloud-io) repository. The GitHub Actions workflow lives at the repository root (`.github/workflows/ci.yml`) and runs with `working-directory: atlas` so GitHub can discover it.
+> **Where the code lives:** this tool is the `atlas/` folder of the [`fabriqant/fortcloud`](https://github.com/fabriqant/fortcloud) repository. The GitHub Actions workflow lives at the repository root (`.github/workflows/ci.yml`) and runs with `working-directory: atlas` so GitHub can discover it.
 
 ## Why
 
@@ -28,8 +28,8 @@ Typical questions Atlas answers:
 ## 30-second quickstart
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/atlas
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/atlas
 python -m pip install -e .
 
 fortcloud-atlas check
@@ -201,7 +201,7 @@ See [`.github/workflows/ci.yml`](../.github/workflows/ci.yml). Generated files a
 ## Repository layout
 
 ```text
-fortcloud-io/
+fortcloud/
 ├── .github/workflows/ci.yml
 ├── README.md                  # family overview
 └── atlas/                     # this tool

@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-cd fortcloud-io/failover
+cd fortcloud/failover
 python -m pip install -e .
 fortcloud-failover --version
 ```

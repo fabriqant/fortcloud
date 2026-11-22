@@ -19,14 +19,14 @@ export function ToolSidebar({
   onSelect: (id: string) => void;
 }) {
   const docsUrl = !home && activeId
-    ? `https://github.com/fabriqant/fortcloud-io/blob/main/${activeId}/README.md`
-    : "https://github.com/fabriqant/fortcloud-io#readme";
+    ? `https://github.com/fabriqant/fortcloud/blob/main/${activeId}/README.md`
+    : "https://github.com/fabriqant/fortcloud#readme";
 
   const links = [
     { label: "Documentation", href: docsUrl, icon: BookOpen, external: true },
     {
       label: "GitHub repository",
-      href: "https://github.com/fabriqant/fortcloud-io",
+      href: "https://github.com/fabriqant/fortcloud",
       icon: Github,
       external: true,
     },

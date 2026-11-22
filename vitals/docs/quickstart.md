@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-cd fortcloud-io/vitals
+cd fortcloud/vitals
 python -m pip install -e .
 fortcloud-vitals --version
 ```

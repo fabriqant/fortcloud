@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-cd fortcloud-io/ark
+cd fortcloud/ark
 python -m pip install -e .
 fortcloud-ark --version
 ```

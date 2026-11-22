@@ -12,7 +12,7 @@
 
 > **Keep the cloud standing.**
 
-[![CI](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud-io/actions/workflows/ci.yml)
+[![CI](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml/badge.svg)](https://github.com/fabriqant/fortcloud/actions/workflows/ci.yml)
 
 FortCloud is a family of small, independent engineering tools that make infrastructure risk explicit, testable and reviewable in a pull request. This repository hosts the family. It contains all seven tools — **Atlas**, **Failover**, **Ark**, **Ballast**, **Vitals**, **Custodian** and **Crucible** — each in its own folder with its own package, CLI, model, tests and documentation.
 
@@ -49,7 +49,7 @@ Each tool can be adopted alone. All seven are separate packages with **independe
 ## Repository layout
 
 ```text
-fortcloud-io/
+fortcloud/
 ├── .github/
 │   └── workflows/ci.yml        # one workflow, one job per tool, one for the web console
 ├── README.md                   # this file — family overview
@@ -117,8 +117,8 @@ fortcloud-io/
 ## Start with Atlas
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/atlas
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/atlas
 python -m pip install -e .
 
 fortcloud-atlas check
@@ -134,7 +134,7 @@ Read the [Atlas README](atlas/README.md) for the CLI, the model format and the f
 ## Continue with Failover
 
 ```bash
-cd fortcloud-io/failover
+cd fortcloud/failover
 python -m pip install -e .
 
 fortcloud-failover check
@@ -145,7 +145,7 @@ This writes a failover coverage matrix, a remediation plan, a drill checklist an
 ## Continue with Ark
 
 ```bash
-cd fortcloud-io/ark
+cd fortcloud/ark
 python -m pip install -e .
 
 fortcloud-ark check
@@ -156,7 +156,7 @@ This writes a backup coverage matrix, a restore evidence report, a recovery plan
 ## Continue with Ballast
 
 ```bash
-cd fortcloud-io/ballast
+cd fortcloud/ballast
 python -m pip install -e .
 
 fortcloud-ballast check
@@ -167,7 +167,7 @@ This writes a timeout budget report, a resilience policy matrix, a remediation p
 ## Continue with Vitals
 
 ```bash
-cd fortcloud-io/vitals
+cd fortcloud/vitals
 python -m pip install -e .
 
 fortcloud-vitals check
@@ -178,7 +178,7 @@ This writes an SLO dashboard, a signal catalog, a quality plan and a machine-rea
 ## Continue with Custodian
 
 ```bash
-cd fortcloud-io/custodian
+cd fortcloud/custodian
 python -m pip install -e .
 
 fortcloud-custodian check
@@ -189,7 +189,7 @@ This writes an access matrix, a secret inventory, a change-control report, an au
 ## Finish with Crucible
 
 ```bash
-cd fortcloud-io/crucible
+cd fortcloud/crucible
 python -m pip install -e .
 
 fortcloud-crucible check

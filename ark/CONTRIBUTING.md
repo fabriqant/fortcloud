@@ -3,8 +3,8 @@
 ## Setup
 
 ```bash
-git clone https://github.com/fabriqant/fortcloud-io.git
-cd fortcloud-io/ark
+git clone https://github.com/fabriqant/fortcloud.git
+cd fortcloud/ark
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # Linux/macOS: source .venv/bin/activate

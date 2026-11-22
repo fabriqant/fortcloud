@@ -19,4 +19,4 @@ All notable changes to this tool are documented here. The format is based on
 - Generated artifacts: `access-matrix.md`, `secret-inventory.md`, `change-control.md`, `audit-trail.md`, `custodian-status.json`.
 - Working hybrid/multi-cloud example, 20 unit tests, documentation and root CI job.
 
-[0.1.0]: https://github.com/fabriqant/fortcloud-io/releases/tag/custodian-v0.1.0
+[0.1.0]: https://github.com/fabriqant/fortcloud/releases/tag/custodian-v0.1.0

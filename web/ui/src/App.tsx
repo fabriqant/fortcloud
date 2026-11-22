@@ -8,6 +8,7 @@ import type {
   ArtifactPayload,
   ModelPayload,
   RunResult,
+  ScenarioState,
   TabKey,
   ToolInfo,
   ViewData,
@@ -22,6 +23,7 @@ import { GraphView } from "./components/GraphView";
 import { ImportView } from "./components/ImportView";
 import { KpiCards } from "./components/KpiCards";
 import { ModelEditor } from "./components/ModelEditor";
+import { ScenarioView } from "./components/ScenarioView";
 import { ToolSidebar } from "./components/ToolSidebar";
 import { Badge, Button, EmptyState } from "./components/ui";
 
@@ -29,6 +31,7 @@ const TAB_ITEMS: { key: TabKey; label: string }[] = [
   { key: "overview", label: "Overview" },
   { key: "model", label: "Model" },
   { key: "outputs", label: "Outputs" },
+  { key: "scenarios", label: "Scenarios" },
   { key: "import", label: "Import" },
   { key: "schemas", label: "Schemas" },
 ];
@@ -43,6 +46,7 @@ export default function App() {
   const [activeArtifact, setActiveArtifact] = useState("");
   const [artifactPayload, setArtifactPayload] = useState<ArtifactPayload | null>(null);
   const [artifactVersion, setArtifactVersion] = useState(0);
+  const [scenarioState, setScenarioState] = useState<ScenarioState | null>(null);
   const [schemas, setSchemas] = useState<Record<string, string>>({});
   const [activeSchema, setActiveSchema] = useState("");
   const [activeFile, setActiveFile] = useState("");
@@ -65,15 +69,17 @@ export default function App() {
   const loadTool = useCallback(async (toolId: string, clearResult: boolean) => {
     if (clearResult) setResult(null);
     setError("");
-    const [modelPayload, data, artifactList, schemaMap] = await Promise.all([
+    const [modelPayload, data, artifactList, schemaMap, scenarios] = await Promise.all([
       api.model(toolId),
       api.data(toolId),
       api.artifacts(toolId),
       api.schemas(toolId),
+      api.scenarios(toolId),
     ]);
     if (activeIdRef.current !== toolId) return;
 
     setModel(modelPayload);
+    setScenarioState(scenarios);
     setDraft({ ...modelPayload.files });
     setActiveFile(Object.keys(modelPayload.files)[0] ?? "");
     setView(data);
@@ -179,6 +185,19 @@ export default function App() {
     }
   }, [activeToolId, strict]);
 
+  const recordSnapshot = useCallback(
+    async (label: string) => {
+      if (!activeToolId) return;
+      try {
+        const next = await api.snapshot(activeToolId, label);
+        if (activeIdRef.current === activeToolId) setScenarioState(next);
+      } catch {
+        // Versioning is best-effort; a failed snapshot must never block a save.
+      }
+    },
+    [activeToolId],
+  );
+
   const saveFile = useCallback(async () => {
     if (!activeToolId || !activeFile) return;
     setBusy("save");
@@ -189,12 +208,13 @@ export default function App() {
           ? { ...current, files: { ...current.files, [activeFile]: draft[activeFile] ?? "" } }
           : current,
       );
+      await recordSnapshot(`Saved ${activeFile}`);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
       setBusy(null);
     }
-  }, [activeToolId, activeFile, draft]);
+  }, [activeToolId, activeFile, draft, recordSnapshot]);
 
   const resetModel = useCallback(async () => {
     if (!activeToolId) return;
@@ -369,7 +389,13 @@ export default function App() {
                   </div>
 
                   {modelMode === "form" ? (
-                    <FormView toolId={activeToolId} onSaved={() => loadTool(activeToolId, true)} />
+                    <FormView
+                      toolId={activeToolId}
+                      onSaved={async () => {
+                        await recordSnapshot("Guided form save");
+                        await loadTool(activeToolId, true);
+                      }}
+                    />
                   ) : (
                     <>
                       <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-[11px] leading-relaxed text-sky-900">
@@ -444,6 +470,20 @@ export default function App() {
                   ) : (
                     <EmptyState title="No artifacts" hint="Run Check to generate the reports for this tool." />
                   )}
+                </Tabs.Content>
+
+                <Tabs.Content value="scenarios" className="animate-fade-in outline-none">
+                  <ScenarioView
+                    toolId={activeToolId}
+                    active={tab === "scenarios"}
+                    state={scenarioState}
+                    onChanged={(next) => {
+                      setScenarioState(next);
+                      void loadTool(activeToolId, true).catch((cause: unknown) => {
+                        setError(cause instanceof Error ? cause.message : String(cause));
+                      });
+                    }}
+                  />
                 </Tabs.Content>
 
                 <Tabs.Content value="import" className="animate-fade-in outline-none">

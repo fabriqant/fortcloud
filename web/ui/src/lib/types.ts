@@ -84,6 +84,38 @@ export interface ModelDocument {
   document: Record<string, unknown>;
 }
 
+export interface SnapshotInfo {
+  version: number;
+  label: string;
+  created_at: string;
+}
+
+export interface ScenarioInfo {
+  name: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  active: boolean;
+  versions: SnapshotInfo[];
+}
+
+export interface ScenarioState {
+  active: string;
+  scenarios: ScenarioInfo[];
+}
+
+export interface ComparisonFile {
+  file: string;
+  changed: boolean;
+  diff: string;
+}
+
+export interface Comparison {
+  left: string;
+  right: string;
+  files: ComparisonFile[];
+}
+
 export interface ImportInfo {
   name: string;
   size: number;
@@ -97,4 +129,4 @@ export interface ImportDiff {
   diff: string;
 }
 
-export type TabKey = "overview" | "model" | "outputs" | "import" | "schemas";
+export type TabKey = "overview" | "model" | "outputs" | "scenarios" | "import" | "schemas";

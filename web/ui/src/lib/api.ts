@@ -4,10 +4,12 @@ import type {
   Catalog,
   ImportDiff,
   ImportInfo,
+  Comparison,
   ModelDocument,
   ModelFormat,
   ModelPayload,
   RunResult,
+  ScenarioState,
   ToolInfo,
   ViewData,
 } from "./types";
@@ -55,6 +57,29 @@ export const api = {
       body: JSON.stringify({ content }),
     }),
   reset: (tool: string) => request<ModelPayload>(`/${tool}/model/reset`, { method: "POST" }),
+  scenarios: (tool: string) => request<ScenarioState>(`/${tool}/scenarios`),
+  createScenario: (tool: string, name: string, description: string) =>
+    request<ScenarioState>(`/${tool}/scenarios`, {
+      method: "POST",
+      body: JSON.stringify({ name, description }),
+    }),
+  activateScenario: (tool: string, name: string) =>
+    request<ScenarioState>(`/${tool}/scenarios/${encodeURIComponent(name)}/activate`, {
+      method: "POST",
+    }),
+  deleteScenario: (tool: string, name: string) =>
+    request<ScenarioState>(`/${tool}/scenarios/${encodeURIComponent(name)}`, {
+      method: "DELETE",
+    }),
+  snapshot: (tool: string, label: string) =>
+    request<ScenarioState>(`/${tool}/snapshots`, {
+      method: "POST",
+      body: JSON.stringify({ label }),
+    }),
+  compare: (tool: string, left: string, right: string) =>
+    request<Comparison>(
+      `/${tool}/compare?left=${encodeURIComponent(left)}&right=${encodeURIComponent(right)}`,
+    ),
   validate: (tool: string, strict: boolean) =>
     request<RunResult>(`/${tool}/validate?strict=${strict}`, { method: "POST" }),
   check: (tool: string, strict: boolean) =>

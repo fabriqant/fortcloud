@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import catalog, registry, runner, structured, workspaces
+from . import catalog, registry, runner, snapshots, structured, workspaces
 
 app = FastAPI(
     title="Fortcloud Console API",
@@ -54,6 +54,15 @@ class CatalogValue(BaseModel):
 
 class CatalogRename(CatalogValue):
     new_value: str
+
+
+class ScenarioRequest(BaseModel):
+    name: str
+    description: str = ""
+
+
+class SnapshotRequest(BaseModel):
+    label: str = ""
 
 
 def _tool(tool_id: str) -> registry.Tool:
@@ -131,6 +140,50 @@ def reset_model(tool_id: str) -> dict:
     tool = _tool(tool_id)
     workspaces.reset_model(tool)
     return {"ok": True, "tool": tool.id, "files": workspaces.read_model(tool)}
+
+
+@app.get("/api/{tool_id}/scenarios")
+def list_scenarios(tool_id: str) -> dict:
+    return snapshots.list_scenarios(_tool(tool_id))
+
+
+@app.post("/api/{tool_id}/scenarios")
+def create_scenario(tool_id: str, payload: ScenarioRequest) -> dict:
+    try:
+        return snapshots.create_scenario(
+            _tool(tool_id), payload.name, payload.description
+        )
+    except snapshots.SnapshotError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/{tool_id}/scenarios/{name}/activate")
+def activate_scenario(tool_id: str, name: str) -> dict:
+    try:
+        return snapshots.activate_scenario(_tool(tool_id), name)
+    except snapshots.SnapshotError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.delete("/api/{tool_id}/scenarios/{name}")
+def delete_scenario(tool_id: str, name: str) -> dict:
+    try:
+        return snapshots.delete_scenario(_tool(tool_id), name)
+    except snapshots.SnapshotError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/{tool_id}/snapshots")
+def create_snapshot(tool_id: str, payload: SnapshotRequest) -> dict:
+    return snapshots.snapshot(_tool(tool_id), payload.label)
+
+
+@app.get("/api/{tool_id}/compare")
+def compare_models(tool_id: str, left: str, right: str) -> dict:
+    try:
+        return snapshots.compare(_tool(tool_id), left, right)
+    except snapshots.SnapshotError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.get("/api/{tool_id}/imports")

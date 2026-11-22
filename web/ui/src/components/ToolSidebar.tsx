@@ -39,7 +39,7 @@ export function ToolSidebar({
   ];
 
   return (
-    <aside className="app-sidebar sticky top-0 flex w-[268px] shrink-0 flex-col border-r border-slate-200 bg-slate-950 text-slate-300">
+    <aside className="app-sidebar sticky top-0 flex w-[268px] shrink-0 flex-col bg-slate-950 text-slate-300">
       <div className="flex shrink-0 items-center justify-center border-b border-slate-800 px-5 py-5">
         <button
           type="button"

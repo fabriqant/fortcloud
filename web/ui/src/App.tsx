@@ -498,7 +498,7 @@ export default function App() {
 
           <div className="flex-1 px-7 py-6">
             {tool?.description && (
-              <p className="mx-auto my-12 max-w-4xl text-center text-lg font-medium leading-relaxed text-slate-600">
+              <p className="mx-auto mt-12 mb-20 max-w-4xl text-center text-lg font-medium leading-relaxed text-slate-600">
                 {tool.description}
               </p>
             )}

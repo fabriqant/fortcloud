@@ -138,7 +138,7 @@ def put_model_file(tool_id: str, filename: str, payload: ModelFile) -> dict:
 @app.post("/api/{tool_id}/model/reset")
 def reset_model(tool_id: str) -> dict:
     tool = _tool(tool_id)
-    workspaces.reset_model(tool)
+    snapshots.activate_scenario(tool, snapshots.DEFAULT_SCENARIO)
     return {"ok": True, "tool": tool.id, "files": workspaces.read_model(tool)}
 
 

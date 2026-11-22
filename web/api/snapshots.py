@@ -201,6 +201,7 @@ def delete_scenario(tool: registry.Tool, name: str) -> dict:
     shutil.rmtree(_scenario_dir(tool, name), ignore_errors=True)
     index = _read_index(tool)
     if index.get("active") == name:
+        workspaces.reset_model(tool)
         index["active"] = DEFAULT_SCENARIO
         _write_index(tool, index)
     return list_scenarios(tool)
@@ -222,6 +223,10 @@ def activate_scenario(tool: registry.Tool, name: str) -> dict:
         latest = max(versions, key=lambda item: item.get("version", 0))
         source = _scenario_dir(tool, name) / f"v{latest['version']:03d}"
         _copy_files(source, tool.model_dir, workspaces.model_files(tool))
+        # Artifacts belong to the previous model; regenerate them after Check.
+        if tool.artifact_dir.exists():
+            shutil.rmtree(tool.artifact_dir)
+        tool.artifact_dir.mkdir(parents=True, exist_ok=True)
     index = _read_index(tool)
     index["active"] = name
     _write_index(tool, index)

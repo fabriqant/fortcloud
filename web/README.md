@@ -9,7 +9,7 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 - Seven-tool sidebar driven by [`api/tools.yaml`](api/tools.yaml).
 - One file-backed workspace per tool under `web/workspaces/<tool>/`.
 - Guided forms generated from each tool's JSON Schema: catalog-backed fields use the same select style as schema enums, with a custom-value fallback; arrays are compact accordion lists instead of nested cards. A local SQLite reference catalog seeds owners, teams, regions, zones, providers, roles, pairs, components, scenarios, risks, checks and more, and can be edited in a modal; the YAML source editor stays available with line numbers, dirty state and explicit save.
-- Named scenarios per tool with independent model copies, automatic version snapshots on every save, manual labelled snapshots and a Scenarios tab that compares any two versions with a unified diff. Switching back restores the selected version exactly.
+- Named scenarios per tool with independent model copies, automatic version snapshots on every save, manual labelled snapshots and a Scenarios tab (before Model) that compares any two versions with a unified diff. The Overview tab has a scenario selector: KPIs, charts, tables and outputs follow the chosen scenario; switching back restores its latest version exactly.
 - Staged YAML import: paste or upload a proposal, review a unified diff, then accept or discard it. Nothing is applied automatically.
 - `Validate`, `Check`, `Strict` and reset-to-example actions.
 - KPI cards, Mermaid dependency graph, Recharts charts and sortable/filterable TanStack tables.

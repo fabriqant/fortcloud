@@ -29,9 +29,9 @@ import { Badge, Button, EmptyState } from "./components/ui";
 
 const TAB_ITEMS: { key: TabKey; label: string }[] = [
   { key: "overview", label: "Overview" },
+  { key: "scenarios", label: "Scenarios" },
   { key: "model", label: "Model" },
   { key: "outputs", label: "Outputs" },
-  { key: "scenarios", label: "Scenarios" },
   { key: "import", label: "Import" },
   { key: "schemas", label: "Schemas" },
 ];
@@ -55,7 +55,7 @@ export default function App() {
   const [strict, setStrict] = useState(false);
   const [tab, setTab] = useState<TabKey>("overview");
   const [modelMode, setModelMode] = useState<"form" | "yaml">("form");
-  const [busy, setBusy] = useState<"validate" | "check" | "save" | "reset" | null>(null);
+  const [busy, setBusy] = useState<"validate" | "check" | "save" | "reset" | "scenario" | null>(null);
   const [error, setError] = useState("");
   const activeIdRef = useRef("");
 
@@ -230,9 +230,29 @@ export default function App() {
     }
   }, [activeToolId, loadTool]);
 
+  const selectScenario = useCallback(
+    async (name: string) => {
+      if (!activeToolId || name === scenarioState?.active) return;
+      setBusy("scenario");
+      setError("");
+      try {
+        const next = await api.activateScenario(activeToolId, name);
+        if (activeIdRef.current !== activeToolId) return;
+        setScenarioState(next);
+        await loadTool(activeToolId, true);
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : String(cause));
+      } finally {
+        setBusy(null);
+      }
+    },
+    [activeToolId, loadTool, scenarioState?.active],
+  );
+
   const dirty = Boolean(activeFile && model && draft[activeFile] !== model.files[activeFile]);
   const selectedArtifact = artifacts.find((entry) => entry.name === activeArtifact) ?? null;
   const selectedTable = view?.tables.find((entry) => entry.id === activeTable) ?? null;
+  const activeScenarioInfo = scenarioState?.scenarios.find((entry) => entry.active) ?? null;
 
   if (!tools.length) {
     return (
@@ -323,6 +343,44 @@ export default function App() {
             <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
               <div className="min-w-0">
                 <Tabs.Content value="overview" className="animate-fade-in space-y-5 outline-none">
+                  {activeScenarioInfo && (
+                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-card">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                          Scenario
+                        </p>
+                        <p className="mt-0.5 text-sm font-semibold text-slate-800">
+                          {activeScenarioInfo.name}
+                        </p>
+                        <p className="mt-0.5 text-[11px] text-slate-500">
+                          {activeScenarioInfo.description || "Bundled example model"}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <select
+                          aria-label="Active scenario"
+                          disabled={busy === "scenario"}
+                          value={activeScenarioInfo.name}
+                          onChange={(event) => void selectScenario(event.target.value)}
+                          className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 outline-none focus:border-slate-400 disabled:opacity-50"
+                        >
+                          {scenarioState?.scenarios.map((scenario) => (
+                            <option key={scenario.name} value={scenario.name}>
+                              {scenario.name}
+                              {scenario.versions.length
+                                ? ` · v${scenario.versions[scenario.versions.length - 1].version}`
+                                : ""}
+                            </option>
+                          ))}
+                        </select>
+                        <Badge tone="blue">
+                          {activeScenarioInfo.versions.length} version
+                          {activeScenarioInfo.versions.length === 1 ? "" : "s"}
+                        </Badge>
+                      </div>
+                    </div>
+                  )}
+
                   <KpiCards kpis={view?.kpis ?? []} />
 
                   {view?.graph && <GraphView graph={view.graph} />}
@@ -361,6 +419,20 @@ export default function App() {
                       hint="Run Check to generate the artifacts, then the tables appear here."
                     />
                   )}
+                </Tabs.Content>
+
+                <Tabs.Content value="scenarios" className="animate-fade-in outline-none">
+                  <ScenarioView
+                    toolId={activeToolId}
+                    active={tab === "scenarios"}
+                    state={scenarioState}
+                    onChanged={(next) => {
+                      setScenarioState(next);
+                      void loadTool(activeToolId, true).catch((cause: unknown) => {
+                        setError(cause instanceof Error ? cause.message : String(cause));
+                      });
+                    }}
+                  />
                 </Tabs.Content>
 
                 <Tabs.Content value="model" className="animate-fade-in space-y-5 outline-none">
@@ -470,20 +542,6 @@ export default function App() {
                   ) : (
                     <EmptyState title="No artifacts" hint="Run Check to generate the reports for this tool." />
                   )}
-                </Tabs.Content>
-
-                <Tabs.Content value="scenarios" className="animate-fade-in outline-none">
-                  <ScenarioView
-                    toolId={activeToolId}
-                    active={tab === "scenarios"}
-                    state={scenarioState}
-                    onChanged={(next) => {
-                      setScenarioState(next);
-                      void loadTool(activeToolId, true).catch((cause: unknown) => {
-                        setError(cause instanceof Error ? cause.message : String(cause));
-                      });
-                    }}
-                  />
                 </Tabs.Content>
 
                 <Tabs.Content value="import" className="animate-fade-in outline-none">

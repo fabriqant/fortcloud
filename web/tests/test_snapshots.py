@@ -77,12 +77,22 @@ def test_scenarios_snapshots_and_compare():
     assert client.get("/api/atlas/scenarios").json()["active"] == "base"
     assert "criticality: P9" not in client.get("/api/atlas/model").json()["files"]["components.yaml"]
 
+    # Check regenerates artifacts for the base model, then switching clears them.
+    client.post("/api/atlas/check")
+    assert all(item["available"] for item in client.get("/api/atlas/artifacts").json())
     client.post("/api/atlas/scenarios/variant-a/activate")
     assert "criticality: P9" in client.get("/api/atlas/model").json()["files"]["components.yaml"]
+    assert all(not item["available"] for item in client.get("/api/atlas/artifacts").json())
 
+    # Reset returns both the example model and the base scenario.
+    client.post("/api/atlas/model/reset")
+    assert client.get("/api/atlas/scenarios").json()["active"] == "base"
+
+    client.post("/api/atlas/scenarios/variant-a/activate")
     deleted = client.delete("/api/atlas/scenarios/variant-a").json()
     assert deleted["active"] == "base"
     assert [item["name"] for item in deleted["scenarios"]] == ["base"]
+    assert "criticality: P9" not in client.get("/api/atlas/model").json()["files"]["components.yaml"]
 
 
 def test_scenario_validation():

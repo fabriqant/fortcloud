@@ -24,6 +24,7 @@ import { DataTable } from "./components/DataTable";
 import { FindingsPanel } from "./components/FindingsPanel";
 import { FormView } from "./components/FormView";
 import { GraphView } from "./components/GraphView";
+import { HomePage } from "./components/HomePage";
 import { ImportView } from "./components/ImportView";
 import { KpiCards } from "./components/KpiCards";
 import { ModelEditor } from "./components/ModelEditor";
@@ -51,10 +52,19 @@ const TAB_INTRO: Record<TabKey, string> = {
   schemas: "The JSON Schemas that validate the model and drive the guided form.",
 };
 
-function readRoute(): { toolId: string; tab: TabKey } {
-  const match = window.location.hash.match(/^#\/([^/]+)(?:\/([^/]+))?$/);
+type Route =
+  | { home: true; toolId: ""; tab: TabKey }
+  | { home: false; toolId: string; tab: TabKey };
+
+function readRoute(): Route {
+  const hash = window.location.hash;
+  if (!hash || hash === "#/" || hash === "#/home") {
+    return { home: true, toolId: "", tab: "overview" };
+  }
+  const match = hash.match(/^#\/([^/]+)(?:\/([^/]+))?$/);
   const candidate = match?.[2];
   return {
+    home: false,
     toolId: match?.[1] ?? "",
     tab: candidate && TAB_KEYS.has(candidate) ? (candidate as TabKey) : "overview",
   };
@@ -64,7 +74,8 @@ export default function App() {
   const [initialRoute] = useState(readRoute);
   const [tools, setTools] = useState<ToolInfo[]>([]);
   const [suiteVersion, setSuiteVersion] = useState("0.1.0");
-  const [activeToolId, setActiveToolId] = useState(initialRoute.toolId);
+  const [home, setHome] = useState(initialRoute.home);
+  const [activeToolId, setActiveToolId] = useState(initialRoute.home ? "" : initialRoute.toolId);
   const [model, setModel] = useState<ModelPayload | null>(null);
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [view, setView] = useState<ViewData | null>(null);
@@ -139,9 +150,17 @@ export default function App() {
     }
   }, []);
 
-  const navigate = useCallback((toolId: string, tabKey: TabKey) => {
+  const navigate = useCallback((toolId: string, tabKey: TabKey = "overview") => {
     const next = `#/${toolId}/${tabKey}`;
+    setHome(false);
+    setActiveToolId(toolId);
+    setTab(tabKey);
     if (window.location.hash !== next) window.location.hash = next;
+  }, []);
+
+  const navigateHome = useCallback(() => {
+    setHome(true);
+    if (window.location.hash !== "#/") window.location.hash = "#/";
   }, []);
 
   useEffect(() => {
@@ -172,9 +191,20 @@ export default function App() {
   useEffect(() => {
     if (!tools.length) return;
     const route = readRoute();
-    const toolId = tools.some((entry) => entry.id === route.toolId) ? route.toolId : tools[0].id;
+    if (route.home) {
+      setHome(true);
+      if (window.location.hash !== "#/") window.history.replaceState(null, "", "#/");
+      return;
+    }
+    const toolId = tools.some((entry) => entry.id === route.toolId) ? route.toolId : "";
+    if (!toolId) {
+      setHome(true);
+      window.history.replaceState(null, "", "#/");
+      return;
+    }
     const next = `#/${toolId}/${route.tab}`;
     if (window.location.hash !== next) window.history.replaceState(null, "", next);
+    setHome(false);
     setActiveToolId(toolId);
     setTab(route.tab);
   }, [tools]);
@@ -182,12 +212,20 @@ export default function App() {
   useEffect(() => {
     const onHashChange = () => {
       const route = readRoute();
-      const toolId = tools.some((entry) => entry.id === route.toolId)
-        ? route.toolId
-        : (tools[0]?.id ?? "");
-      if (!toolId) return;
+      if (route.home) {
+        setHome(true);
+        if (window.location.hash !== "#/") window.history.replaceState(null, "", "#/");
+        return;
+      }
+      const toolId = tools.some((entry) => entry.id === route.toolId) ? route.toolId : "";
+      if (!toolId) {
+        setHome(true);
+        window.history.replaceState(null, "", "#/");
+        return;
+      }
       const next = `#/${toolId}/${route.tab}`;
       if (window.location.hash !== next) window.history.replaceState(null, "", next);
+      setHome(false);
       setTab(route.tab);
       setActiveToolId(toolId);
     };
@@ -196,7 +234,7 @@ export default function App() {
   }, [tools]);
 
   useEffect(() => {
-    if (!activeToolId) return;
+    if (home || !activeToolId) return;
     activeIdRef.current = activeToolId;
     artifactToolRef.current = "";
     setActiveArtifact("");
@@ -204,7 +242,7 @@ export default function App() {
     void loadTool(activeToolId, true).catch((cause: unknown) => {
       setError(cause instanceof Error ? cause.message : String(cause));
     });
-  }, [activeToolId, loadTool]);
+  }, [home, activeToolId, loadTool]);
 
   useEffect(() => {
     if (!activeToolId || !activeArtifact || artifactToolRef.current !== activeToolId) {
@@ -356,13 +394,19 @@ export default function App() {
       <ToolSidebar
         tools={tools}
         activeId={activeToolId}
+        home={home}
         version={suiteVersion}
+        onHome={navigateHome}
         onSelect={(id) => navigate(id, "overview")}
       />
 
       <main className="flex min-w-0 flex-1 flex-col">
-        <div key={activeToolId} className="animate-tool-in flex min-h-0 flex-1 flex-col">
-          <header className="border-b border-slate-200 bg-white px-7 py-5">
+        <div key={home ? "home" : activeToolId} className="animate-tool-in flex min-h-0 flex-1 flex-col">
+          {home ? (
+            <HomePage tools={tools} version={suiteVersion} onOpenTool={(id) => navigate(id)} />
+          ) : (
+            <>
+              <header className="border-b border-slate-200 bg-white px-7 py-5">
             <div className="flex flex-wrap items-start justify-between gap-5">
               <div className="min-w-0">
                 <div className="flex items-center gap-3.5">
@@ -701,8 +745,10 @@ export default function App() {
                   <FindingsPanel result={result} />
                 </aside>
               </div>
-            </Tabs.Root>
-          </div>
+              </Tabs.Root>
+            </div>
+            </>
+          )}
         </div>
       </main>
       {catalogOpen && (

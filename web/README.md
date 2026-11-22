@@ -6,6 +6,7 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 
 ## What works in this prototype
 
+- Editorial home page at `#/`, reachable by clicking the Fortcloud logo or the Home sidebar item, presenting the seven tools, their audience and the model → check → review rhythm.
 - Seven-tool sidebar driven by [`api/tools.yaml`](api/tools.yaml).
 - One file-backed workspace per tool under `web/workspaces/<tool>/`.
 - Guided forms generated from each tool's JSON Schema: catalog-backed fields use the same select style as schema enums, with a custom-value fallback; arrays are compact accordion lists instead of nested cards. A local SQLite reference catalog seeds owners, teams, regions, zones, providers, roles, pairs, components, scenarios, risks, checks and more, and can be edited in a modal; the YAML source editor stays available with line numbers, dirty state and explicit save.
@@ -16,7 +17,7 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 - Generated Markdown, Mermaid and JSON artifacts rendered read-only, with download.
 - JSON Schemas served to the browser and displayed in a dedicated tab.
 - Error and warning panel with the exact diagnostics returned by the tool.
-- Optional local read-only AWS connector that writes an Atlas proposal for review.
+- Optional local read-only AWS, Azure and GCP connectors that write an Atlas proposal for review.
 - API and connector tests plus a production UI build in CI.
 
 Not included: direct cloud access from the browser or API, Monaco-based YAML completion, authentication and multi-user hosting.
@@ -158,8 +159,8 @@ web/
 │   ├── runner.py         imports the tool packages and runs check()
 │   └── structured.py     view models for KPIs, charts and tables
 ├── ui/
-│   ├── src/App.tsx       layout, actions and state
-│   └── src/components/   sidebar, forms, cards, graph, tables, editor, outputs
+│   ├── src/App.tsx       routes, layout, actions and state
+│   └── src/components/   home page, sidebar, forms, cards, graph, tables, editor, outputs
 ├── connectors/
 │   ├── common.py         shared component mapping and slugging
 │   ├── aws/

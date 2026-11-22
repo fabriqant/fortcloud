@@ -1,4 +1,4 @@
-import { BookOpen, ExternalLink, Github, Mail } from "lucide-react";
+import { BookOpen, ExternalLink, Github, House, Mail } from "lucide-react";
 import type { ToolInfo } from "../lib/types";
 import { toolIcon } from "../lib/toolIcons";
 import { accentFor, cn, displayToolName } from "../lib/utils";
@@ -6,15 +6,19 @@ import { accentFor, cn, displayToolName } from "../lib/utils";
 export function ToolSidebar({
   tools,
   activeId,
+  home,
   version,
+  onHome,
   onSelect,
 }: {
   tools: ToolInfo[];
   activeId: string;
+  home: boolean;
   version?: string;
+  onHome: () => void;
   onSelect: (id: string) => void;
 }) {
-  const docsUrl = activeId
+  const docsUrl = !home && activeId
     ? `https://github.com/fabriqant/fortcloud-io/blob/main/${activeId}/README.md`
     : "https://github.com/fabriqant/fortcloud-io#readme";
 
@@ -37,14 +41,54 @@ export function ToolSidebar({
   return (
     <aside className="app-sidebar sticky top-0 flex w-[268px] shrink-0 flex-col border-r border-slate-200 bg-slate-950 text-slate-300">
       <div className="flex shrink-0 items-center justify-center border-b border-slate-800 px-5 py-5">
-        <div className="sidebar-logo" role="img" aria-label="Fortcloud" />
+        <button
+          type="button"
+          onClick={onHome}
+          aria-label="Fortcloud home"
+          title="Fortcloud home"
+          className={cn(
+            "group flex items-center justify-center rounded-lg px-3 py-2 transition hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-400/50",
+            home && "bg-slate-900 ring-1 ring-slate-700",
+          )}
+        >
+          <div
+            className="sidebar-logo transition duration-200 group-hover:opacity-80"
+            role="img"
+            aria-label="Fortcloud"
+          />
+        </button>
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+        <button
+          type="button"
+          onClick={onHome}
+          className={cn(
+            "group flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition",
+            home ? "bg-slate-800 ring-1 ring-slate-700" : "hover:bg-slate-900",
+          )}
+        >
+          <House
+            className={cn("mt-0.5 h-6 w-6 shrink-0", home ? "text-sky-400" : "text-slate-400")}
+          />
+          <span className="min-w-0">
+            <span className={cn("block truncate text-sm font-semibold", home ? "text-white" : "text-slate-300")}>
+              Home
+            </span>
+            <span className="mt-0.5 block truncate text-sidebar-desc font-medium text-slate-500">
+              The whole story
+            </span>
+          </span>
+        </button>
+
+        <p className="px-3 pb-1 pt-4 text-3xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+          Tools
+        </p>
+
         {tools.map((tool) => {
           const Icon = toolIcon(tool.icon);
           const accent = accentFor(tool.accent);
-          const active = tool.id === activeId;
+          const active = !home && tool.id === activeId;
           return (
             <button
               key={tool.id}

@@ -19,6 +19,26 @@
     background-size: contain;
   }
 
+  .home-hero-logo {
+    width: 230px;
+    height: 158px;
+    background-image: url("../../../logo-white-2.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .home-hero-glow {
+    position: absolute;
+    top: -240px;
+    right: -120px;
+    width: 620px;
+    height: 620px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.22), rgba(15, 23, 42, 0) 68%);
+    pointer-events: none;
+  }
+
   .content-button {
     @apply inline-flex items-center justify-center gap-2 rounded-md border border-transparent px-3.5 py-1.5 text-xs font-semibold transition;
   }
@@ -106,6 +126,7 @@
 
     .array-item[data-entering="true"],
     .array-item[data-exiting="true"],
+    .animate-fade-in,
     .animate-tool-in {
       animation: none;
     }

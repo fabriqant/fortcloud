@@ -1,30 +1,7 @@
-import {
-  Activity,
-  Archive,
-  BookOpen,
-  Boxes,
-  ExternalLink,
-  FlaskConical,
-  Gauge,
-  Github,
-  Mail,
-  Network,
-  ShieldCheck,
-  Shuffle,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { BookOpen, ExternalLink, Github, Mail } from "lucide-react";
 import type { ToolInfo } from "../lib/types";
+import { toolIcon } from "../lib/toolIcons";
 import { accentFor, cn, displayToolName } from "../lib/utils";
-
-const ICONS: Record<string, LucideIcon> = {
-  network: Network,
-  shuffle: Shuffle,
-  archive: Archive,
-  gauge: Gauge,
-  activity: Activity,
-  shield: ShieldCheck,
-  flask: FlaskConical,
-};
 
 export function ToolSidebar({
   tools,
@@ -63,7 +40,7 @@ export function ToolSidebar({
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         {tools.map((tool) => {
-          const Icon = ICONS[tool.icon] ?? Boxes;
+          const Icon = toolIcon(tool.icon);
           const accent = accentFor(tool.accent);
           const active = tool.id === activeId;
           return (
@@ -75,14 +52,12 @@ export function ToolSidebar({
                 active ? "bg-slate-800 ring-1 ring-slate-700" : "hover:bg-slate-900",
               )}
             >
-              <span
+              <Icon
                 className={cn(
-                  "mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-md",
-                  active ? accent.soft : "bg-slate-800/70",
+                  "mt-0.5 h-6 w-6 shrink-0",
+                  active ? accent.text : "text-slate-400",
                 )}
-              >
-                <Icon className={cn("h-3.5 w-3.5", active ? accent.text : "text-slate-400")} />
-              </span>
+              />
               <span className="min-w-0">
                 <span className={cn("block truncate text-sm font-semibold", active ? "text-white" : "text-slate-300")}>
                   {displayToolName(tool.name)}

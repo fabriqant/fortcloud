@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import type { Catalog } from "../lib/types";
 import { cn } from "../lib/utils";
 
@@ -398,13 +398,13 @@ function ArrayField({
             setOpen((previous) => ({ ...previous, [items.length]: true }));
             onChange([...items, blankFor(itemSchema)]);
           }}
-          className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-control font-semibold text-slate-600 hover:border-slate-400"
+          className="content-button border-slate-200 bg-white text-slate-600 hover:border-slate-400"
         >
           <Plus className="h-3 w-3" /> Add
         </button>
       </div>
 
-      <div className="divide-y divide-slate-100">
+      <div className="space-y-6 pt-1">
         {items.map((item, index) => {
           const expanded = open[index] === true;
           return (
@@ -416,11 +416,12 @@ function ArrayField({
                   className="flex min-w-0 flex-1 items-center gap-1.5 text-left"
                   aria-expanded={expanded}
                 >
-                  {expanded ? (
-                    <ChevronDown className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-                  ) : (
-                    <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-                  )}
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200",
+                      expanded ? "rotate-0" : "-rotate-90",
+                    )}
+                  />
                   <span className="truncate text-accordion-title font-medium text-slate-700">
                     {itemTitle(item, index)}
                   </span>
@@ -433,34 +434,36 @@ function ArrayField({
                 <button
                   type="button"
                   onClick={() => onChange(items.filter((_, position) => position !== index))}
-                  className="text-slate-400 hover:text-rose-600"
+                  className="content-icon-button text-slate-400 hover:bg-rose-50 hover:text-rose-600"
                   aria-label={`Remove ${label} ${index + 1}`}
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
+                  <Trash2 className="h-4 w-4" />
                 </button>
               </div>
 
-              {expanded && (
-                <div className="pb-3 pl-5">
-                  {objectItems ? (
-                    <Fields
-                      schema={itemSchema}
-                      value={item}
-                      catalog={catalog}
-                      onChange={(next) => setItem(index, next)}
-                    />
-                  ) : (
-                    <PrimitiveField
-                      name={`${name}-${index}`}
-                      schema={itemSchema}
-                      value={item}
-                      required
-                      suggestions={suggestionsFor(name, catalog)}
-                      onChange={(next) => setItem(index, next)}
-                    />
-                  )}
+              <div className="accordion-panel" data-open={expanded}>
+                <div>
+                  <div className="pb-3 pl-5 pt-3">
+                    {objectItems ? (
+                      <Fields
+                        schema={itemSchema}
+                        value={item}
+                        catalog={catalog}
+                        onChange={(next) => setItem(index, next)}
+                      />
+                    ) : (
+                      <PrimitiveField
+                        name={`${name}-${index}`}
+                        schema={itemSchema}
+                        value={item}
+                        required
+                        suggestions={suggestionsFor(name, catalog)}
+                        onChange={(next) => setItem(index, next)}
+                      />
+                    )}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
@@ -483,7 +486,7 @@ function Fields({
 }) {
   const record = isRecord(value) ? value : {};
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
+    <div className="grid gap-5 sm:grid-cols-2">
       {Object.entries(schema.properties ?? {}).map(([key, child]) => (
         <Field
           key={key}

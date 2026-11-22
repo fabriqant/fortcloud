@@ -221,15 +221,16 @@ export function ImportView({
                 <button
                   key={item.name}
                   onClick={() => setSelected(item.name)}
+                  title={`${item.name} · ${item.size} bytes`}
                   className={cn(
-                    "w-full rounded-md px-2.5 py-2 text-left font-mono text-2xs transition",
+                    "content-button w-full justify-between text-left font-mono",
                     item.name === selected
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-600 hover:bg-slate-100",
+                      ? "border-slate-900 bg-slate-900 text-white"
+                      : "border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-800",
                   )}
                 >
-                  <span className="block truncate">{item.name}</span>
-                  <span className={cn("block text-4xs", item.name === selected ? "text-slate-400" : "text-slate-400")}>
+                  <span className="truncate">{item.name}</span>
+                  <span className={cn("shrink-0 text-4xs", item.name === selected ? "text-slate-400" : "text-slate-400")}>
                     {item.size} bytes
                   </span>
                 </button>

@@ -19,9 +19,42 @@
     background-size: contain;
   }
 
+  .content-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-transparent px-3.5 py-1.5 text-xs font-semibold transition;
+  }
+
+  .content-icon-button {
+    @apply inline-flex h-[34px] w-[34px] items-center justify-center rounded-md border border-transparent text-xs transition;
+  }
+
   .accordion-row {
     min-height: var(--accordion-row-height);
     line-height: var(--leading-accordion-title);
+  }
+
+  .accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 0.28s ease,
+      opacity 0.2s ease;
+  }
+
+  .accordion-panel[data-open="true"] {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .accordion-panel > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-panel {
+      transition: none;
+    }
   }
 }
 

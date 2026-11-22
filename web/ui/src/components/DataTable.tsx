@@ -128,7 +128,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
           <button
             onClick={() => reactTable.previousPage()}
             disabled={!reactTable.getCanPreviousPage()}
-            className="rounded-md border border-slate-200 p-1.5 hover:bg-slate-50 disabled:opacity-40"
+            className="content-icon-button border-slate-200 hover:bg-slate-50 disabled:opacity-40"
             aria-label="Previous page"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
@@ -136,7 +136,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
           <button
             onClick={() => reactTable.nextPage()}
             disabled={!reactTable.getCanNextPage()}
-            className="rounded-md border border-slate-200 p-1.5 hover:bg-slate-50 disabled:opacity-40"
+            className="content-icon-button border-slate-200 hover:bg-slate-50 disabled:opacity-40"
             aria-label="Next page"
           >
             <ChevronRight className="h-3.5 w-3.5" />

@@ -1,8 +1,8 @@
 tools:
   - id: atlas
     name: Fortcloud Atlas
-    tagline: Map every dependency. See every risk.
-    description: Dependency map, blast radius and risk register for hybrid and multi-cloud systems.
+    tagline: Map dependencies. See risk.
+    description: Dependency map, blast radius and risk register for hybrid and multi-cloud systems. Trace every critical path from component to owner.
     accent: red
     icon: network
     artifacts:
@@ -15,8 +15,8 @@ tools:
 
   - id: failover
     name: Fortcloud Failover
-    tagline: Design out the single point of failure.
-    description: Failover strategies, switchover budgets and drill evidence.
+    tagline: Design out failure.
+    description: Failover strategies, switchover budgets and drill evidence. Turn architecture intent into measurable recovery time.
     accent: orange
     icon: shuffle
     artifacts:
@@ -35,8 +35,8 @@ tools:
 
   - id: ark
     name: Fortcloud Ark
-    tagline: Prove that your backups restore.
-    description: Backup coverage, restore evidence and recovery targets.
+    tagline: Prove restores work.
+    description: Backup coverage, restore evidence and recovery targets. Move from "we back up" to "we restore".
     accent: amber
     icon: archive
     artifacts:
@@ -55,8 +55,8 @@ tools:
 
   - id: ballast
     name: Fortcloud Ballast
-    tagline: Keep latency budgets honest.
-    description: Timeout budgets, retry policies and bulkhead isolation.
+    tagline: Keep latency honest.
+    description: Timeout budgets, retry policies and bulkhead isolation. Keep latency promises under real failure.
     accent: blue
     icon: gauge
     artifacts:
@@ -75,8 +75,8 @@ tools:
 
   - id: vitals
     name: Fortcloud Vitals
-    tagline: Measure what "working" means.
-    description: SLOs, signals, error budgets and verification checks.
+    tagline: Measure what works.
+    description: SLOs, signals, error budgets and verification checks. Define what healthy means before an incident does.
     accent: green
     icon: activity
     artifacts:
@@ -95,8 +95,8 @@ tools:
 
   - id: custodian
     name: Fortcloud Custodian
-    tagline: Make access and change auditable.
-    description: Access matrix, secrets inventory, change control and audit trail.
+    tagline: Make access auditable.
+    description: Access matrix, secrets inventory, change control and audit trail. Prove who changed what, when and why.
     accent: violet
     icon: shield
     artifacts:
@@ -118,8 +118,8 @@ tools:
 
   - id: crucible
     name: Fortcloud Crucible
-    tagline: Rehearse the outage before it happens.
-    description: Drill scenarios, roles, communication and verification evidence.
+    tagline: Rehearse the outage.
+    description: Drill scenarios, roles, communication and verification evidence. Rehearse the outage until the response is boring.
     accent: pink
     icon: flask
     artifacts:

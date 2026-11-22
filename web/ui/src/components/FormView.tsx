@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, Database, Save } from "lucide-react";
 import { api } from "../lib/api";
 import type { Catalog, ModelFormat } from "../lib/types";
@@ -23,6 +23,7 @@ export function FormView({
   const [notice, setNotice] = useState("");
   const [catalog, setCatalog] = useState<Catalog>({});
   const [catalogOpen, setCatalogOpen] = useState(false);
+  const formatToolRef = useRef("");
 
   useEffect(() => {
     api
@@ -35,6 +36,7 @@ export function FormView({
 
   useEffect(() => {
     let cancelled = false;
+    formatToolRef.current = "";
     setFormats([]);
     setSchemas({});
     setActiveFile("");
@@ -44,6 +46,7 @@ export function FormView({
     Promise.all([api.formats(toolId), api.schemas(toolId)])
       .then(([items, schemaMap]) => {
         if (cancelled) return;
+        formatToolRef.current = toolId;
         setFormats(items);
         setSchemas(schemaMap);
         setActiveFile(items[0]?.file ?? "");
@@ -68,7 +71,7 @@ export function FormView({
   }, [formats, schemas, activeFile]);
 
   useEffect(() => {
-    if (!activeFile || !schema) return;
+    if (!activeFile || !schema || formatToolRef.current !== toolId) return;
     let cancelled = false;
     api
       .document(toolId, activeFile)
@@ -122,7 +125,7 @@ export function FormView({
               setNotice("");
             }}
             className={cn(
-              "rounded-lg border px-3 py-2 font-mono text-2xs font-semibold transition",
+              "content-button font-mono",
               format.file === activeFile
                 ? "border-slate-900 bg-slate-900 text-white"
                 : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",

@@ -6,7 +6,14 @@ import { Button, Card, CardTitle } from "./ui";
 import { GraphView } from "./GraphView";
 
 const markdownStyles =
-  "[&_h1]:mt-1 [&_h1]:text-lg [&_h1]:font-bold [&_h1]:text-slate-900 [&_h2]:mt-6 [&_h2]:border-b [&_h2]:border-slate-100 [&_h2]:pb-1.5 [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-slate-900 [&_h3]:mt-5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:uppercase [&_h3]:tracking-wider [&_h3]:text-slate-600 [&_p]:mt-2 [&_p]:text-xs [&_p]:leading-relaxed [&_p]:text-slate-600 [&_li]:mt-1 [&_li]:text-xs [&_li]:leading-relaxed [&_li]:text-slate-600 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-2xs [&_code]:text-slate-800 [&_table]:mt-3 [&_table]:w-full [&_table]:border-collapse [&_table]:text-2xs [&_th]:border-b [&_th]:border-slate-200 [&_th]:px-2 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold [&_th]:text-slate-600 [&_td]:border-b [&_td]:border-slate-100 [&_td]:px-2 [&_td]:py-2 [&_td]:align-top [&_td]:text-slate-700 [&_blockquote]:mt-2 [&_blockquote]:rounded [&_blockquote]:bg-sky-50 [&_blockquote]:px-3 [&_blockquote]:py-2 [&_blockquote]:text-2xs [&_blockquote]:text-sky-800 [&_a]:text-sky-600 [&_a]:underline";
+  "[&_h1]:mt-1 [&_h1]:text-lg [&_h1]:font-bold [&_h1]:text-slate-900 [&_h2]:mt-6 [&_h2]:border-b [&_h2]:border-slate-100 [&_h2]:pb-1.5 [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-slate-900 [&_h3]:mt-5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:uppercase [&_h3]:tracking-wider [&_h3]:text-slate-600 [&_p]:mt-2 [&_p]:text-xs [&_p]:leading-relaxed [&_p]:text-slate-600 [&_li]:mt-1 [&_li]:text-xs [&_li]:leading-relaxed [&_li]:text-slate-600 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_code]:rounded [&_code]:bg-slate-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-2xs [&_code]:text-slate-800 [&_pre]:max-w-full [&_pre]:overflow-auto [&_table]:mt-3 [&_table]:w-full [&_table]:min-w-max [&_table]:border-collapse [&_table]:text-2xs [&_th]:border-b [&_th]:border-slate-200 [&_th]:px-2 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold [&_th]:text-slate-600 [&_td]:border-b [&_td]:border-slate-100 [&_td]:px-2 [&_td]:py-2 [&_td]:align-top [&_td]:text-slate-700 [&_blockquote]:mt-2 [&_blockquote]:rounded [&_blockquote]:bg-sky-50 [&_blockquote]:px-3 [&_blockquote]:py-2 [&_blockquote]:text-2xs [&_blockquote]:text-sky-800 [&_a]:text-sky-600 [&_a]:underline";
+
+function extractMermaid(content: string): string {
+  const fenced = content.match(/```mermaid\s*\r?\n([\s\S]*?)\r?\n?```/i)?.[1];
+  if (fenced) return fenced.trim();
+  const bare = /^\s*(graph|flowchart|sequenceDiagram|classDiagram|stateDiagram|erDiagram|journey|gantt|pie|gitGraph)/i;
+  return bare.test(content) ? content.trim() : "";
+}
 
 export function ArtifactView({
   artifact,
@@ -34,8 +41,16 @@ export function ArtifactView({
   };
 
   if (artifact.kind === "mermaid") {
-    const graph = payload.content.match(/```mermaid\s*\n([\s\S]*?)\n```/)?.[1] ?? payload.content;
-    return <GraphView graph={graph.trim()} title={artifact.label} />;
+    const graph = extractMermaid(payload.content);
+    if (!graph) {
+      return (
+        <Card>
+          <CardTitle title={artifact.label} subtitle={artifact.name} />
+          <p className="text-xs text-slate-500">No Mermaid graph found in this artifact.</p>
+        </Card>
+      );
+    }
+    return <GraphView graph={graph} title={artifact.label} />;
   }
 
   let pretty = payload.content;
@@ -66,8 +81,10 @@ export function ArtifactView({
         </div>
       )}
       {artifact.kind === "markdown" ? (
-        <div className={markdownStyles}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{payload.content}</ReactMarkdown>
+        <div className="overflow-x-auto">
+          <div className={markdownStyles}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{payload.content}</ReactMarkdown>
+          </div>
         </div>
       ) : (
         <pre className="max-h-[620px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-2xs leading-relaxed text-slate-200">

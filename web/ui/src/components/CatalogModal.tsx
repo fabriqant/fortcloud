@@ -79,7 +79,7 @@ export function CatalogModal({
           <button
             onClick={onClose}
             aria-label="Close reference data"
-            className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            className="content-icon-button text-slate-400 hover:bg-slate-100 hover:text-slate-700"
           >
             <X className="h-4 w-4" />
           </button>
@@ -96,7 +96,7 @@ export function CatalogModal({
                   setError("");
                 }}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-control font-semibold transition",
+                  "content-button w-full justify-between text-left",
                   category === active
                     ? "bg-slate-900 text-white"
                     : "text-slate-500 hover:bg-white hover:text-slate-800",
@@ -167,7 +167,7 @@ export function CatalogModal({
                         onClick={() =>
                           void run(() => api.renameCatalogValue(active, value, edited.trim()), true)
                         }
-                        className="text-emerald-600 hover:text-emerald-700 disabled:opacity-40"
+                        className="content-icon-button text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-40"
                       >
                         <Check className="h-3.5 w-3.5" />
                       </button>
@@ -183,7 +183,7 @@ export function CatalogModal({
                           setEditing(value);
                           setEdited(value);
                         }}
-                        className="text-slate-400 opacity-60 hover:text-slate-700 group-hover:opacity-100"
+                        className="content-icon-button text-slate-400 opacity-60 hover:bg-slate-100 hover:text-slate-700 group-hover:opacity-100"
                       >
                         <Pencil className="h-3.5 w-3.5" />
                       </button>
@@ -191,7 +191,7 @@ export function CatalogModal({
                         aria-label={`Remove ${value}`}
                         disabled={busy}
                         onClick={() => void run(() => api.removeCatalogValue(active, value))}
-                        className="text-slate-400 opacity-60 hover:text-rose-600 group-hover:opacity-100"
+                        className="content-icon-button text-slate-400 opacity-60 hover:bg-rose-50 hover:text-rose-600 group-hover:opacity-100"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>

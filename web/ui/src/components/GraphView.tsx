@@ -3,8 +3,11 @@ import mermaid from "mermaid";
 import { Check, Copy, Maximize2 } from "lucide-react";
 import { Button, Card, CardTitle } from "./ui";
 
+let renderSequence = 0;
+
 mermaid.initialize({
   startOnLoad: false,
+  suppressErrorRendering: true,
   theme: "base",
   securityLevel: "strict",
   fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
@@ -27,18 +30,23 @@ export function GraphView({ graph, title = "Dependency graph" }: { graph: string
 
   useEffect(() => {
     let cancelled = false;
+    const target = container.current;
     setError("");
-    if (!graph || !container.current) return;
+    if (!graph || !target) return;
+    target.innerHTML = "";
+    const renderId = `fortcloud-graph-${rawId}-${++renderSequence}`;
     mermaid
-      .render(`fortcloud-graph-${rawId}`, graph)
+      .render(renderId, graph, target)
       .then(({ svg }) => {
         if (!cancelled && container.current) container.current.innerHTML = svg;
       })
       .catch((cause: unknown) => {
+        target.innerHTML = "";
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
       });
     return () => {
       cancelled = true;
+      if (container.current) container.current.innerHTML = "";
     };
   }, [graph, rawId]);
 

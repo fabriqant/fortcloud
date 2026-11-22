@@ -3,6 +3,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import * as Switch from "@radix-ui/react-switch";
 import { AlertCircle, CheckCircle2, RotateCcw, ShieldAlert, Play, Activity } from "lucide-react";
 import { api } from "./lib/api";
+import { toolIcon } from "./lib/toolIcons";
 import type {
   ArtifactInfo,
   ArtifactPayload,
@@ -36,9 +37,21 @@ const TAB_ITEMS: { key: TabKey; label: string }[] = [
   { key: "schemas", label: "Schemas" },
 ];
 
+const TAB_KEYS = new Set<string>(TAB_ITEMS.map((item) => item.key));
+
+function readRoute(): { toolId: string; tab: TabKey } {
+  const match = window.location.hash.match(/^#\/([^/]+)(?:\/([^/]+))?$/);
+  const candidate = match?.[2];
+  return {
+    toolId: match?.[1] ?? "",
+    tab: candidate && TAB_KEYS.has(candidate) ? (candidate as TabKey) : "overview",
+  };
+}
+
 export default function App() {
+  const [initialRoute] = useState(readRoute);
   const [tools, setTools] = useState<ToolInfo[]>([]);
-  const [activeToolId, setActiveToolId] = useState("");
+  const [activeToolId, setActiveToolId] = useState(initialRoute.toolId);
   const [model, setModel] = useState<ModelPayload | null>(null);
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [view, setView] = useState<ViewData | null>(null);
@@ -53,17 +66,19 @@ export default function App() {
   const [activeTable, setActiveTable] = useState("");
   const [result, setResult] = useState<RunResult | null>(null);
   const [strict, setStrict] = useState(false);
-  const [tab, setTab] = useState<TabKey>("overview");
+  const [tab, setTab] = useState<TabKey>(initialRoute.tab);
   const [modelMode, setModelMode] = useState<"form" | "yaml">("form");
   const [busy, setBusy] = useState<"validate" | "check" | "save" | "reset" | "scenario" | null>(null);
   const [error, setError] = useState("");
   const activeIdRef = useRef("");
+  const artifactToolRef = useRef("");
 
   const tool = useMemo(
     () => tools.find((entry) => entry.id === activeToolId) ?? null,
     [tools, activeToolId],
   );
   const accent = accentFor(tool?.accent ?? "blue");
+  const ToolIcon = toolIcon(tool?.icon);
   const modelFiles = useMemo(() => Object.keys(model?.files ?? {}), [model]);
 
   const loadTool = useCallback(async (toolId: string, clearResult: boolean) => {
@@ -84,6 +99,7 @@ export default function App() {
     setActiveFile(Object.keys(modelPayload.files)[0] ?? "");
     setView(data);
     setActiveTable(data.tables[0]?.id ?? "");
+    artifactToolRef.current = toolId;
     setArtifacts(artifactList);
     setActiveArtifact(artifactList.find((entry) => entry.available)?.name ?? "");
     setSchemas(schemaMap);
@@ -100,25 +116,55 @@ export default function App() {
       if (activeIdRef.current !== toolId) return;
       setView(freshData);
       setActiveTable(freshData.tables[0]?.id ?? "");
+      artifactToolRef.current = toolId;
       setArtifacts(freshArtifacts);
       setActiveArtifact(freshArtifacts.find((entry) => entry.available)?.name ?? "");
       setArtifactVersion((version) => version + 1);
     }
   }, []);
 
+  const navigate = useCallback((toolId: string, tabKey: TabKey) => {
+    const next = `#/${toolId}/${tabKey}`;
+    if (window.location.hash !== next) window.location.hash = next;
+  }, []);
+
   useEffect(() => {
     api
       .tools()
-      .then((items) => {
-        setTools(items);
-        setActiveToolId(items[0]?.id ?? "");
-      })
+      .then(setTools)
       .catch((cause: unknown) => setError(String(cause)));
   }, []);
 
   useEffect(() => {
+    if (!tools.length) return;
+    const route = readRoute();
+    const toolId = tools.some((entry) => entry.id === route.toolId) ? route.toolId : tools[0].id;
+    const next = `#/${toolId}/${route.tab}`;
+    if (window.location.hash !== next) window.history.replaceState(null, "", next);
+    setActiveToolId(toolId);
+    setTab(route.tab);
+  }, [tools]);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      const route = readRoute();
+      const toolId = tools.some((entry) => entry.id === route.toolId)
+        ? route.toolId
+        : (tools[0]?.id ?? "");
+      if (!toolId) return;
+      const next = `#/${toolId}/${route.tab}`;
+      if (window.location.hash !== next) window.history.replaceState(null, "", next);
+      setTab(route.tab);
+      setActiveToolId(toolId);
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [tools]);
+
+  useEffect(() => {
     if (!activeToolId) return;
     activeIdRef.current = activeToolId;
+    artifactToolRef.current = "";
     setActiveArtifact("");
     setArtifactPayload(null);
     void loadTool(activeToolId, true).catch((cause: unknown) => {
@@ -127,10 +173,11 @@ export default function App() {
   }, [activeToolId, loadTool]);
 
   useEffect(() => {
-    if (!activeToolId || !activeArtifact) {
+    if (!activeToolId || !activeArtifact || artifactToolRef.current !== activeToolId) {
       setArtifactPayload(null);
       return;
     }
+    setArtifactPayload(null);
     let cancelled = false;
     api
       .artifact(activeToolId, activeArtifact)
@@ -175,6 +222,7 @@ export default function App() {
       ]);
       setView(data);
       setActiveTable((current) => data.tables.some((t) => t.id === current) ? current : data.tables[0]?.id ?? "");
+      artifactToolRef.current = activeToolId;
       setArtifacts(artifactList);
       setActiveArtifact(artifactList.find((entry) => entry.available)?.name ?? "");
       setArtifactVersion((version) => version + 1);
@@ -251,6 +299,8 @@ export default function App() {
 
   const dirty = Boolean(activeFile && model && draft[activeFile] !== model.files[activeFile]);
   const selectedArtifact = artifacts.find((entry) => entry.name === activeArtifact) ?? null;
+  const visiblePayload =
+    selectedArtifact && artifactPayload?.name === selectedArtifact.name ? artifactPayload : null;
   const selectedTable = view?.tables.find((entry) => entry.id === activeTable) ?? null;
   const activeScenarioInfo = scenarioState?.scenarios.find((entry) => entry.active) ?? null;
 
@@ -269,14 +319,14 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-900">
-      <ToolSidebar tools={tools} activeId={activeToolId} onSelect={setActiveToolId} />
+      <ToolSidebar tools={tools} activeId={activeToolId} onSelect={(id) => navigate(id, "overview")} />
 
       <main className="flex min-w-0 flex-1 flex-col">
         <header className="border-b border-slate-200 bg-white px-7 py-5">
           <div className="flex flex-wrap items-start justify-between gap-5">
             <div className="min-w-0">
-              <div className="flex items-center gap-2.5">
-                <span className={cn("h-2.5 w-2.5 rounded-full", accent.dot)} />
+              <div className="flex items-center gap-3.5">
+                <ToolIcon className={cn("h-10 w-10 shrink-0", accent.text)} />
                 <h1 className="text-xl font-bold tracking-tight text-slate-900">
                   {displayToolName(tool?.name ?? "")}
                 </h1>
@@ -329,13 +379,13 @@ export default function App() {
         </header>
 
         <div className="flex-1 px-7 py-6">
-          <Tabs.Root value={tab} onValueChange={(value) => setTab(value as TabKey)}>
+          <Tabs.Root value={tab} onValueChange={(value) => navigate(activeToolId, value as TabKey)}>
             <Tabs.List className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
               {TAB_ITEMS.map((item) => (
                 <Tabs.Trigger
                   key={item.key}
                   value={item.key}
-                  className="rounded-md px-3.5 py-1.5 text-xs font-semibold text-slate-500 transition hover:text-slate-800 data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  className="content-button text-slate-500 hover:text-slate-800 data-[state=active]:bg-slate-900 data-[state=active]:text-white"
                 >
                   {item.label}
                 </Tabs.Trigger>
@@ -345,6 +395,10 @@ export default function App() {
             <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
               <div className="min-w-0">
                 <Tabs.Content value="overview" className="animate-fade-in space-y-5 outline-none">
+                  <p className="text-2xs leading-relaxed text-slate-500">
+                    A live operating picture: KPIs, dependency flow and the evidence behind every
+                    risk. Run Check after a model change to refresh this view.
+                  </p>
                   {activeScenarioInfo && (
                     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-card">
                       <div>
@@ -403,7 +457,7 @@ export default function App() {
                             key={table.id}
                             onClick={() => setActiveTable(table.id)}
                             className={cn(
-                              "rounded-full border px-3 py-1.5 text-2xs font-semibold transition",
+                              "content-button rounded-full",
                               table.id === activeTable
                                 ? "border-slate-900 bg-slate-900 text-white"
                                 : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800",
@@ -423,7 +477,11 @@ export default function App() {
                   )}
                 </Tabs.Content>
 
-                <Tabs.Content value="scenarios" className="animate-fade-in outline-none">
+                <Tabs.Content value="scenarios" className="animate-fade-in space-y-5 outline-none">
+                  <p className="text-2xs leading-relaxed text-slate-500">
+                    Branch the model without leaving the console. The base model stays protected;
+                    named scenarios keep every save as a version you can restore or compare.
+                  </p>
                   <ScenarioView
                     toolId={activeToolId}
                     active={tab === "scenarios"}
@@ -438,6 +496,10 @@ export default function App() {
                 </Tabs.Content>
 
                 <Tabs.Content value="model" className="animate-fade-in space-y-5 outline-none">
+                  <p className="text-2xs leading-relaxed text-slate-500">
+                    This is the source of truth. Shape it with guided fields for speed, or drop into
+                    YAML when you need precise control; both paths validate through the tool.
+                  </p>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
                       {(["form", "yaml"] as const).map((mode) => (
@@ -445,7 +507,7 @@ export default function App() {
                           key={mode}
                           onClick={() => setModelMode(mode)}
                           className={cn(
-                            "rounded-md px-3.5 py-1.5 text-xs font-semibold transition",
+                            "content-button",
                             mode === modelMode
                               ? "bg-slate-900 text-white"
                               : "text-slate-500 hover:text-slate-800",
@@ -484,7 +546,7 @@ export default function App() {
                             key={filename}
                             onClick={() => setActiveFile(filename)}
                             className={cn(
-                              "rounded-lg border px-3 py-2 font-mono text-2xs font-semibold transition",
+                              "content-button font-mono",
                               filename === activeFile
                                 ? "border-slate-900 bg-slate-900 text-white"
                                 : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
@@ -511,7 +573,11 @@ export default function App() {
                   )}
                 </Tabs.Content>
 
-                <Tabs.Content value="outputs" className="animate-fade-in outline-none">
+                <Tabs.Content value="outputs" className="animate-fade-in space-y-5 outline-none">
+                  <p className="text-2xs leading-relaxed text-slate-500">
+                    Generated reports and machine-readable status. Everything here is rebuilt from
+                    the model by Check, never edited by hand, so the numbers stay reproducible.
+                  </p>
                   {artifacts.length ? (
                     <div className="grid gap-5 lg:grid-cols-[230px_minmax(0,1fr)]">
                       <div className="space-y-1.5">
@@ -520,33 +586,31 @@ export default function App() {
                             key={artifact.name}
                             disabled={!artifact.available}
                             onClick={() => setActiveArtifact(artifact.name)}
+                            title={artifact.name}
                             className={cn(
-                              "flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left transition disabled:opacity-40",
+                              "content-button w-full justify-between text-left disabled:opacity-40",
                               artifact.name === activeArtifact
-                                ? "border-slate-900 bg-white shadow-sm"
-                                : "border-transparent bg-white/60 hover:border-slate-200 hover:bg-white",
+                                ? "border-slate-900 bg-white text-slate-900 shadow-sm"
+                                : "border-transparent bg-white/60 text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-800",
                             )}
                           >
-                            <span className="min-w-0">
-                              <span className="block truncate text-xs font-semibold text-slate-700">
-                                {artifact.label}
-                              </span>
-                              <span className="block truncate font-mono text-3xs text-slate-400">
-                                {artifact.name}
-                              </span>
-                            </span>
+                            <span className="truncate">{artifact.label}</span>
                             {artifact.available && <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />}
                           </button>
                         ))}
                       </div>
-                      {selectedArtifact && <ArtifactView artifact={selectedArtifact} payload={artifactPayload} />}
+                      {selectedArtifact && <ArtifactView artifact={selectedArtifact} payload={visiblePayload} />}
                     </div>
                   ) : (
                     <EmptyState title="No artifacts" hint="Run Check to generate the reports for this tool." />
                   )}
                 </Tabs.Content>
 
-                <Tabs.Content value="import" className="animate-fade-in outline-none">
+                <Tabs.Content value="import" className="animate-fade-in space-y-5 outline-none">
+                  <p className="text-2xs leading-relaxed text-slate-500">
+                    Bring a local YAML model under review before it touches your workspace. Staging,
+                    diff and acceptance stay explicit; no cloud credentials ever reach the browser.
+                  </p>
                   <ImportView
                     toolId={activeToolId}
                     files={modelFiles}
@@ -554,14 +618,18 @@ export default function App() {
                   />
                 </Tabs.Content>
 
-                <Tabs.Content value="schemas" className="animate-fade-in outline-none">
+                <Tabs.Content value="schemas" className="animate-fade-in space-y-4 outline-none">
+                  <p className="text-2xs leading-relaxed text-slate-500">
+                    The JSON Schema behind the guided form. Use it to understand required fields,
+                    allowed values and limits when you switch to YAML.
+                  </p>
                   <div className="mb-4 flex flex-wrap gap-2">
                     {Object.keys(schemas).map((filename) => (
                       <button
                         key={filename}
                         onClick={() => setActiveSchema(filename)}
                         className={cn(
-                          "rounded-lg border px-3 py-2 font-mono text-2xs font-semibold transition",
+                          "content-button font-mono",
                           filename === activeSchema
                             ? "border-slate-900 bg-slate-900 text-white"
                             : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",

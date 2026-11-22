@@ -2,6 +2,8 @@ import type {
   ArtifactInfo,
   ArtifactPayload,
   Catalog,
+  ConnectorInfo,
+  ConnectorRunResult,
   ImportDiff,
   ImportInfo,
   Comparison,
@@ -112,5 +114,11 @@ export const api = {
   discardImport: (tool: string, file: string) =>
     request<{ ok: boolean }>(`/${tool}/imports/${encodeURIComponent(file)}`, {
       method: "DELETE",
+    }),
+  connectors: () => request<ConnectorInfo[]>("/connectors"),
+  runConnector: (payload: Record<string, string>) =>
+    request<ConnectorRunResult>("/connectors/run", {
+      method: "POST",
+      body: JSON.stringify(payload),
     }),
 };

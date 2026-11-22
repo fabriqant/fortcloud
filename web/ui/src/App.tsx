@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Switch from "@radix-ui/react-switch";
-import { Activity, AlertCircle, CheckCircle2, Database, Play, RotateCcw, ShieldAlert } from "lucide-react";
+import { Activity, AlertCircle, CheckCircle2, Cloud, Database, Play, RotateCcw, ShieldAlert } from "lucide-react";
 import { api } from "./lib/api";
 import { toolIcon } from "./lib/toolIcons";
 import type {
@@ -18,6 +18,7 @@ import type {
 import { accentFor, cn, displayToolName } from "./lib/utils";
 import { ArtifactView } from "./components/ArtifactView";
 import { CatalogModal } from "./components/CatalogModal";
+import { ConnectorModal } from "./components/ConnectorModal";
 import { ChartCard } from "./components/ChartCard";
 import { DataTable } from "./components/DataTable";
 import { FindingsPanel } from "./components/FindingsPanel";
@@ -79,6 +80,7 @@ export default function App() {
   const [strict, setStrict] = useState(false);
   const [catalog, setCatalog] = useState<Catalog>({});
   const [catalogOpen, setCatalogOpen] = useState(false);
+  const [connectorOpen, setConnectorOpen] = useState(false);
   const [tab, setTab] = useState<TabKey>(initialRoute.tab);
   const [modelMode, setModelMode] = useState<"form" | "yaml">("form");
   const [busy, setBusy] = useState<"validate" | "check" | "save" | "reset" | "scenario" | null>(null);
@@ -361,6 +363,10 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
+              <Button variant="ghost" onClick={() => setConnectorOpen(true)}>
+                <Cloud className="h-3.5 w-3.5" />
+                Cloud connectors
+              </Button>
               <Button variant="ghost" onClick={() => setCatalogOpen(true)}>
                 <Database className="h-3.5 w-3.5" />
                 Reference data
@@ -691,6 +697,15 @@ export default function App() {
           catalog={catalog}
           onClose={() => setCatalogOpen(false)}
           onChange={setCatalog}
+        />
+      )}
+      {connectorOpen && (
+        <ConnectorModal
+          onClose={() => setConnectorOpen(false)}
+          onOpenImport={() => {
+            setConnectorOpen(false);
+            navigate("atlas", "import");
+          }}
         />
       )}
     </div>

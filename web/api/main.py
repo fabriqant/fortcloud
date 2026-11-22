@@ -1,7 +1,9 @@
 """Local API for the Fortcloud web console.
 
-The API imports the seven tool packages directly. It never shells out to the CLIs
-and never modifies the tools' own example models.
+The API imports the seven tool packages directly. It never shells out to the tool
+CLIs and never modifies the tools' own example models. On explicit request it can
+run one of the local read-only inventory connectors; no cloud credentials are sent
+to the browser or stored by the API.
 """
 
 from __future__ import annotations
@@ -13,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import catalog, registry, runner, snapshots, structured, workspaces
+from . import catalog, connectors, registry, runner, snapshots, structured, workspaces
 
 app = FastAPI(
     title="Fortcloud Console API",
@@ -319,19 +321,42 @@ def list_schemas(tool_id: str) -> dict[str, str]:
     return schemas
 
 
+@app.get("/api/connectors")
+def list_connectors() -> list[dict]:
+    """Connector metadata and discovered, non-secret identifiers."""
+    return connectors.describe()
+
+
+@app.post("/api/connectors/run")
+def run_connector(request: connectors.ConnectorRun) -> dict:
+    """Run a local read-only connector; the browser sends identifiers only."""
+    try:
+        return connectors.run(request)
+    except connectors.ConnectorError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @app.post("/api/atlas/inventory")
 def propose_inventory(request: InventoryRequest) -> dict:
-    """Describe the local connector; the console itself never reads a cloud account."""
+    """Describe the local connectors; the console itself never reads a cloud account."""
     tool = registry.get_tool("atlas")
+    source = request.source or "aws"
+    known = {"aws", "azure", "gcp"}
+    command = (
+        f"python -m connectors.{source}"
+        if source in known
+        else "python -m connectors.aws --profile <profile> --region <region>"
+    )
     return {
         "direct_access": False,
-        "source": request.source,
-        "connector": "python -m connectors.aws --profile <profile> --region <region>",
+        "source": source,
+        "connector": command,
+        "providers": connectors.describe(),
         "imports_dir": str(tool.workspace_dir / "imports"),
         "message": (
-            "The console does not connect to clouds. Run the local read-only connector where "
-            "your AWS profile is configured. It writes a proposal to the imports folder; review "
-            "it in the Import tab before accepting it."
+            "The console does not connect to clouds directly. Run a local read-only connector "
+            "where your cloud CLI is configured. It writes a proposal to the imports folder; "
+            "review it in the Import tab before accepting it."
         ),
     }
 

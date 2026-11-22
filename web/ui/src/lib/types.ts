@@ -129,4 +129,33 @@ export interface ImportDiff {
   diff: string;
 }
 
+export interface ConnectorField {
+  name: string;
+  label: string;
+  placeholder: string;
+  required: boolean;
+  default?: string;
+  help?: string;
+  identifiers: string[];
+}
+
+export interface ConnectorInfo {
+  id: string;
+  label: string;
+  description: string;
+  installed: boolean;
+  fields: ConnectorField[];
+  proposal: string;
+}
+
+export interface ConnectorRunResult {
+  ok: boolean;
+  provider: string;
+  module: string;
+  command: string;
+  output: string;
+  proposal: string;
+  imports_dir: string;
+}
+
 export type TabKey = "overview" | "model" | "outputs" | "scenarios" | "import" | "schemas";

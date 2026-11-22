@@ -6,24 +6,14 @@ a document that the console shows as a proposal in the Import tab.
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 from typing import Any
 
+from ..common import component as _component
+from ..common import tag as _tag
+
 WEB_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_IMPORT_FILE = WEB_ROOT / "workspaces" / "atlas" / "imports" / "components.yaml"
-
-
-def _slug(value: str) -> str:
-    result = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")[:60]
-    return result or "resource"
-
-
-def _tag(tags: list[dict] | None, key: str, default: str = "") -> str:
-    for tag in tags or []:
-        if tag.get("Key") == key:
-            return str(tag.get("Value") or default)
-    return default
 
 
 def _pages(client: Any, method: str, result_key: str, **kwargs: Any) -> list[dict]:
@@ -32,38 +22,6 @@ def _pages(client: Any, method: str, result_key: str, **kwargs: Any) -> list[dic
     for page in paginator.paginate(**kwargs):
         items.extend(page.get(result_key, []))
     return items
-
-
-def _component(
-    identifier: str,
-    name: str,
-    category: str,
-    region: str,
-    owner: str,
-    zones: list[str] | None = None,
-    instances: int = 1,
-    replication: str = "none",
-    notes: str = "",
-) -> dict:
-    component = {
-        "id": _slug(identifier),
-        "name": name[:120] or identifier,
-        "category": category,
-        "criticality": "P1",
-        "owner": owner or "unassigned",
-        "provider": "aws",
-        "regions": [region],
-        "zones": [zone for zone in (zones or []) if zone],
-        "redundancy": {
-            "instances": max(1, instances),
-            "active_passive": instances > 1,
-            "replication": replication,
-        },
-        "backup": {"enabled": False, "immutable": False, "retention_days": 0},
-    }
-    if notes:
-        component["notes"] = notes
-    return component
 
 
 def _ec2_components(client: Any, region: str) -> list[dict]:

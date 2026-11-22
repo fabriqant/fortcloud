@@ -141,8 +141,10 @@ export function ImportView({
             Imports are never applied automatically. Stage YAML, review the diff, then accept it.
             The console never receives cloud credentials.
           </p>
-          <p className="mt-1.5 font-mono text-3xs text-sky-800">
-            Local AWS connector: python -m connectors.aws --profile &lt;profile&gt; --region &lt;region&gt;
+          <p className="mt-1.5 text-sky-800">
+            Use <span className="font-semibold">Cloud connectors</span> in the header for AWS, Azure
+            and Google Cloud, or run a connector locally:
+            <span className="font-mono"> python -m connectors.aws --profile &lt;profile&gt;</span>.
           </p>
         </div>
       </div>

@@ -1,0 +1,4 @@
+# Optional dependencies for the local Azure inventory connector.
+# Kept out of web/requirements.txt: the browser and API never handle credentials.
+azure-identity>=1.16
+azure-mgmt-resource>=23.0

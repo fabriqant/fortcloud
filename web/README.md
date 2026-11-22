@@ -37,12 +37,14 @@ web/workspaces/<tool>/scenarios/<name>/    <- version snapshots per scenario
 web/catalog.sqlite3                        <- reusable reference values for guided forms
 ```
 
-Optional, outside the API:
+Optional, launched from the console header **Cloud connectors** or from a local terminal:
 
 ```text
-Local AWS profile -> python -m connectors.aws -> web/workspaces/atlas/imports/components.yaml
+Local cloud CLI config -> python -m connectors.aws / azure / gcp -> web/workspaces/atlas/imports/components.yaml
                           (read-only APIs)              |  reviewed in the Import tab
 ```
+
+The browser only sends non-secret identifiers (profile, region, subscription ID, project ID). No cloud credentials reach the API or the browser.
 
 Everything stays local by default. The API binds to `127.0.0.1` when started with the command below.
 
@@ -73,19 +75,32 @@ Open <http://127.0.0.1:5173>.
 
 For a single-process setup, build the UI (`cd web/ui && npm run build`) and start the API. It serves `web/ui/dist` automatically at <http://127.0.0.1:8000>.
 
-## Local AWS connector (optional)
+## Local cloud connectors (optional)
 
-The connector is a standalone command, not part of the API. Install its dependency only if you need it:
+Click **Cloud connectors** in the console header, select AWS, Azure or Google Cloud, fill in the identifiers and run the local connector. The console shows the exact command, the SDK status and the result. Discovered profile names come from your local CLI configuration; secrets are never read or returned.
+
+You can also run the same connectors directly:
 
 ```bash
+# AWS — EC2, RDS, S3
 python -m pip install -r web/connectors/requirements-aws.txt
 python -m connectors.aws --profile my-profile --region eu-west-3 --dry-run
 python -m connectors.aws --profile my-profile --region eu-west-3
+
+# Azure — VMs, AKS, SQL databases, storage accounts
+python -m pip install -r web/connectors/requirements-azure.txt
+python -m connectors.azure --subscription-id 00000000-0000-0000-0000-000000000000 --dry-run
+python -m connectors.azure --subscription-id 00000000-0000-0000-0000-000000000000
+
+# Google Cloud — Compute Engine, Cloud SQL, Cloud Storage
+python -m pip install -r web/connectors/requirements-gcp.txt
+python -m connectors.gcp --project-id my-project --dry-run
+python -m connectors.gcp --project-id my-project
 ```
 
-It uses the standard `boto3` credential chain from your local AWS configuration, calls only read-only APIs (`ec2:DescribeInstances`, `rds:DescribeDBInstances`, `s3:ListBuckets`), and writes `web/workspaces/atlas/imports/components.yaml`. It never writes to `model/`. Use `--out` for another destination. Open the **Import** tab, review the diff, then accept or discard the proposal. Run `Validate` before `Check` as usual.
+All three write `web/workspaces/atlas/imports/components.yaml`. They never write to `model/`. Use `--out` for another destination. Open the **Import** tab, review the diff, then accept or discard the proposal. Run `Validate` before `Check` as usual.
 
-No credentials are sent to the console, stored in a workspace, or written to a proposal. Without `boto3`, the API, UI and all other tools work unchanged.
+The browser sends only non-secret identifiers. The API starts the connector as a local subprocess with an allowlisted command; no credentials are sent to the console, stored in a workspace, or written to a proposal. Without the optional SDKs, the API, UI and all other tools work unchanged. See [Using the tools in practice](../docs/USING_THE_TOOLS.md) for the full workflow and the limits of generated inventories.
 
 ## API endpoints
 
@@ -120,7 +135,9 @@ No credentials are sent to the console, stored in a workspace, or written to a p
 | `GET` | `/api/{tool}/artifacts` | Artifact list |
 | `GET` | `/api/{tool}/artifacts/{name}` | Artifact content |
 | `GET` | `/api/{tool}/schemas` | JSON Schemas |
-| `POST` | `/api/atlas/inventory` | Connector instructions; no cloud access |
+| `GET` | `/api/connectors` | Connector metadata, SDK status and discovered identifiers |
+| `POST` | `/api/connectors/run` | Run one local read-only connector with non-secret identifiers |
+| `POST` | `/api/atlas/inventory` | Connector instructions; no direct cloud access |
 
 `{tool}` is one of `atlas`, `failover`, `ark`, `ballast`, `vitals`, `custodian`, `crucible`.
 
@@ -133,6 +150,7 @@ web/
 ├── api/
 │   ├── main.py           FastAPI app and routes
 │   ├── catalog.py        local SQLite reference-value catalog
+│   ├── connectors.py     connector registry and local subprocess runner
 │   ├── registry.py       tools.yaml loader and tool paths
 │   ├── tools.yaml        single source of truth for the UI shell
 │   ├── workspaces.py     file storage and example seeding
@@ -143,15 +161,27 @@ web/
 │   ├── src/App.tsx       layout, actions and state
 │   └── src/components/   sidebar, forms, cards, graph, tables, editor, outputs
 ├── connectors/
+│   ├── common.py         shared component mapping and slugging
 │   ├── aws/
 │   │   ├── collector.py  read-only AWS to Atlas component mapping
 │   │   └── __main__.py   local CLI entry point
-│   └── requirements-aws.txt   optional boto3 dependency
+│   ├── azure/
+│   │   ├── collector.py  read-only Azure Resource Manager mapping
+│   │   └── __main__.py   local CLI entry point
+│   ├── gcp/
+│   │   ├── collector.py  read-only Google Cloud mapping
+│   │   └── __main__.py   local CLI entry point
+│   ├── requirements-aws.txt
+│   ├── requirements-azure.txt
+│   └── requirements-gcp.txt
 ├── tests/
 │   ├── test_api.py       API and import smoke tests
 │   ├── test_catalog.py   reference catalog CRUD tests
 │   ├── test_snapshots.py scenario, snapshot and comparison tests
-│   └── test_aws_connector.py  connector mapping with a fake session
+│   ├── test_connectors_api.py connector registry and runner
+│   ├── test_aws_connector.py  connector mapping with a fake session
+│   ├── test_azure_connector.py
+│   └── test_gcp_connector.py
 ├── requirements.txt      API and editable tool installs
 └── README.md             this file
 ```

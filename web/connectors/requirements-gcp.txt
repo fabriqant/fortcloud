@@ -1,0 +1,5 @@
+# Optional dependencies for the local Google Cloud inventory connector.
+# Kept out of web/requirements.txt: the browser and API never handle credentials.
+google-cloud-compute>=1.30
+google-cloud-storage>=2.14
+google-api-python-client>=2.100

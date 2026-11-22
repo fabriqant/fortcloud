@@ -18,6 +18,8 @@ Fortcloud is a family of small, independent engineering tools that make infrastr
 
 The common thread is simple: **no backend, no agent, no platform to adopt** — just versioned files, a CLI and CI checks.
 
+> New here? [Using the tools in practice](docs/USING_THE_TOOLS.md) explains the full workflow — cloud inventory, staged import, validation, CI and what "reviewable in a pull request" actually means.
+
 ## The seven tools
 
 | # | Need | Tool | Folder | Status | Tagline |

@@ -264,7 +264,10 @@ jobs:
         run: python -m pytest tests -q
 
       - name: Connector CLI smoke test
-        run: python -m connectors.aws --help
+        run: |
+          python -m connectors.aws --help
+          python -m connectors.azure --help
+          python -m connectors.gcp --help
 
       - name: Install UI dependencies
         run: npm ci

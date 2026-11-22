@@ -10,6 +10,10 @@ export function FindingsPanel({ result }: { result: RunResult | null }) {
   return (
     <Card className="h-full">
       <CardTitle title="Findings" subtitle="Live diagnostics from the last run" />
+      <p className="mb-5 mt-7 text-2xs leading-relaxed text-slate-500">
+        Findings explain errors and warnings in plain language and link them to the rules enforced
+        by the tool.
+      </p>
       <div className="mb-4 flex flex-wrap gap-2">
         <Badge tone={errors.length ? "rose" : "green"}>{errors.length} errors</Badge>
         <Badge tone={warnings.length ? "amber" : "slate"}>{warnings.length} warnings</Badge>

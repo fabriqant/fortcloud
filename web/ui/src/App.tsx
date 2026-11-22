@@ -63,6 +63,7 @@ function readRoute(): { toolId: string; tab: TabKey } {
 export default function App() {
   const [initialRoute] = useState(readRoute);
   const [tools, setTools] = useState<ToolInfo[]>([]);
+  const [suiteVersion, setSuiteVersion] = useState("0.1.0");
   const [activeToolId, setActiveToolId] = useState(initialRoute.toolId);
   const [model, setModel] = useState<ModelPayload | null>(null);
   const [draft, setDraft] = useState<Record<string, string>>({});
@@ -148,6 +149,15 @@ export default function App() {
       .tools()
       .then(setTools)
       .catch((cause: unknown) => setError(String(cause)));
+  }, []);
+
+  useEffect(() => {
+    api
+      .health()
+      .then((info) => setSuiteVersion(info.version))
+      .catch(() => {
+        // The bundled fallback is enough if health is unavailable.
+      });
   }, []);
 
   useEffect(() => {
@@ -343,353 +353,356 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-900">
-      <ToolSidebar tools={tools} activeId={activeToolId} onSelect={(id) => navigate(id, "overview")} />
+      <ToolSidebar
+        tools={tools}
+        activeId={activeToolId}
+        version={suiteVersion}
+        onSelect={(id) => navigate(id, "overview")}
+      />
 
       <main className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-slate-200 bg-white px-7 py-5">
-          <div className="flex flex-wrap items-start justify-between gap-5">
-            <div className="min-w-0">
-              <div className="flex items-center gap-3.5">
-                <ToolIcon className={cn("h-10 w-10 shrink-0", accent.text)} />
-                <h1 className="text-xl font-bold tracking-tight text-slate-900">
-                  {displayToolName(tool?.name ?? "")}
-                </h1>
-                {result && (
-                  <Badge tone={result.exit_code === 0 ? "green" : "rose"}>
-                    exit {result.exit_code}
-                  </Badge>
-                )}
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Button variant="ghost" onClick={() => setConnectorOpen(true)}>
-                <Cloud className="h-3.5 w-3.5" />
-                Cloud connectors
-              </Button>
-              <Button variant="ghost" onClick={() => setCatalogOpen(true)}>
-                <Database className="h-3.5 w-3.5" />
-                Reference data
-              </Button>
-              <div className="mr-2 flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2">
-                <Switch.Root
-                  id="strict-mode"
-                  checked={strict}
-                  onCheckedChange={setStrict}
-                  className="relative h-4 w-7 rounded-full bg-slate-300 transition data-[state=checked]:bg-slate-900"
-                >
-                  <Switch.Thumb className="block h-3 w-3 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-3.5" />
-                </Switch.Root>
-                <label htmlFor="strict-mode" className="cursor-pointer text-2xs font-semibold text-slate-600">
-                  Strict
-                </label>
-              </div>
-              <Button onClick={runValidate} loading={busy === "validate"}>
-                <ShieldAlert className="h-3.5 w-3.5" />
-                Validate
-              </Button>
-              <Button variant="primary" onClick={runCheck} loading={busy === "check"}>
-                <Play className="h-3.5 w-3.5" />
-                Check
-              </Button>
-              <Button aria-label="Reset model" title="Reset to the bundled example" onClick={resetModel} loading={busy === "reset"}>
-                <RotateCcw className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </div>
-
-          {error && (
-            <div className="mt-4 flex items-start gap-2 rounded-lg bg-rose-50 px-3 py-2.5 text-xs text-rose-700">
-              <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-              {error}
-            </div>
-          )}
-        </header>
-
-        <div className="flex-1 px-7 py-6">
-          {tool?.description && (
-            <p className="mx-auto my-12 max-w-4xl text-center text-lg font-medium leading-relaxed text-slate-600">
-              {tool.description}
-            </p>
-          )}
-          <Tabs.Root value={tab} onValueChange={(value) => navigate(activeToolId, value as TabKey)}>
-            <Tabs.List className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
-              {TAB_ITEMS.map((item) => (
-                <Tabs.Trigger
-                  key={item.key}
-                  value={item.key}
-                  className="content-button text-slate-500 hover:text-slate-800 data-[state=active]:bg-slate-900 data-[state=active]:text-white"
-                >
-                  {item.label}
-                </Tabs.Trigger>
-              ))}
-            </Tabs.List>
-            <p className="mt-3 max-w-5xl text-2xs leading-relaxed text-slate-500">
-              {TAB_INTRO[tab]}
-            </p>
-
-            <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <div key={activeToolId} className="animate-tool-in flex min-h-0 flex-1 flex-col">
+          <header className="border-b border-slate-200 bg-white px-7 py-5">
+            <div className="flex flex-wrap items-start justify-between gap-5">
               <div className="min-w-0">
-                <Tabs.Content value="overview" className="animate-fade-in space-y-5 outline-none">
-                  {activeScenarioInfo && (
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-card">
-                      <div>
-                        <p className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
-                          Scenario
-                        </p>
-                        <p className="mt-0.5 text-sm font-semibold text-slate-800">
-                          {activeScenarioInfo.name}
-                        </p>
-                        <p className="mt-0.5 text-2xs text-slate-500">
-                          {activeScenarioInfo.description || "Bundled example model"}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <select
-                          aria-label="Active scenario"
-                          disabled={busy === "scenario"}
-                          value={activeScenarioInfo.name}
-                          onChange={(event) => void selectScenario(event.target.value)}
-                          className="form-control disabled:opacity-50"
-                        >
-                          {scenarioState?.scenarios.map((scenario) => (
-                            <option key={scenario.name} value={scenario.name}>
-                              {scenario.name}
-                              {scenario.versions.length
-                                ? ` · v${scenario.versions[scenario.versions.length - 1].version}`
-                                : ""}
-                            </option>
-                          ))}
-                        </select>
-                        <Badge tone="blue">
-                          {activeScenarioInfo.versions.length} version
-                          {activeScenarioInfo.versions.length === 1 ? "" : "s"}
-                        </Badge>
-                      </div>
-                    </div>
+                <div className="flex items-center gap-3.5">
+                  <ToolIcon className={cn("h-10 w-10 shrink-0", accent.text)} />
+                  <h1 className="text-xl font-bold tracking-tight text-slate-900">
+                    {displayToolName(tool?.name ?? "")}
+                  </h1>
+                  {result && (
+                    <Badge tone={result.exit_code === 0 ? "green" : "rose"}>
+                      exit {result.exit_code}
+                    </Badge>
                   )}
+                </div>
+              </div>
 
-                  <p className="text-2xs leading-relaxed text-slate-500">
-                    Switching the branch changes every number below. Run Check after a model change
-                    to refresh the charts and tables.
-                  </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant="ghost" onClick={() => setConnectorOpen(true)}>
+                  <Cloud className="h-3.5 w-3.5" />
+                  Cloud connectors
+                </Button>
+                <Button variant="ghost" onClick={() => setCatalogOpen(true)}>
+                  <Database className="h-3.5 w-3.5" />
+                  Reference data
+                </Button>
+                <div className="mr-2 flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2">
+                  <Switch.Root
+                    id="strict-mode"
+                    checked={strict}
+                    onCheckedChange={setStrict}
+                    className="relative h-4 w-7 rounded-full bg-slate-300 transition data-[state=checked]:bg-slate-900"
+                  >
+                    <Switch.Thumb className="block h-3 w-3 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-3.5" />
+                  </Switch.Root>
+                  <label htmlFor="strict-mode" className="cursor-pointer text-2xs font-semibold text-slate-600">
+                    Strict
+                  </label>
+                </div>
+                <Button onClick={runValidate} loading={busy === "validate"}>
+                  <ShieldAlert className="h-3.5 w-3.5" />
+                  Validate
+                </Button>
+                <Button variant="primary" onClick={runCheck} loading={busy === "check"}>
+                  <Play className="h-3.5 w-3.5" />
+                  Check
+                </Button>
+                <Button aria-label="Reset model" title="Reset to the bundled example" onClick={resetModel} loading={busy === "reset"}>
+                  <RotateCcw className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
 
-                  <KpiCards kpis={view?.kpis ?? []} />
+            {error && (
+              <div className="mt-4 flex items-start gap-2 rounded-lg bg-rose-50 px-3 py-2.5 text-xs text-rose-700">
+                <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                {error}
+              </div>
+            )}
+          </header>
 
-                  {view?.graph && <GraphView graph={view.graph} />}
+          <div className="flex-1 px-7 py-6">
+            {tool?.description && (
+              <p className="mx-auto my-12 max-w-4xl text-center text-lg font-medium leading-relaxed text-slate-600">
+                {tool.description}
+              </p>
+            )}
+            <Tabs.Root value={tab} onValueChange={(value) => navigate(activeToolId, value as TabKey)}>
+              <Tabs.List className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
+                {TAB_ITEMS.map((item) => (
+                  <Tabs.Trigger
+                    key={item.key}
+                    value={item.key}
+                    className="content-button text-slate-500 hover:text-slate-800 data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  >
+                    {item.label}
+                  </Tabs.Trigger>
+                ))}
+              </Tabs.List>
+              <p className="mt-3 max-w-5xl text-2xs leading-relaxed text-slate-500">
+                {TAB_INTRO[tab]}
+              </p>
 
-                  {Boolean(view?.charts.length) && (
-                    <div className={cn("grid gap-5", view && view.charts.length > 1 ? "lg:grid-cols-2" : "")}>
-                      {view?.charts.map((chart) => (
-                        <ChartCard key={chart.id} chart={chart} />
-                      ))}
-                    </div>
-                  )}
-
-                  {view?.tables.length ? (
-                    <>
-                      <div className="flex flex-wrap gap-2">
-                        {view.tables.map((table) => (
-                          <button
-                            key={table.id}
-                            onClick={() => setActiveTable(table.id)}
-                            className={cn(
-                              "content-button rounded-full",
-                              table.id === activeTable
-                                ? "border-slate-900 bg-slate-900 text-white"
-                                : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800",
-                            )}
+              <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
+                <div className="min-w-0">
+                  <Tabs.Content value="overview" className="animate-fade-in space-y-5 outline-none">
+                    {activeScenarioInfo && (
+                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-card">
+                        <div>
+                          <p className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
+                            Scenario
+                          </p>
+                          <p className="mt-0.5 text-sm font-semibold text-slate-800">
+                            {activeScenarioInfo.name}
+                          </p>
+                          <p className="mt-0.5 text-2xs text-slate-500">
+                            {activeScenarioInfo.description || "Bundled example model"}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <select
+                            aria-label="Active scenario"
+                            disabled={busy === "scenario"}
+                            value={activeScenarioInfo.name}
+                            onChange={(event) => void selectScenario(event.target.value)}
+                            className="form-control disabled:opacity-50"
                           >
-                            {table.label} · {table.total}
-                          </button>
-                        ))}
+                            {scenarioState?.scenarios.map((scenario) => (
+                              <option key={scenario.name} value={scenario.name}>
+                                {scenario.name}
+                                {scenario.versions.length
+                                  ? ` · v${scenario.versions[scenario.versions.length - 1].version}`
+                                  : ""}
+                              </option>
+                            ))}
+                          </select>
+                          <Badge tone="blue">
+                            {activeScenarioInfo.versions.length} version
+                            {activeScenarioInfo.versions.length === 1 ? "" : "s"}
+                          </Badge>
+                        </div>
                       </div>
-                      {selectedTable && <DataTable table={selectedTable} />}
-                    </>
-                  ) : (
-                    <EmptyState
-                      title="No structured tables yet"
-                      hint="Run Check to generate the artifacts, then the tables appear here."
-                    />
-                  )}
-                </Tabs.Content>
+                    )}
 
-                <Tabs.Content value="scenarios" className="animate-fade-in space-y-5 outline-none">
-                  <p className="text-2xs leading-relaxed text-slate-500">
-                    The protected base is the bundled starting point. Named scenarios keep
-                    independent copies; activating one clears stale artifacts until Check runs again.
-                  </p>
-                  <ScenarioView
-                    toolId={activeToolId}
-                    active={tab === "scenarios"}
-                    state={scenarioState}
-                    onChanged={(next) => {
-                      setScenarioState(next);
-                      void loadTool(activeToolId, true).catch((cause: unknown) => {
-                        setError(cause instanceof Error ? cause.message : String(cause));
-                      });
-                    }}
-                  />
-                </Tabs.Content>
-
-                <Tabs.Content value="model" className="animate-fade-in space-y-5 outline-none">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
-                      {(["form", "yaml"] as const).map((mode) => (
-                        <button
-                          key={mode}
-                          onClick={() => setModelMode(mode)}
-                          className={cn(
-                            "content-button",
-                            mode === modelMode
-                              ? "bg-slate-900 text-white"
-                              : "text-slate-500 hover:text-slate-800",
-                          )}
-                        >
-                          {mode === "form" ? "Guided form" : "YAML source"}
-                        </button>
-                      ))}
-                    </div>
-                    <p className="max-w-md text-2xs leading-relaxed text-slate-500">
-                      {modelMode === "form"
-                        ? "Fields suggest catalog values but accept custom entries. Every save creates a version in the active scenario."
-                        : "Edit the YAML directly, then Save. Every save creates a version; Check regenerates the artifacts."}
+                    <p className="text-2xs leading-relaxed text-slate-500">
+                      Switching the branch changes every number below. Run Check after a model change
+                      to refresh the charts and tables.
                     </p>
-                  </div>
 
-                  {modelMode === "form" ? (
-                    <FormView
-                      toolId={activeToolId}
-                      catalog={catalog}
-                      onSaved={async () => {
-                        await recordSnapshot("Guided form save");
-                        await loadTool(activeToolId, true);
-                      }}
-                    />
-                  ) : (
-                    <>
-                      <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
-                        Edit a YAML file below, then select <span className="font-semibold">Save</span>. The
-                        model changes only after <span className="font-semibold">Check</span> regenerates the
-                        artifacts. Use <span className="font-semibold">Reset</span> to restore the bundled
-                        example as a starting template.
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {modelFiles.map((filename) => (
-                          <button
-                            key={filename}
-                            onClick={() => setActiveFile(filename)}
-                            className={cn(
-                              "content-button font-mono",
-                              filename === activeFile
-                                ? "border-slate-900 bg-slate-900 text-white"
-                                : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
-                            )}
-                          >
-                            {filename}
-                            {draft[filename] !== model?.files[filename] && (
-                              <span className="ml-2 text-amber-400">●</span>
-                            )}
-                          </button>
+                    <KpiCards kpis={view?.kpis ?? []} />
+
+                    {view?.graph && <GraphView graph={view.graph} />}
+
+                    {Boolean(view?.charts.length) && (
+                      <div className={cn("grid gap-5", view && view.charts.length > 1 ? "lg:grid-cols-2" : "")}>
+                        {view?.charts.map((chart) => (
+                          <ChartCard key={chart.id} chart={chart} />
                         ))}
                       </div>
-                      {activeFile && (
-                        <ModelEditor
-                          file={activeFile}
-                          value={draft[activeFile] ?? ""}
-                          dirty={dirty}
-                          saving={busy === "save"}
-                          onChange={(value) => setDraft((current) => ({ ...current, [activeFile]: value }))}
-                          onSave={saveFile}
-                        />
-                      )}
-                    </>
-                  )}
-                </Tabs.Content>
+                    )}
 
-                <Tabs.Content value="outputs" className="animate-fade-in space-y-5 outline-none">
-                  {artifacts.length ? (
-                    <>
-                      <p className="text-2xs leading-relaxed text-slate-500">
-                        Greyed-out artifacts have not been produced for this scenario yet — run Check
-                        first. Markdown reports and Mermaid graphs sit alongside machine-readable
-                        JSON status.
-                      </p>
-                      <div className="grid gap-5 lg:grid-cols-[230px_minmax(0,1fr)]">
-                        <div className="space-y-1.5">
-                          {artifacts.map((artifact) => (
+                    {view?.tables.length ? (
+                      <>
+                        <div className="flex flex-wrap gap-2">
+                          {view.tables.map((table) => (
                             <button
-                              key={artifact.name}
-                              disabled={!artifact.available}
-                              onClick={() => setActiveArtifact(artifact.name)}
-                              title={artifact.name}
+                              key={table.id}
+                              onClick={() => setActiveTable(table.id)}
                               className={cn(
-                                "content-button w-full justify-between text-left disabled:opacity-40",
-                                artifact.name === activeArtifact
-                                  ? "border-slate-900 bg-white text-slate-900 shadow-sm"
-                                  : "border-transparent bg-white/60 text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-800",
+                                "content-button rounded-full",
+                                table.id === activeTable
+                                  ? "border-slate-900 bg-slate-900 text-white"
+                                  : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800",
                               )}
                             >
-                              <span className="truncate">{artifact.label}</span>
-                              {artifact.available && <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />}
+                              {table.label} · {table.total}
                             </button>
                           ))}
                         </div>
-                        {selectedArtifact && <ArtifactView artifact={selectedArtifact} payload={visiblePayload} />}
+                        {selectedTable && <DataTable table={selectedTable} />}
+                      </>
+                    ) : (
+                      <EmptyState
+                        title="No structured tables yet"
+                        hint="Run Check to generate the artifacts, then the tables appear here."
+                      />
+                    )}
+                  </Tabs.Content>
+
+                  <Tabs.Content value="scenarios" className="animate-fade-in space-y-5 outline-none">
+                    <p className="text-2xs leading-relaxed text-slate-500">
+                      The protected base is the bundled starting point. Named scenarios keep
+                      independent copies; activating one clears stale artifacts until Check runs again.
+                    </p>
+                    <ScenarioView
+                      toolId={activeToolId}
+                      active={tab === "scenarios"}
+                      state={scenarioState}
+                      onChanged={(next) => {
+                        setScenarioState(next);
+                        void loadTool(activeToolId, true).catch((cause: unknown) => {
+                          setError(cause instanceof Error ? cause.message : String(cause));
+                        });
+                      }}
+                    />
+                  </Tabs.Content>
+
+                  <Tabs.Content value="model" className="animate-fade-in space-y-5 outline-none">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
+                        {(["form", "yaml"] as const).map((mode) => (
+                          <button
+                            key={mode}
+                            onClick={() => setModelMode(mode)}
+                            className={cn(
+                              "content-button",
+                              mode === modelMode
+                                ? "bg-slate-900 text-white"
+                                : "text-slate-500 hover:text-slate-800",
+                            )}
+                          >
+                            {mode === "form" ? "Guided form" : "YAML source"}
+                          </button>
+                        ))}
                       </div>
-                    </>
-                  ) : (
-                    <EmptyState title="No artifacts" hint="Run Check to generate the reports for this tool." />
-                  )}
-                </Tabs.Content>
+                      <p className="max-w-md text-2xs leading-relaxed text-slate-500">
+                        {modelMode === "form"
+                          ? "Fields suggest catalog values but accept custom entries. Every save creates a version in the active scenario."
+                          : "Edit the YAML directly, then Save. Every save creates a version; Check regenerates the artifacts."}
+                      </p>
+                    </div>
 
-                <Tabs.Content value="import" className="animate-fade-in space-y-5 outline-none">
-                  <ImportView
-                    toolId={activeToolId}
-                    files={modelFiles}
-                    onAccepted={() => loadTool(activeToolId, true)}
-                  />
-                </Tabs.Content>
-
-                <Tabs.Content value="schemas" className="animate-fade-in space-y-4 outline-none">
-                  <p className="text-2xs leading-relaxed text-slate-500">
-                    Each schema maps to one model file. Required fields, enums and bounds are
-                    defined here; catalog values are suggestions, not limits.
-                  </p>
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {Object.keys(schemas).map((filename) => (
-                      <button
-                        key={filename}
-                        onClick={() => setActiveSchema(filename)}
-                        className={cn(
-                          "content-button font-mono",
-                          filename === activeSchema
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
+                    {modelMode === "form" ? (
+                      <FormView
+                        toolId={activeToolId}
+                        catalog={catalog}
+                        onSaved={async () => {
+                          await recordSnapshot("Guided form save");
+                          await loadTool(activeToolId, true);
+                        }}
+                      />
+                    ) : (
+                      <>
+                        <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
+                          Edit a YAML file below, then select <span className="font-semibold">Save</span>. The
+                          model changes only after <span className="font-semibold">Check</span> regenerates the
+                          artifacts. Use <span className="font-semibold">Reset</span> to restore the bundled
+                          example as a starting template.
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {modelFiles.map((filename) => (
+                            <button
+                              key={filename}
+                              onClick={() => setActiveFile(filename)}
+                              className={cn(
+                                "content-button font-mono",
+                                filename === activeFile
+                                  ? "border-slate-900 bg-slate-900 text-white"
+                                  : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
+                              )}
+                            >
+                              {filename}
+                              {draft[filename] !== model?.files[filename] && (
+                                <span className="ml-2 text-amber-400">●</span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                        {activeFile && (
+                          <ModelEditor
+                            file={activeFile}
+                            value={draft[activeFile] ?? ""}
+                            dirty={dirty}
+                            saving={busy === "save"}
+                            onChange={(value) => setDraft((current) => ({ ...current, [activeFile]: value }))}
+                            onSave={saveFile}
+                          />
                         )}
-                      >
-                        {filename}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-card">
-                    <h2 className="mb-3 text-sm font-semibold">{activeSchema || "JSON Schema"}</h2>
-                    <pre className="max-h-[780px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-2xs leading-relaxed text-slate-200">
-                      {activeSchema ? schemas[activeSchema] : "No schema available."}
-                    </pre>
-                  </div>
-                </Tabs.Content>
-              </div>
+                      </>
+                    )}
+                  </Tabs.Content>
 
-              <aside className="min-w-0 space-y-3">
-                <p className="text-2xs leading-relaxed text-slate-500">
-                  Findings explain errors and warnings in plain language and link them to the
-                  rules enforced by the tool.
-                </p>
-                <FindingsPanel result={result} />
-              </aside>
-            </div>
-          </Tabs.Root>
+                  <Tabs.Content value="outputs" className="animate-fade-in space-y-5 outline-none">
+                    {artifacts.length ? (
+                      <>
+                        <p className="text-2xs leading-relaxed text-slate-500">
+                          Greyed-out artifacts have not been produced for this scenario yet — run Check
+                          first. Markdown reports and Mermaid graphs sit alongside machine-readable
+                          JSON status.
+                        </p>
+                        <div className="grid gap-5 lg:grid-cols-[230px_minmax(0,1fr)]">
+                          <div className="space-y-1.5">
+                            {artifacts.map((artifact) => (
+                              <button
+                                key={artifact.name}
+                                disabled={!artifact.available}
+                                onClick={() => setActiveArtifact(artifact.name)}
+                                title={artifact.name}
+                                className={cn(
+                                  "content-button w-full justify-between text-left disabled:opacity-40",
+                                  artifact.name === activeArtifact
+                                    ? "border-slate-900 bg-white text-slate-900 shadow-sm"
+                                    : "border-transparent bg-white/60 text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-800",
+                                )}
+                              >
+                                <span className="truncate">{artifact.label}</span>
+                                {artifact.available && <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />}
+                              </button>
+                            ))}
+                          </div>
+                          {selectedArtifact && <ArtifactView artifact={selectedArtifact} payload={visiblePayload} />}
+                        </div>
+                      </>
+                    ) : (
+                      <EmptyState title="No artifacts" hint="Run Check to generate the reports for this tool." />
+                    )}
+                  </Tabs.Content>
+
+                  <Tabs.Content value="import" className="animate-fade-in space-y-5 outline-none">
+                    <ImportView
+                      toolId={activeToolId}
+                      files={modelFiles}
+                      onAccepted={() => loadTool(activeToolId, true)}
+                    />
+                  </Tabs.Content>
+
+                  <Tabs.Content value="schemas" className="animate-fade-in space-y-4 outline-none">
+                    <p className="text-2xs leading-relaxed text-slate-500">
+                      Each schema maps to one model file. Required fields, enums and bounds are
+                      defined here; catalog values are suggestions, not limits.
+                    </p>
+                    <div className="mb-4 flex flex-wrap gap-2">
+                      {Object.keys(schemas).map((filename) => (
+                        <button
+                          key={filename}
+                          onClick={() => setActiveSchema(filename)}
+                          className={cn(
+                            "content-button font-mono",
+                            filename === activeSchema
+                              ? "border-slate-900 bg-slate-900 text-white"
+                              : "border-slate-200 bg-white text-slate-500 hover:text-slate-800",
+                          )}
+                        >
+                          {filename}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-card">
+                      <h2 className="mb-3 text-sm font-semibold">{activeSchema || "JSON Schema"}</h2>
+                      <pre className="max-h-[780px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-2xs leading-relaxed text-slate-200">
+                        {activeSchema ? schemas[activeSchema] : "No schema available."}
+                      </pre>
+                    </div>
+                  </Tabs.Content>
+                </div>
+
+                <aside className="min-w-0 space-y-3">
+                  <FindingsPanel result={result} />
+                </aside>
+              </div>
+            </Tabs.Root>
+          </div>
         </div>
       </main>
       {catalogOpen && (

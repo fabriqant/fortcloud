@@ -7,6 +7,7 @@ import type {
   ImportDiff,
   ImportInfo,
   Comparison,
+  HealthInfo,
   ModelDocument,
   ModelFormat,
   ModelPayload,
@@ -35,6 +36,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  health: () => request<HealthInfo>("/health"),
   tools: () => request<ToolInfo[]>("/tools"),
   catalog: () => request<Catalog>("/catalog"),
   addCatalogValue: (category: string, value: string) =>

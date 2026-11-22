@@ -48,9 +48,14 @@ export default {
           "0%": { opacity: "0", transform: "translateY(4px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        "tool-in": {
+          "0%": { opacity: "0", transform: "translateY(8px) scale(0.995)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
       },
       animation: {
         "fade-in": "fade-in .22s ease-out both",
+        "tool-in": "tool-in .32s cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },

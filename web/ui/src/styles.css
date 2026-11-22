@@ -105,7 +105,8 @@
     }
 
     .array-item[data-entering="true"],
-    .array-item[data-exiting="true"] {
+    .array-item[data-exiting="true"],
+    .animate-tool-in {
       animation: none;
     }
   }

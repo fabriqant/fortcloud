@@ -106,7 +106,7 @@ The browser sends only non-secret identifiers. The API starts the connector as a
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/api/health` | Service status |
+| `GET` | `/api/health` | Service status and suite version |
 | `GET` | `/api/tools` | Registry of the seven tools |
 | `GET` | `/api/catalog` | Reference values grouped by category |
 | `POST` | `/api/catalog` | Add a reference value |

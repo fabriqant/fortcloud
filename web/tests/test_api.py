@@ -31,7 +31,7 @@ def isolated_workspaces():
 
 
 def test_health_and_registry():
-    assert client.get("/api/health").json() == {"status": "ok", "tools": 7}
+    assert client.get("/api/health").json() == {"status": "ok", "tools": 7, "version": app.version}
     tools = client.get("/api/tools").json()
     assert [tool["id"] for tool in tools] == [
         "atlas",

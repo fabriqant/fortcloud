@@ -18,6 +18,12 @@ export interface ToolInfo {
   artifacts: ArtifactInfo[];
 }
 
+export interface HealthInfo {
+  status: string;
+  tools: number;
+  version: string;
+}
+
 export interface RunResult {
   tool: string;
   ok: boolean;

@@ -6,10 +6,12 @@ import { accentFor, cn, displayToolName } from "../lib/utils";
 export function ToolSidebar({
   tools,
   activeId,
+  version,
   onSelect,
 }: {
   tools: ToolInfo[];
   activeId: string;
+  version?: string;
   onSelect: (id: string) => void;
 }) {
   const docsUrl = activeId
@@ -96,6 +98,12 @@ export function ToolSidebar({
           <p className="mt-1.5 text-footer text-slate-600">
             Models stay in <span className="font-mono text-slate-500">web/workspaces/</span>
           </p>
+          {version && (
+            <div className="mt-2 flex items-center justify-between gap-2 text-footer text-slate-600">
+              <span>Fortcloud suite</span>
+              <span className="font-mono text-slate-500">v{version}</span>
+            </div>
+          )}
         </div>
       </div>
     </aside>

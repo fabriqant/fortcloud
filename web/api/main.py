@@ -17,9 +17,11 @@ from pydantic import BaseModel
 
 from . import catalog, connectors, registry, runner, snapshots, structured, workspaces
 
+SUITE_VERSION = "0.1.0"
+
 app = FastAPI(
     title="Fortcloud Console API",
-    version="0.1.0",
+    version=SUITE_VERSION,
     description="Local API for the seven standalone Fortcloud resilience tools.",
 )
 
@@ -76,7 +78,7 @@ def _tool(tool_id: str) -> registry.Tool:
 
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "tools": len(registry.load_tools())}
+    return {"status": "ok", "tools": len(registry.load_tools()), "version": SUITE_VERSION}
 
 
 @app.get("/api/tools")

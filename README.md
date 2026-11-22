@@ -1,3 +1,11 @@
+<table width="100%" cellpadding="24" cellspacing="0">
+  <tr>
+    <td align="center" bgcolor="#0f172a">
+      <img src="logo-white-2.png" alt="Fortcloud" width="360" />
+    </td>
+  </tr>
+</table>
+
 # Fortcloud-io
 
 ### Cloud resilience tooling for hybrid and multi-cloud infrastructure

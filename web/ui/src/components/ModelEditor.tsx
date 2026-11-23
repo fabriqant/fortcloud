@@ -1,5 +1,6 @@
 import { useMemo, useRef } from "react";
 import { Save } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge, Button, Card } from "./ui";
 
 export function ModelEditor({
@@ -17,6 +18,7 @@ export function ModelEditor({
   onChange: (value: string) => void;
   onSave: () => void;
 }) {
+  const { t } = useTranslation();
   const gutter = useRef<HTMLDivElement>(null);
   const lineCount = useMemo(() => Math.max(1, value.split("\n").length), [value]);
 
@@ -25,11 +27,11 @@ export function ModelEditor({
       <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3">
         <div className="flex items-center gap-3">
           <span className="font-mono text-xs font-semibold text-slate-800">{file}</span>
-          {dirty ? <Badge tone="amber">Unsaved</Badge> : <Badge tone="green">Saved</Badge>}
+          {dirty ? <Badge tone="amber">{t("feedback.editor.unsaved")}</Badge> : <Badge tone="green">{t("feedback.editor.saved")}</Badge>}
         </div>
         <Button variant="primary" onClick={onSave} disabled={!dirty} loading={saving}>
           <Save className="h-3.5 w-3.5" />
-          Save model
+          {t("feedback.editor.save")}
         </Button>
       </div>
       <div className="flex h-[560px] bg-slate-950 text-slate-100">
@@ -54,7 +56,9 @@ export function ModelEditor({
         />
       </div>
       <p className="border-t border-slate-100 px-5 py-3 text-2xs text-slate-500">
-        YAML is the source of truth. Generated artifacts are rebuilt by <span className="font-mono">Check</span>.
+        {t("feedback.editor.yamlPrefix")}{" "}
+        <span className="font-mono">Check</span>
+        {t("feedback.editor.yamlSuffix")}
       </p>
     </Card>
   );

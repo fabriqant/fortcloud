@@ -1,0 +1,34 @@
+{
+  "providers": {
+    "aws": {
+      "description": "Instances EC2, bases de données RDS et buckets S3.",
+      "fields": {
+        "profile": {
+          "label": "Profil AWS",
+          "help": "Laissez vide pour utiliser la chaîne d’identifiants par défaut."
+        },
+        "region": {
+          "label": "Région"
+        }
+      }
+    },
+    "azure": {
+      "description": "Machines virtuelles, bases de données SQL et comptes de stockage.",
+      "fields": {
+        "subscription_id": {
+          "label": "ID d’abonnement",
+          "help": "Un accès en lecture seule (rôle Reader) suffit."
+        }
+      }
+    },
+    "gcp": {
+      "description": "Instances Compute Engine, Cloud SQL et buckets Cloud Storage.",
+      "fields": {
+        "project_id": {
+          "label": "ID de projet",
+          "help": "Utilisez un projet dans lequel vous pouvez lister les ressources."
+        }
+      }
+    }
+  }
+}

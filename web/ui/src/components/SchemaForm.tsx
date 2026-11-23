@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { Catalog } from "../lib/types";
 import { cn } from "../lib/utils";
+
+type TFunc = ReturnType<typeof useTranslation>["t"];
 
 export interface Schema {
   type?: string | string[];
@@ -35,8 +38,9 @@ function allowsNull(schema: Schema): boolean {
   return Array.isArray(schema.type) && schema.type.includes("null");
 }
 
-function labelFor(name: string): string {
-  return name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+function labelFor(name: string, t: TFunc): string {
+  const fallback = name.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  return t(`forms.field.${name}`, { defaultValue: fallback });
 }
 
 const SUGGESTION_CATEGORIES: Record<string, string> = {
@@ -157,20 +161,21 @@ const TITLE_KEYS = [
   "person",
 ];
 
-function itemTitle(item: unknown, index: number): string {
+function itemTitle(item: unknown, index: number, t: TFunc): string {
+  const fallback = () => t("forms.schema.item", { index: index + 1 });
   if (isRecord(item)) {
     for (const key of TITLE_KEYS) {
       const candidate = item[key];
       if (typeof candidate === "string" && candidate.trim()) return candidate.trim();
       if (typeof candidate === "number") return String(candidate);
     }
-    const fallback = Object.values(item).find(
-      (candidate) => typeof candidate === "string" && candidate.trim(),
+    const candidate = Object.values(item).find(
+      (value) => typeof value === "string" && value.trim(),
     );
-    if (typeof fallback === "string" && fallback.trim()) return fallback.trim();
-    return `Item ${index + 1}`;
+    if (typeof candidate === "string" && candidate.trim()) return candidate.trim();
+    return fallback();
   }
-  if (item === undefined || item === null || item === "") return `Item ${index + 1}`;
+  if (item === undefined || item === null || item === "") return fallback();
   return String(item);
 }
 
@@ -237,8 +242,9 @@ function PrimitiveField({
   compact?: boolean;
   onChange: (value: unknown) => void;
 }) {
+  const { t } = useTranslation();
   const type = schemaType(schema);
-  const label = schema.title ?? labelFor(name);
+  const label = schema.title ?? labelFor(name, t);
   const inputClass = "form-control";
   const [customOpen, setCustomOpen] = useState(false);
 
@@ -249,7 +255,7 @@ function PrimitiveField({
           <span className="sr-only">{label}</span>
         ) : (
           <span className="mb-1 block text-3xs font-semibold text-slate-500">
-            {label} <span className="font-normal text-slate-400">· null</span>
+            {label} <span className="font-normal text-slate-400">· {t("forms.schema.null")}</span>
           </span>
         )}
         <button
@@ -257,7 +263,7 @@ function PrimitiveField({
           onClick={() => onChange(blankFor(schema))}
           className={cn("w-full", inputClass, "text-left text-slate-400 hover:border-slate-400")}
         >
-          Set a value
+          {t("forms.schema.setValue")}
         </button>
       </label>
     );
@@ -296,7 +302,7 @@ function PrimitiveField({
           onChange={(event) => onChange(event.target.checked)}
           className="h-3.5 w-3.5 rounded border-slate-300"
         />
-        Enabled
+        {t("forms.schema.enabled")}
       </label>
     );
   } else if (type === "integer" || type === "number") {
@@ -331,14 +337,14 @@ function PrimitiveField({
               {option}
             </option>
           ))}
-          <option value="__custom__">Type a custom value…</option>
+          <option value="__custom__">{t("forms.schema.customOption")}</option>
         </select>
         {customActive && (
           <input
             type="text"
             className={cn(inputClass, "mt-1.5 w-full")}
             value={current}
-            placeholder="Custom value"
+            placeholder={t("forms.schema.customValue")}
             onChange={(event) => onChange(event.target.value)}
           />
         )}
@@ -350,7 +356,7 @@ function PrimitiveField({
         type="text"
         className={cn(inputClass, "w-full")}
         value={current}
-        placeholder={schema.pattern ? "Must match the schema pattern" : undefined}
+        placeholder={schema.pattern ? t("forms.schema.pattern") : undefined}
         onChange={(event) => onChange(event.target.value)}
       />
     );
@@ -385,10 +391,11 @@ function ArrayField({
   catalog?: Catalog;
   onChange: (value: unknown) => void;
 }) {
+  const { t } = useTranslation();
   const items = Array.isArray(value) ? value : [];
   const itemSchema = schema.items ?? {};
   const objectItems = schemaType(itemSchema) === "object";
-  const label = schema.title ?? labelFor(name);
+  const label = schema.title ?? labelFor(name, t);
 
   // Stable keys keep the enter/leave animation on the right row after removals.
   const idsRef = useRef<number[]>([]);
@@ -471,7 +478,7 @@ function ArrayField({
           onClick={add}
           className="content-button border-slate-200 bg-white text-slate-600 hover:border-slate-400"
         >
-          <Plus className="h-3 w-3" /> Add
+          <Plus className="h-3 w-3" /> {t("forms.schema.add")}
         </button>
       </div>
 
@@ -502,7 +509,7 @@ function ArrayField({
                   onClick={() => remove(id)}
                   disabled={exiting[id] === true}
                   className="content-icon-button h-[38px] w-[38px] shrink-0 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                  aria-label={`Remove ${label} ${index + 1}`}
+                  aria-label={t("forms.schema.remove", { label, index: index + 1 })}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -527,11 +534,11 @@ function ArrayField({
                     )}
                   />
                   <span className="truncate text-accordion-title font-medium text-slate-700">
-                    {itemTitle(item, index)}
+                    {itemTitle(item, index, t)}
                   </span>
                   {isRecord(item) && (
                     <span className="shrink-0 text-3xs text-slate-400">
-                      · {Object.keys(item).length} fields
+                      · {t("forms.schema.fields", { count: Object.keys(item).length })}
                     </span>
                   )}
                 </button>
@@ -540,7 +547,7 @@ function ArrayField({
                   onClick={() => remove(id)}
                   disabled={exiting[id] === true}
                   className="content-icon-button text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                  aria-label={`Remove ${label} ${index + 1}`}
+                  aria-label={t("forms.schema.remove", { label, index: index + 1 })}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -561,7 +568,7 @@ function ArrayField({
             </div>
           );
         })}
-        {!items.length && <p className="py-2 text-2xs text-slate-400">No entries yet.</p>}
+        {!items.length && <p className="py-2 text-2xs text-slate-400">{t("forms.schema.noEntries")}</p>}
       </div>
     </div>
   );
@@ -611,8 +618,9 @@ function Field({
   catalog?: Catalog;
   onChange: (value: unknown) => void;
 }) {
+  const { t } = useTranslation();
   const type = schemaType(schema);
-  const label = schema.title ?? labelFor(name);
+  const label = schema.title ?? labelFor(name, t);
 
   if (type === "object") {
     return (

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { CheckCircle2, FileUp, ShieldCheck, Trash2 } from "lucide-react";
 import { api } from "../lib/api";
 import type { ImportDiff, ImportInfo } from "../lib/types";
@@ -21,6 +22,7 @@ export function ImportView({
   files: string[];
   onAccepted: () => void | Promise<void>;
 }) {
+  const { t } = useTranslation();
   const [target, setTarget] = useState("");
   const [content, setContent] = useState("");
   const [staged, setStaged] = useState<ImportInfo[]>([]);
@@ -82,7 +84,7 @@ export function ImportView({
       setContent("");
       await refreshStaged();
       setSelected(target);
-      setNotice(`${target} staged. Review the diff before accepting it.`);
+      setNotice(t("views.import.notice.staged", { name: target }));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
@@ -98,7 +100,7 @@ export function ImportView({
       await api.acceptImport(toolId, selected);
       await refreshStaged();
       setDiff(null);
-      setNotice(`${selected} applied to the workspace model. Run Check to regenerate artifacts.`);
+      setNotice(t("views.import.notice.accepted", { name: selected }));
       await onAccepted();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
@@ -115,7 +117,7 @@ export function ImportView({
       await api.discardImport(toolId, selected);
       await refreshStaged();
       setDiff(null);
-      setNotice(`${selected} discarded.`);
+      setNotice(t("views.import.notice.discarded", { name: selected }));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
@@ -137,13 +139,12 @@ export function ImportView({
       <div className="flex items-start gap-2 rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
         <div>
-          <p>
-            Imports are never applied automatically. Stage YAML, review the diff, then accept it.
-            The console never receives cloud credentials.
-          </p>
+          <p>{t("views.import.guidance.stage")}</p>
           <p className="mt-1.5 text-sky-800">
-            Use <span className="font-semibold">Cloud connectors</span> in the header for AWS, Azure
-            and Google Cloud, or run a connector locally:
+            <Trans
+              i18nKey="views.import.guidance.connectors"
+              components={{ strong: <span className="font-semibold" /> }}
+            />
             <span className="font-mono"> python -m connectors.aws --profile &lt;profile&gt;</span>.
           </p>
         </div>
@@ -154,14 +155,14 @@ export function ImportView({
 
       <Card>
         <CardTitle
-          title="Stage a YAML proposal"
-          subtitle="Paste YAML or pick a file. The target must match one of this tool's model files."
+          title={t("views.import.stage.title")}
+          subtitle={t("views.import.stage.subtitle")}
         />
         <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)]">
           <div className="space-y-3">
             <label className="block">
               <span className="mb-1.5 block text-3xs font-semibold uppercase tracking-wider text-slate-400">
-                Target file
+                {t("views.import.target")}
               </span>
               <select
                 value={target}
@@ -177,11 +178,11 @@ export function ImportView({
             </label>
             <label className="block">
               <span className="mb-1.5 block text-3xs font-semibold uppercase tracking-wider text-slate-400">
-                Or upload
+                {t("views.import.upload")}
               </span>
               <span className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-2xs text-slate-500 hover:border-slate-400 hover:text-slate-700">
                 <FileUp className="h-3.5 w-3.5" />
-                Choose a YAML file
+                {t("views.import.chooseFile")}
                 <input
                   type="file"
                   accept=".yaml,.yml,.json,text/plain"
@@ -193,7 +194,7 @@ export function ImportView({
           </div>
           <div>
             <span className="mb-1.5 block text-3xs font-semibold uppercase tracking-wider text-slate-400">
-              Proposed content
+              {t("views.import.proposed")}
             </span>
             <textarea
               value={content}
@@ -206,7 +207,7 @@ export function ImportView({
         </div>
         <div className="mt-4 flex justify-end">
           <Button variant="primary" loading={busy === "stage"} disabled={!target || !content.trim()} onClick={() => void stage()}>
-            Stage proposal
+            {t("views.import.stageButton")}
           </Button>
         </div>
       </Card>
@@ -214,8 +215,10 @@ export function ImportView({
       <div className="grid gap-5 lg:grid-cols-[210px_minmax(0,1fr)]">
         <Card padded={false} className="overflow-hidden">
           <div className="border-b border-slate-200 px-4 py-3">
-            <p className="text-xs font-semibold text-slate-800">Staged proposals</p>
-            <p className="mt-0.5 text-3xs text-slate-400">{staged.length} waiting for review</p>
+            <p className="text-xs font-semibold text-slate-800">{t("views.import.staged.title")}</p>
+            <p className="mt-0.5 text-3xs text-slate-400">
+              {t("views.import.waiting", { count: staged.length })}
+            </p>
           </div>
           <div className="space-y-1 p-2">
             {staged.length ? (
@@ -223,7 +226,7 @@ export function ImportView({
                 <button
                   key={item.name}
                   onClick={() => setSelected(item.name)}
-                  title={`${item.name} · ${item.size} bytes`}
+                  title={`${item.name} · ${t("views.import.size", { count: item.size })}`}
                   className={cn(
                     "content-button w-full justify-between text-left font-mono",
                     item.name === selected
@@ -233,13 +236,13 @@ export function ImportView({
                 >
                   <span className="truncate">{item.name}</span>
                   <span className={cn("shrink-0 text-4xs", item.name === selected ? "text-slate-400" : "text-slate-400")}>
-                    {item.size} bytes
+                    {t("views.import.size", { count: item.size })}
                   </span>
                 </button>
               ))
             ) : (
               <p className="px-2.5 py-3 text-2xs leading-relaxed text-slate-400">
-                No proposal staged. Paste YAML above or run a local connector.
+                {t("views.import.staged.empty")}
               </p>
             )}
           </div>
@@ -247,14 +250,20 @@ export function ImportView({
 
         <Card>
           <CardTitle
-            title={diff ? `Diff · ${diff.file}` : "Diff"}
-            subtitle={diff ? (diff.changed ? "Review every line before accepting." : "No changes.") : undefined}
+            title={diff ? t("views.import.diff.titleFile", { file: diff.file }) : t("views.import.diff.title")}
+            subtitle={
+              diff
+                ? diff.changed
+                  ? t("views.import.diff.review")
+                  : t("views.import.diff.unchanged")
+                : undefined
+            }
             action={
               diff && (
                 <div className="flex gap-2">
                   <Button loading={busy === "discard"} disabled={!selected} onClick={() => void discard()}>
                     <Trash2 className="h-3.5 w-3.5" />
-                    Discard
+                    {t("views.import.discard")}
                   </Button>
                   <Button
                     variant="primary"
@@ -263,7 +272,7 @@ export function ImportView({
                     onClick={() => void accept()}
                   >
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    Accept
+                    {t("views.import.accept")}
                   </Button>
                 </div>
               )
@@ -278,7 +287,10 @@ export function ImportView({
               ))}
             </pre>
           ) : (
-            <EmptyState title="No diff to show" hint="Stage a proposal to compare it with the current model." />
+            <EmptyState
+              title={t("views.import.diff.emptyTitle")}
+              hint={t("views.import.diff.emptyHint")}
+            />
           )}
         </Card>
       </div>

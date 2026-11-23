@@ -8,6 +8,8 @@ from pathlib import Path
 
 import yaml
 
+from . import i18n
+
 ROOT = Path(__file__).resolve().parents[2]
 WEB_ROOT = ROOT / "web"
 REGISTRY_FILE = Path(__file__).with_name("tools.yaml")
@@ -59,15 +61,24 @@ class Tool:
         return self.workspace_dir / "artifacts"
 
 
-@lru_cache(maxsize=1)
-def load_tools() -> tuple[Tool, ...]:
+@lru_cache(maxsize=None)
+def load_tools(language: str = i18n.DEFAULT_LANGUAGE) -> tuple[Tool, ...]:
     data = yaml.safe_load(REGISTRY_FILE.read_text(encoding="utf-8"))
+    overrides = i18n.resource(language, "tools.yaml").get("tools", {})
+    if not isinstance(overrides, dict):
+        overrides = {}
     tools = []
     for item in data["tools"]:
+        translated = overrides.get(item["id"], {})
+        if not isinstance(translated, dict):
+            translated = {}
+        labels = translated.get("artifacts", {})
+        if not isinstance(labels, dict):
+            labels = {}
         artifacts = tuple(
             Artifact(
                 name=entry["name"],
-                label=entry["label"],
+                label=str(labels.get(entry["name"], entry["label"])),
                 kind=entry["kind"],
             )
             for entry in item.get("artifacts", [])
@@ -76,8 +87,8 @@ def load_tools() -> tuple[Tool, ...]:
             Tool(
                 id=item["id"],
                 name=item["name"],
-                tagline=item["tagline"],
-                description=item["description"],
+                tagline=str(translated.get("tagline", item["tagline"])),
+                description=str(translated.get("description", item["description"])),
                 accent=item.get("accent", "slate"),
                 icon=item.get("icon", "box"),
                 artifacts=artifacts,
@@ -86,8 +97,8 @@ def load_tools() -> tuple[Tool, ...]:
     return tuple(tools)
 
 
-def get_tool(tool_id: str) -> Tool:
-    for tool in load_tools():
+def get_tool(tool_id: str, language: str = i18n.DEFAULT_LANGUAGE) -> Tool:
+    for tool in load_tools(language):
         if tool.id == tool_id:
             return tool
     raise KeyError(f"Unknown tool: {tool_id}")
@@ -105,3 +116,7 @@ def public_tool(tool: Tool) -> dict:
             {"name": a.name, "label": a.label, "kind": a.kind} for a in tool.artifacts
         ],
     }
+
+
+def public_tools(language: str = i18n.DEFAULT_LANGUAGE) -> list[dict]:
+    return [public_tool(tool) for tool in load_tools(language)]

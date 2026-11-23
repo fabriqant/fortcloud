@@ -19,6 +19,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from . import i18n
+
 WEB_ROOT = Path(__file__).resolve().parents[1]
 PROPOSAL_FILE = "components.yaml"
 _TIMEOUT_SECONDS = 180
@@ -138,24 +140,41 @@ def _discover(kind: str) -> list[str]:
     return []
 
 
-def describe(provider: str | None = None) -> list[dict[str, Any]]:
+def describe(
+    provider: str | None = None,
+    language: str = i18n.DEFAULT_LANGUAGE,
+) -> list[dict[str, Any]]:
     """Metadata for the connector picker, including discovered non-secret identifiers."""
     if provider and provider not in PROVIDERS:
         raise ConnectorError(f"Unknown connector: {provider}")
+    translated = i18n.resource(language, "connectors.json").get("providers", {})
+    if not isinstance(translated, dict):
+        translated = {}
     result = []
     for key, spec in PROVIDERS.items():
         if provider and key != provider:
             continue
+        override = translated.get(key, {})
+        if not isinstance(override, dict):
+            override = {}
+        field_overrides = override.get("fields", {})
+        if not isinstance(field_overrides, dict):
+            field_overrides = {}
         fields = []
         for field in spec["fields"]:
             entry = dict(field)
+            field_override = field_overrides.get(field["name"], {})
+            if isinstance(field_override, dict):
+                for name in ("label", "help"):
+                    if name in field_override:
+                        entry[name] = str(field_override[name])
             entry["identifiers"] = _discover(field.get("discovery", "")) if field.get("discovery") else []
             fields.append(entry)
         result.append(
             {
                 "id": key,
                 "label": spec["label"],
-                "description": spec["description"],
+                "description": str(override.get("description", spec["description"])),
                 "installed": _installed(spec["sdk"]),
                 "fields": fields,
                 "proposal": PROPOSAL_FILE,

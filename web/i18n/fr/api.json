@@ -1,0 +1,3 @@
+{
+  "inventory_message": "La console ne se connecte pas directement aux clouds. Exécutez un connecteur local en lecture seule là où votre CLI cloud est configuré. Il écrit une proposition dans le dossier imports ; vérifiez-la dans l’onglet Import avant de l’accepter."
+}

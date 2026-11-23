@@ -10,12 +10,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import catalog, connectors, registry, runner, snapshots, structured, workspaces
+from . import catalog, connectors, i18n, registry, runner, snapshots, structured, workspaces
 
 SUITE_VERSION = "0.1.0"
 
@@ -82,8 +82,8 @@ def health() -> dict:
 
 
 @app.get("/api/tools")
-def tools() -> list[dict]:
-    return [registry.public_tool(tool) for tool in registry.load_tools()]
+def tools(request: Request) -> list[dict]:
+    return registry.public_tools(i18n.language_from_request(request))
 
 
 @app.get("/api/catalog")
@@ -147,8 +147,16 @@ def reset_model(tool_id: str) -> dict:
 
 
 @app.get("/api/{tool_id}/scenarios")
-def list_scenarios(tool_id: str) -> dict:
-    return snapshots.list_scenarios(_tool(tool_id))
+def list_scenarios(tool_id: str, request: Request) -> dict:
+    language = i18n.language_from_request(request)
+    result = snapshots.list_scenarios(_tool(tool_id))
+    descriptions = i18n.resource(language, "scenarios.json").get("descriptions", {})
+    if not isinstance(descriptions, dict):
+        return result
+    for scenario in result.get("scenarios", []):
+        if isinstance(scenario, dict) and scenario.get("name") in descriptions:
+            scenario["description"] = str(descriptions[scenario["name"]])
+    return result
 
 
 @app.post("/api/{tool_id}/scenarios")
@@ -273,10 +281,10 @@ def get_artifact(tool_id: str, name: str) -> dict:
 
 
 @app.get("/api/{tool_id}/data")
-def get_data(tool_id: str) -> dict:
+def get_data(tool_id: str, request: Request) -> dict:
     tool = _tool(tool_id)
     model, errors, warnings = runner.collect(tool)
-    result = structured.build(tool, model)
+    result = structured.build(tool, model, i18n.language_from_request(request))
     result.update({"tool": tool.id, "errors": errors, "warnings": warnings})
     return result
 
@@ -312,21 +320,27 @@ def put_document(tool_id: str, filename: str, payload: DocumentPayload) -> dict:
 
 
 @app.get("/api/{tool_id}/schemas")
-def list_schemas(tool_id: str) -> dict[str, str]:
+def list_schemas(tool_id: str, request: Request) -> dict[str, str]:
     tool = _tool(tool_id)
     core, _, _ = runner.load_modules(tool)
+    language = i18n.language_from_request(request)
     schemas = {}
     for _, schema_filename in core.FILES.values():
         path = tool.schema_dir / schema_filename
         if path.is_file():
-            schemas[schema_filename] = path.read_text(encoding="utf-8")
+            schemas[schema_filename] = i18n.translate_schema(
+                tool_id,
+                schema_filename,
+                path.read_text(encoding="utf-8"),
+                language,
+            )
     return schemas
 
 
 @app.get("/api/connectors")
-def list_connectors() -> list[dict]:
+def list_connectors(request: Request) -> list[dict]:
     """Connector metadata and discovered, non-secret identifiers."""
-    return connectors.describe()
+    return connectors.describe(language=i18n.language_from_request(request))
 
 
 @app.post("/api/connectors/run")
@@ -339,9 +353,10 @@ def run_connector(request: connectors.ConnectorRun) -> dict:
 
 
 @app.post("/api/atlas/inventory")
-def propose_inventory(request: InventoryRequest) -> dict:
+def propose_inventory(request: InventoryRequest, http_request: Request) -> dict:
     """Describe the local connectors; the console itself never reads a cloud account."""
     tool = registry.get_tool("atlas")
+    language = i18n.language_from_request(http_request)
     source = request.source or "aws"
     known = {"aws", "azure", "gcp"}
     command = (
@@ -349,17 +364,19 @@ def propose_inventory(request: InventoryRequest) -> dict:
         if source in known
         else "python -m connectors.aws --profile <profile> --region <region>"
     )
+    message = i18n.resource(language, "api.json").get(
+        "inventory_message",
+        "The console does not connect to clouds directly. Run a local read-only connector "
+        "where your cloud CLI is configured. It writes a proposal to the imports folder; "
+        "review it in the Import tab before accepting it.",
+    )
     return {
         "direct_access": False,
         "source": source,
         "connector": command,
-        "providers": connectors.describe(),
+        "providers": connectors.describe(language=language),
         "imports_dir": str(tool.workspace_dir / "imports"),
-        "message": (
-            "The console does not connect to clouds directly. Run a local read-only connector "
-            "where your cloud CLI is configured. It writes a proposal to the imports folder; "
-            "review it in the Import tab before accepting it."
-        ),
+        "message": str(message),
     }
 
 

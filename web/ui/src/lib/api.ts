@@ -1,3 +1,4 @@
+import { getLocale } from "./locale";
 import type {
   ArtifactInfo,
   ArtifactPayload,
@@ -20,7 +21,11 @@ import type {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, {
     ...init,
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept-Language": getLocale(),
+      ...(init?.headers ?? {}),
+    },
   });
   if (!response.ok) {
     let detail = response.statusText;

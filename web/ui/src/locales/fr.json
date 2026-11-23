@@ -1,0 +1,14 @@
+{
+  "common.version_one": "{{count}} version",
+  "common.version_other": "{{count}} versions",
+  "common.row_one": "{{count}} ligne",
+  "common.row_other": "{{count}} lignes",
+  "common.value_one": "{{count}} valeur",
+  "common.value_other": "{{count}} valeurs",
+  "common.field_one": "{{count}} champ",
+  "common.field_other": "{{count}} champs",
+  "common.byte_one": "{{count}} octet",
+  "common.byte_other": "{{count}} octets",
+  "import.waiting_one": "{{count}} proposition en attente de revue",
+  "import.waiting_other": "{{count}} propositions en attente de revue"
+}

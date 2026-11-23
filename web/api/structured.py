@@ -5,8 +5,9 @@ from __future__ import annotations
 import json
 import re
 from collections import Counter
+from functools import lru_cache
 
-from . import registry, runner, workspaces
+from . import i18n, registry, runner, workspaces
 
 _MERMAID = re.compile(r"```mermaid\s*\n(.*?)\n```", re.DOTALL)
 _DANGER = ("spof", "critical", "failed", "overdue", "blocked", "at_risk")
@@ -47,11 +48,28 @@ def _label(key: str) -> str:
     return _KPI_LABELS.get(key, key.replace("_", " ").strip().capitalize())
 
 
-def _value(item) -> str:
+@lru_cache(maxsize=None)
+def _strings(language: str) -> dict:
+    return i18n.resource(language, "structured.json")
+
+
+def _display(language: str, section: str, value: str, fallback: str | None = None) -> str:
+    entries = _strings(language).get(section, {})
+    default = fallback if fallback is not None else value
+    return str(entries.get(value, default)) if isinstance(entries, dict) else default
+
+
+def _label_for(key: str, language: str) -> str:
+    return _display(language, "labels", key) if key in _strings(language).get("labels", {}) else _label(key)
+
+
+def _value(item, language: str = i18n.DEFAULT_LANGUAGE) -> str:
     if item is None:
         return "-"
     if isinstance(item, bool):
-        return "Yes" if item else "No"
+        yes = _display(language, "values", "Yes")
+        no = _display(language, "values", "No")
+        return yes if item else no
     if isinstance(item, (list, tuple, set)):
         return ", ".join(str(entry) for entry in item)
     if isinstance(item, dict):
@@ -59,7 +77,13 @@ def _value(item) -> str:
     return str(item)
 
 
-def _table(table_id: str, label: str, rows: list[dict], limit: int = 40) -> dict | None:
+def _table(
+    table_id: str,
+    label: str,
+    rows: list[dict],
+    limit: int = 40,
+    language: str = i18n.DEFAULT_LANGUAGE,
+) -> dict | None:
     rows = [row for row in rows if isinstance(row, dict)]
     if not rows:
         return None
@@ -70,9 +94,9 @@ def _table(table_id: str, label: str, rows: list[dict], limit: int = 40) -> dict
                 columns.append(key)
     return {
         "id": table_id,
-        "label": label,
-        "columns": [{"key": key, "label": _label(key)} for key in columns],
-        "rows": [{key: _value(row.get(key)) for key in columns} for row in rows[:limit]],
+        "label": _display(language, "tables", label, fallback=_label_for(label, language)),
+        "columns": [{"key": key, "label": _label_for(key, language)} for key in columns],
+        "rows": [{key: _value(row.get(key), language) for key in columns} for row in rows[:limit]],
         "total": len(rows),
     }
 
@@ -100,7 +124,7 @@ def _counts(model: dict | None) -> dict[str, int]:
     return counts
 
 
-def _kpis(summary: dict) -> list[dict]:
+def _kpis(summary: dict, language: str = i18n.DEFAULT_LANGUAGE) -> list[dict]:
     keys = [
         key
         for key, value in summary.items()
@@ -116,13 +140,13 @@ def _kpis(summary: dict) -> list[dict]:
     for key in keys[:4]:
         lowered = key.lower()
         tone = "danger" if any(t in lowered for t in _DANGER) else "warning" if any(t in lowered for t in _WARNING) else "neutral"
-        result.append({"label": _label(key), "value": summary[key], "tone": tone, "key": key})
+        result.append({"label": _label_for(key, language), "value": summary[key], "tone": tone, "key": key})
     return result
 
 
-def _charts(summary: dict) -> list[dict]:
+def _charts(summary: dict, language: str = i18n.DEFAULT_LANGUAGE) -> list[dict]:
     data = [
-        {"name": _label(key), "value": value}
+        {"name": _label_for(key, language), "value": value}
         for key, value in summary.items()
         if isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0
     ]
@@ -131,7 +155,7 @@ def _charts(summary: dict) -> list[dict]:
     return [
         {
             "id": "summary",
-            "label": "Model at a glance",
+            "label": _display(language, "charts", "Model at a glance"),
             "type": "bar",
             "data": data[:10],
         }
@@ -149,22 +173,32 @@ def _graph(tool: registry.Tool) -> str:
     return ""
 
 
-def _generic_tables(tool: registry.Tool, model: dict | None, payload: dict) -> list[dict]:
+def _generic_tables(
+    tool: registry.Tool,
+    model: dict | None,
+    payload: dict,
+    language: str = i18n.DEFAULT_LANGUAGE,
+) -> list[dict]:
     tables = []
     for key, value in payload.items():
-        table = _table(key, _label(key), value) if isinstance(value, list) else None
+        table = _table(key, key, value, language=language) if isinstance(value, list) else None
         if table:
             tables.append(table)
     for key, value in (model or {}).items():
         groups = value.items() if isinstance(value, dict) else [(key, value)]
         for group_key, rows in groups:
-            table = _table(f"model-{group_key}", _label(group_key), rows if isinstance(rows, list) else [])
+            table = _table(
+                f"model-{group_key}",
+                group_key,
+                rows if isinstance(rows, list) else [],
+                language=language,
+            )
             if table:
                 tables.append(table)
     return tables
 
 
-def _atlas(tool: registry.Tool, model: dict) -> dict:
+def _atlas(tool: registry.Tool, model: dict, language: str = i18n.DEFAULT_LANGUAGE) -> dict:
     core, _, _ = runner.load_modules(tool)
     components = model.get("components", [])
     risks = model.get("risks", [])
@@ -192,20 +226,43 @@ def _atlas(tool: registry.Tool, model: dict) -> dict:
     }
 
     kpis = [
-        {"label": "Single points of failure", "value": len(spofs), "tone": "danger", "key": "spofs"},
-        {"label": "Critical risks", "value": len(critical), "tone": "danger", "key": "critical_risks"},
-        {"label": "P0 in one region", "value": len(single_region), "tone": "warning", "key": "single_region_p0"},
-        {"label": "Components mapped", "value": len(components), "tone": "neutral", "key": "components"},
+        {
+            "label": _display(language, "labels", "Single points of failure"),
+            "value": len(spofs),
+            "tone": "danger",
+            "key": "spofs",
+        },
+        {
+            "label": _display(language, "labels", "Critical risks"),
+            "value": len(critical),
+            "tone": "danger",
+            "key": "critical_risks",
+        },
+        {
+            "label": _display(language, "labels", "P0 in one region"),
+            "value": len(single_region),
+            "tone": "warning",
+            "key": "single_region_p0",
+        },
+        {
+            "label": _display(language, "labels", "Components mapped"),
+            "value": len(components),
+            "tone": "neutral",
+            "key": "components",
+        },
     ]
 
     severity_counts = Counter(label for label, _ in scored)
     charts = [
         {
             "id": "risk-severity",
-            "label": "Risk severity",
+            "label": _display(language, "charts", "Risk severity"),
             "type": "bar",
             "data": [
-                {"name": name, "value": severity_counts.get(key, 0)}
+                {
+                    "name": _display(language, "charts", name),
+                    "value": severity_counts.get(key, 0),
+                }
                 for key, name in (
                     ("critical", "Critical"),
                     ("high", "High"),
@@ -216,10 +273,13 @@ def _atlas(tool: registry.Tool, model: dict) -> dict:
         },
         {
             "id": "criticality",
-            "label": "Components by criticality",
+            "label": _display(language, "charts", "Components by criticality"),
             "type": "donut",
             "data": [
-                {"name": name, "value": count}
+                {
+                    "name": _display(language, "labels", name),
+                    "value": count,
+                }
                 for name, count in sorted(Counter(c.get("criticality", "") for c in components).items())
             ],
         },
@@ -229,7 +289,14 @@ def _atlas(tool: registry.Tool, model: dict) -> dict:
         {
             "id": component.get("id", ""),
             "name": component.get("name", ""),
-            "category": core.CATEGORY_LABELS.get(component.get("category", ""), component.get("category", "")),
+            "category": _display(
+                language,
+                "categories",
+                component.get("category", ""),
+                fallback=core.CATEGORY_LABELS.get(
+                    component.get("category", ""), component.get("category", "")
+                ),
+            ),
             "criticality": component.get("criticality", ""),
             "owner": component.get("owner", ""),
             "risks": ", ".join(risks_by_component.get(component.get("id", ""), [])),
@@ -273,9 +340,9 @@ def _atlas(tool: registry.Tool, model: dict) -> dict:
     tables = [
         table
         for table in (
-            _table("spofs", "Single points of failure", spof_rows, limit=20),
-            _table("risks", "Risk register", risk_rows, limit=30),
-            _table("flows", "Business flows", flow_rows, limit=20),
+            _table("spofs", "Single points of failure", spof_rows, limit=20, language=language),
+            _table("risks", "Risk register", risk_rows, limit=30, language=language),
+            _table("flows", "Business flows", flow_rows, limit=20, language=language),
         )
         if table
     ]
@@ -288,15 +355,15 @@ def _atlas(tool: registry.Tool, model: dict) -> dict:
     }
 
 
-def build(tool: registry.Tool, model: dict | None) -> dict:
+def build(tool: registry.Tool, model: dict | None, language: str = i18n.DEFAULT_LANGUAGE) -> dict:
     payload = _status_payload(tool)
     if tool.id == "atlas" and model:
-        return _atlas(tool, model)
+        return _atlas(tool, model, language)
     summary = dict(payload.get("summary") or _counts(model))
     return {
         "summary": summary,
-        "kpis": _kpis(summary),
-        "charts": _charts(summary),
-        "tables": _generic_tables(tool, model, payload),
+        "kpis": _kpis(summary, language),
+        "charts": _charts(summary, language),
+        "tables": _generic_tables(tool, model, payload, language),
         "graph": _graph(tool),
     }

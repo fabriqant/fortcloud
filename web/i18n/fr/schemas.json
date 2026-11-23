@@ -1,0 +1,32 @@
+{
+  "titles": {
+    "Component inventory": "Inventaire des composants",
+    "Dependency graph": "Graphe de dépendances",
+    "Business flows and resilience objectives": "Flux métier et objectifs de résilience",
+    "FMEA risk register": "Registre des risques FMEA",
+    "Failover topology": "Topologie de bascule",
+    "Failover strategies": "Stratégies de bascule",
+    "Business services and availability objectives": "Services métier et objectifs de disponibilité",
+    "Failover drill evidence": "Preuves d’exercice de bascule",
+    "Business services and recovery targets": "Services métier et cibles de récupération",
+    "Data asset inventory": "Inventaire des actifs de données",
+    "Backup policies": "Politiques de sauvegarde",
+    "Restore evidence": "Preuves de restauration",
+    "Services and latency budgets": "Services et budgets de latence",
+    "Resilience policies": "Politiques de résilience",
+    "Call chains and steps": "Chaînes d’appels et étapes",
+    "Outbound dependencies": "Dépendances sortantes",
+    "Monitored services": "Services supervisés",
+    "Health and data-quality signals": "Signaux de santé et de qualité des données",
+    "Service-level objectives": "Objectifs de niveau de service",
+    "SLO verification evidence": "Preuves de vérification SLO",
+    "Secret inventory — references only": "Inventaire des secrets — références uniquement",
+    "Environments, identities and privileges": "Environnements, identités et privilèges",
+    "Controlled deployment pipelines": "Pipelines de déploiement contrôlés",
+    "Logging of sensitive operations": "Journalisation des opérations sensibles",
+    "Failure scenarios and responsibilities": "Scénarios de défaillance et responsabilités",
+    "Controlled rehearsal environments": "Environnements de répétition contrôlés",
+    "Exercise communication plan": "Plan de communication d’exercice",
+    "Service/data verification and signatures": "Vérification des services/données et signatures"
+  }
+}

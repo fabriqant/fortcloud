@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, Save } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { api } from "../lib/api";
 import type { Catalog, ModelFormat } from "../lib/types";
 import { cn } from "../lib/utils";
@@ -15,6 +16,7 @@ export function FormView({
   catalog: Catalog;
   onSaved: () => void | Promise<void>;
 }) {
+  const { t } = useTranslation();
   const [formats, setFormats] = useState<ModelFormat[]>([]);
   const [schemas, setSchemas] = useState<Record<string, string>>({});
   const [activeFile, setActiveFile] = useState("");
@@ -84,7 +86,7 @@ export function FormView({
     try {
       const cleaned = cleanDocument(document, schema, true) as Record<string, unknown>;
       await api.saveDocument(toolId, activeFile, cleaned);
-      setNotice(`${activeFile} saved. The YAML editor stays the source of truth.`);
+      setNotice(t("forms.view.saved", { file: activeFile }));
       await onSaved();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
@@ -96,8 +98,7 @@ export function FormView({
   return (
     <div className="space-y-5">
       <p className="max-w-2xl text-2xs leading-relaxed text-slate-500">
-        Fields suggest reusable values from your local reference catalog. You can still type any
-        value required by the schema.
+        {t("forms.view.guidance")}
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -134,14 +135,14 @@ export function FormView({
           <div className="flex justify-end">
             <Button variant="primary" loading={busy} onClick={() => void save()}>
               <Save className="h-3.5 w-3.5" />
-              Save structured model
+              {t("forms.view.save")}
             </Button>
           </div>
         </>
       ) : (
         <EmptyState
-          title="No editor for this file"
-          hint="The JSON Schema for this model file could not be loaded. Use the YAML tab instead."
+          title={t("forms.view.noEditor")}
+          hint={t("forms.view.noEditorHint")}
         />
       )}
 

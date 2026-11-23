@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Camera, GitCompare, Plus, RotateCcw, Trash2 } from "lucide-react";
 import { api } from "../lib/api";
 import type { ScenarioState } from "../lib/types";
 import { cn } from "../lib/utils";
 import { Badge, Button, Card, CardTitle } from "./ui";
 
-function dateLabel(value: string): string {
-  if (!value) return "bundled";
+function dateLabel(value: string, language: string, bundled: string): string {
+  if (!value) return bundled;
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+  return Number.isNaN(date.getTime())
+    ? value
+    : new Intl.DateTimeFormat(language, { dateStyle: "medium", timeStyle: "short" }).format(date);
 }
 
 export function ScenarioView({
@@ -22,6 +25,7 @@ export function ScenarioView({
   state: ScenarioState | null;
   onChanged: (state: ScenarioState) => void;
 }) {
+  const { t, i18n } = useTranslation();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [label, setLabel] = useState("");
@@ -63,23 +67,30 @@ export function ScenarioView({
       const lines = result.files.flatMap((file) =>
         file.changed ? [`### ${file.file}`, file.diff] : [],
       );
-      setDiff(lines.join("\n\n") || "No differences between these versions.");
+      setDiff(lines.join("\n\n") || t("views.scenarios.compare.empty"));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
       setBusy(false);
     }
-  }, [toolId, left, right]);
+  }, [toolId, left, right, t]);
 
   if (!active) return null;
 
   const options = [
-    { value: "current", label: "Current live model" },
+    { value: "current", label: t("views.scenarios.compare.label.current") },
     ...scenarios.flatMap((scenario) => [
-      { value: scenario.name, label: `${scenario.name} · latest` },
+      {
+        value: scenario.name,
+        label: t("views.scenarios.compare.label.latest", { name: scenario.name }),
+      },
       ...scenario.versions.map((version) => ({
         value: `${scenario.name}:${version.version}`,
-        label: `${scenario.name} · v${version.version}${version.label ? ` · ${version.label}` : ""}`,
+        label:
+          t("views.scenarios.compare.label.version", {
+            name: scenario.name,
+            version: version.version,
+          }) + (version.label ? ` · ${version.label}` : ""),
       })),
     ]),
   ];
@@ -87,9 +98,10 @@ export function ScenarioView({
   return (
     <div className="space-y-5">
       <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
-        Scenarios keep independent copies of this tool's model. Switching one restores its latest
-        version; <span className="font-semibold">Snapshot</span> records the current files as a new
-        version before you continue.
+        <Trans
+          i18nKey="views.scenarios.guidance"
+          components={{ strong: <span className="font-semibold" /> }}
+        />
       </div>
 
       {error && (
@@ -98,9 +110,9 @@ export function ScenarioView({
 
       <Card>
         <CardTitle
-          title="Scenarios"
-          subtitle={`Active: ${activeScenario}`}
-          action={<Badge tone="blue">{scenarios.length} total</Badge>}
+          title={t("views.scenarios.title")}
+          subtitle={t("views.scenarios.active", { name: activeScenario })}
+          action={<Badge tone="blue">{t("views.scenarios.count", { count: scenarios.length })}</Badge>}
         />
         <div className="divide-y divide-slate-100">
           {scenarios.map((scenario) => (
@@ -114,16 +126,22 @@ export function ScenarioView({
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-xs font-semibold">{scenario.name}</span>
-                  {scenario.active && <Badge tone="green">active</Badge>}
+                  {scenario.active && <Badge tone="green">{t("views.scenarios.badge.active")}</Badge>}
                   <span className="text-3xs text-slate-400">
-                    {scenario.versions.length} version{scenario.versions.length === 1 ? "" : "s"}
+                    {t("views.scenarios.version", { count: scenario.versions.length })}
                   </span>
                 </div>
                 {scenario.description && (
                   <p className="mt-0.5 text-2xs text-slate-500">{scenario.description}</p>
                 )}
                 <p className="mt-0.5 text-3xs text-slate-400">
-                  Updated {dateLabel(scenario.updated_at || scenario.created_at)}
+                  {t("views.scenarios.updated", {
+                    date: dateLabel(
+                      scenario.updated_at || scenario.created_at,
+                      i18n.language,
+                      t("views.scenarios.bundled"),
+                    ),
+                  })}
                 </p>
               </div>
               <div className="flex items-center gap-1.5">
@@ -132,7 +150,7 @@ export function ScenarioView({
                     disabled={busy}
                     onClick={() => run(() => api.activateScenario(toolId, scenario.name))}
                   >
-                    <RotateCcw className="h-3 w-3" /> Activate
+                    <RotateCcw className="h-3 w-3" /> {t("views.scenarios.activate")}
                   </Button>
                 )}
                 {scenario.name !== "base" && (
@@ -140,7 +158,7 @@ export function ScenarioView({
                     disabled={busy}
                     onClick={() => run(() => api.deleteScenario(toolId, scenario.name))}
                   >
-                    <Trash2 className="h-3 w-3" /> Delete
+                    <Trash2 className="h-3 w-3" /> {t("views.scenarios.delete")}
                   </Button>
                 )}
               </div>
@@ -150,23 +168,23 @@ export function ScenarioView({
         <div className="mt-4 flex flex-wrap items-end gap-2 border-t border-slate-100 pt-4">
           <label className="min-w-[180px] flex-1">
             <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
-              New scenario
+              {t("views.scenarios.new")}
             </span>
             <input
               className="form-control w-full"
               value={name}
-              placeholder="e.g. cost-optimisation"
+              placeholder={t("views.scenarios.namePlaceholder")}
               onChange={(event) => setName(event.target.value)}
             />
           </label>
           <label className="min-w-[220px] flex-1">
             <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
-              Description
+              {t("views.scenarios.description")}
             </span>
             <input
               className="form-control w-full"
               value={description}
-              placeholder="Optional"
+              placeholder={t("views.scenarios.optional")}
               onChange={(event) => setDescription(event.target.value)}
             />
           </label>
@@ -182,21 +200,21 @@ export function ScenarioView({
               })
             }
           >
-            <Plus className="h-3 w-3" /> Create
+            <Plus className="h-3 w-3" /> {t("views.scenarios.create")}
           </Button>
         </div>
       </Card>
 
       <Card>
         <CardTitle
-          title="Version history"
-          subtitle={`Snapshots of ${activeScenario}`}
+          title={t("views.scenarios.history.title")}
+          subtitle={t("views.scenarios.history.subtitle", { name: activeScenario })}
           action={
             <div className="flex items-center gap-2">
               <input
                 className="form-control w-40"
                 value={label}
-                placeholder="Label (optional)"
+                placeholder={t("views.scenarios.history.labelPlaceholder")}
                 onChange={(event) => setLabel(event.target.value)}
               />
               <Button
@@ -209,7 +227,7 @@ export function ScenarioView({
                   })
                 }
               >
-                <Camera className="h-3 w-3" /> Snapshot
+                <Camera className="h-3 w-3" /> {t("views.scenarios.history.snapshot")}
               </Button>
             </div>
           }
@@ -225,23 +243,28 @@ export function ScenarioView({
                   v{version.version.toString().padStart(3, "0")}
                 </span>
                 <span className="min-w-0 flex-1 truncate text-slate-500">
-                  {version.label || "Automatic version"}
+                  {version.label || t("views.scenarios.history.automatic")}
                 </span>
-                <span className="text-3xs text-slate-400">{dateLabel(version.created_at)}</span>
+                <span className="text-3xs text-slate-400">
+                  {dateLabel(version.created_at, i18n.language, t("views.scenarios.bundled"))}
+                </span>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-slate-500">No snapshot yet in this scenario.</p>
+          <p className="text-xs text-slate-500">{t("views.scenarios.history.empty")}</p>
         )}
       </Card>
 
       <Card>
-        <CardTitle title="Compare" subtitle="Unified diff of two model states" />
+        <CardTitle
+          title={t("views.scenarios.compare.title")}
+          subtitle={t("views.scenarios.compare.subtitle")}
+        />
         <div className="flex flex-wrap items-end gap-2">
           <label className="min-w-[200px] flex-1">
             <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
-              From
+              {t("views.scenarios.compare.from")}
             </span>
             <select
               className="form-control w-full"
@@ -257,7 +280,7 @@ export function ScenarioView({
           </label>
           <label className="min-w-[200px] flex-1">
             <span className="mb-1 block text-3xs font-semibold uppercase tracking-wider text-slate-500">
-              To
+              {t("views.scenarios.compare.to")}
             </span>
             <select
               className="form-control w-full"
@@ -272,7 +295,7 @@ export function ScenarioView({
             </select>
           </label>
           <Button variant="primary" disabled={busy || !right} onClick={runCompare}>
-            <GitCompare className="h-3 w-3" /> Compare
+            <GitCompare className="h-3 w-3" /> {t("views.scenarios.compare.button")}
           </Button>
         </div>
         {diff && (

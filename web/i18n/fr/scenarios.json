@@ -1,0 +1,8 @@
+{
+  "descriptions": {
+    "base": "Modèle d’exemple fourni",
+    "region-loss-eu-west-1": "La région principale eu-west-1 est perdue : promouvoir les secours eu-west-3, vérifier les RTO/RPO et actualiser les preuves.",
+    "ransomware-restore": "Ransomware sur les données de production : restaurer depuis des copies immuables hors ligne dans un environnement sain et vérifier les sommes de contrôle avant la bascule.",
+    "idp-outage-failover": "Panne du fournisseur d’identité principal : fédérer le fournisseur secondaire, s’appuyer sur les caches de session locaux et prouver que la connexion respecte le RTO."
+  }
+}

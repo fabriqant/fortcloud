@@ -18,7 +18,8 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 - JSON Schemas served to the browser and displayed in a dedicated tab.
 - Error and warning panel with the exact diagnostics returned by the tool.
 - Optional local read-only AWS, Azure and GCP connectors that write an Atlas proposal for review.
-- API and connector tests plus a production UI build in CI.
+- English and French display languages. The browser stores the choice in `localStorage["fortcloud.locale"]`, sends `Accept-Language` with each API call, and only translates labels and prose: model files, identifiers, enum values, catalog values and generated artifacts stay in English.
+- API, connector and display-metadata tests plus a production UI build in CI.
 
 Not included: direct cloud access from the browser or API, Monaco-based YAML completion, authentication and multi-user hosting.
 
@@ -26,7 +27,7 @@ Not included: direct cloud access from the browser or API, Monaco-based YAML com
 
 ```text
 Browser (React + Vite)
-  │  JSON over HTTP
+  │  JSON over HTTP + Accept-Language
   ▼
 FastAPI (web/api)
   │  imports fortcloud_atlas, fortcloud_failover, ... directly
@@ -76,6 +77,10 @@ npm run dev
 Open <http://127.0.0.1:5173>.
 
 For a single-process setup, build the UI (`cd web/ui && npm run build`) and start the API. It serves `web/ui/dist` automatically at <http://127.0.0.1:8000>.
+
+## Display language
+
+The console starts in English. Use the **EN / FR** control in the sidebar footer to switch; the choice is stored in `localStorage["fortcloud.locale"]` and the page reloads so both UI strings and server-provided metadata stay consistent. The browser sends `Accept-Language` on every API request; `?lang=fr` is also accepted on GET endpoints for testing. Translation resources live in `web/i18n/fr/` and `web/ui/src/locales/fr/`. English is the fallback when a key is missing. Only display labels and prose are translated: model files, IDs, enum values, catalog values, validation messages and generated artifacts remain English in this phase.
 
 ## Local cloud connectors (optional)
 
@@ -158,9 +163,19 @@ web/
 │   ├── workspaces.py     file storage and example seeding
 │   ├── snapshots.py      named scenarios, versions and comparison
 │   ├── runner.py         imports the tool packages and runs check()
-│   └── structured.py     view models for KPIs, charts and tables
+│   ├── structured.py     view models for KPIs, charts and tables
+│   └── i18n.py           request language and display-resource loader
+├── i18n/fr/
+│   ├── tools.yaml        French tool taglines, descriptions and artifact labels
+│   ├── connectors.json   French connector field labels and help text
+│   ├── structured.json   French KPI, chart, table and category labels
+│   ├── schemas.json      French JSON Schema titles
+│   ├── scenarios.json    French starter scenario descriptions
+│   └── api.json          French inventory message
 ├── ui/
 │   ├── src/App.tsx       routes, layout, actions and state
+│   ├── src/i18n.ts       react-i18next setup and locale bundles
+│   ├── src/locales/      English and French UI strings
 │   └── src/components/   home page, sidebar, forms, cards, graph, tables, editor, outputs
 ├── connectors/
 │   ├── common.py         shared component mapping and slugging
@@ -183,6 +198,7 @@ web/
 │   ├── test_api.py       API and import smoke tests
 │   ├── test_catalog.py   reference catalog CRUD tests
 │   ├── test_snapshots.py scenario, snapshot and comparison tests
+│   ├── test_i18n.py      English fallback and French display metadata
 │   ├── test_connectors_api.py connector registry and runner
 │   ├── test_aws_connector.py  connector mapping with a fake session
 │   ├── test_azure_connector.py

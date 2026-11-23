@@ -1,0 +1,57 @@
+tools:
+  atlas:
+    tagline: "Cartographiez les dépendances. Visualisez les risques."
+    description: "Atlas modélise les dépendances d’infrastructure sous forme d’un graphe validé et audité. Il expose les points de défaillance uniques, les composants P0 d’une seule région, les risques FMEA et la couverture RTO/RPO à partir de components.yaml, dependencies.yaml, flows.yaml et risks.yaml. La commande `check` reconstruit le graphe de dépendances et le rapport de résilience afin que chaque affirmation puisse être retracée jusqu’au modèle."
+    artifacts:
+      dependency-graph.md: "Graphe de dépendances"
+      resilience-report.md: "Rapport de résilience"
+  failover:
+    tagline: "Éliminez les défaillances par conception."
+    description: "Failover modélise la topologie, les services, les stratégies et les exercices afin de prouver qu’une bascule est réelle. Il vérifie les paires primaire/secours, la détection et la promotion au regard du RTO, la réplication au regard du RPO, la capacité et le TTL DNS, ainsi que la fraîcheur des exercices. La commande `check` produit une matrice de couverture, un plan de remédiation, une liste de contrôle des exercices et l’état CI."
+    artifacts:
+      failover-matrix.md: "Matrice de bascule"
+      failover-plan.md: "Plan de bascule"
+      drill-scenarios.md: "Scénarios d’exercice"
+      failover-status.json: "État"
+  ark:
+    tagline: "Prouvez que les restaurations fonctionnent."
+    description: "Ark modélise les actifs de données, les politiques de sauvegarde et les preuves de restauration datées. Il vérifie la couverture P0, l’immuabilité, le chiffrement, la planification au regard du RPO, les RTO/RPO mesurés et les scénarios de restauration, puis publie la couverture des sauvegardes, les preuves de restauration, le plan de récupération et l’état CI. Une sauvegarde n’est réelle que lorsqu’un test daté a mesuré la restauration."
+    artifacts:
+      backup-coverage.md: "Couverture des sauvegardes"
+      restore-evidence.md: "Preuves de restauration"
+      recovery-plan.md: "Plan de récupération"
+      restore-status.json: "État"
+  ballast:
+    tagline: "Tenez la latence sous contrôle."
+    description: "Ballast modélise les appels sortants, les règles de résilience et les flux ordonnés afin de respecter les engagements de latence même en cas de défaillance. Il calcule les budgets de timeout dans le pire cas, vérifie les nouvelles tentatives, la gigue, les disjoncteurs, les cloisons et les solutions de repli, et signale les nouvelles tentatives non idempotentes ou les chaînes dont le budget est trop grossier. La commande `check` produit le budget de timeout, la matrice des règles, le plan de remédiation et l’état CI."
+    artifacts:
+      timeout-budget.md: "Budget de timeout"
+      policy-matrix.md: "Matrice des règles"
+      resilience-plan.md: "Plan de résilience"
+      ballast-status.json: "État"
+  vitals:
+    tagline: "Mesurez ce qui fonctionne."
+    description: "Vitals modélise les services, les signaux, les SLO et les vérifications afin de transformer la supervision en preuves. Il associe les types et les intervalles de signaux aux objectifs, vérifie les seuils d’alerte au regard des budgets d’erreur, exige des objectifs de qualité des données et des runbooks pour les services P0, et signale les vérifications obsolètes. La commande `check` produit un tableau de bord SLO, un catalogue de signaux, un plan de qualité et l’état CI."
+    artifacts:
+      slo-dashboard.md: "Tableau de bord SLO"
+      signal-catalog.md: "Catalogue des signaux"
+      quality-plan.md: "Plan de qualité"
+      vitals-status.json: "État"
+  custodian:
+    tagline: "Rendez les accès auditables."
+    description: "Custodian modélise les identités, les octrois, les secrets, les récepteurs d’audit et les pipelines de déploiement. Il applique le moindre privilège, l’isolation des environnements, des secrets référencés uniquement, la rotation, des récepteurs d’audit immuables et des déploiements revus avec une restauration vérifiée. La commande `check` génère les inventaires des accès et des secrets, le contrôle des modifications, la piste d’audit et l’état CI."
+    artifacts:
+      access-matrix.md: "Matrice des accès"
+      secret-inventory.md: "Inventaire des secrets"
+      change-control.md: "Contrôle des modifications"
+      audit-trail.md: "Piste d’audit"
+      custodian-status.json: "État"
+  crucible:
+    tagline: "Répétez les scénarios de panne."
+    description: "Crucible modélise les exercices de défaillance, les participants, les canaux, la vérification et les validations. Il impose des répétitions en environnement contrôlé avant les exercices en production, quatre rôles nommés, une cadence de notification et des contrôles de service et de données réussis avec preuves. La commande `check` produit le plan de scénarios, la matrice des rôles, le plan de communication, le rapport de vérification et l’état CI."
+    artifacts:
+      scenario-plan.md: "Plan de scénarios"
+      roles-matrix.md: "Matrice des rôles"
+      communication-plan.md: "Plan de communication"
+      verification-report.md: "Rapport de vérification"
+      crucible-status.json: "État"

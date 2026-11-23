@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AlertCircle, CheckCircle2, Cloud, Play, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { api } from "../lib/api";
 import type { ConnectorInfo, ConnectorRunResult } from "../lib/types";
 import { cn } from "../lib/utils";
@@ -23,6 +24,7 @@ export function ConnectorModal({
   onClose: () => void;
   onOpenImport: () => void;
 }) {
+  const { t } = useTranslation();
   const [providers, setProviders] = useState<ConnectorInfo[]>([]);
   const [selectedId, setSelectedId] = useState("");
   const [values, setValues] = useState<Record<string, string>>({});
@@ -95,7 +97,7 @@ export function ConnectorModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Cloud connectors"
+        aria-label={t("modals.connector.title")}
         className="flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
       >
         <header className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
@@ -104,16 +106,17 @@ export function ConnectorModal({
               <Cloud className="h-4 w-4" />
             </span>
             <div>
-              <h2 className="text-sm font-semibold text-slate-900">Cloud connectors</h2>
+              <h2 className="text-sm font-semibold text-slate-900">
+                {t("modals.connector.title")}
+              </h2>
               <p className="mt-1 max-w-xl text-2xs leading-relaxed text-slate-500">
-                Runs locally with your cloud CLI configuration. The console receives only
-                identifiers — never credentials — and never writes to the model directly.
+                {t("modals.connector.description")}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close connectors"
+            aria-label={t("modals.connector.close")}
             className="content-icon-button text-slate-400 hover:bg-slate-100 hover:text-slate-700"
           >
             <X className="h-4 w-4" />
@@ -150,7 +153,9 @@ export function ConnectorModal({
                       selected.installed ? "text-emerald-600" : "text-amber-600",
                     )}
                   >
-                    {selected.installed ? "SDK available" : "SDK missing"}
+                    {selected.installed
+                      ? t("modals.connector.sdkAvailable")
+                      : t("modals.connector.sdkMissing")}
                   </span>
                 </div>
                 <p className="mt-1 text-2xs leading-relaxed text-slate-500">{selected.description}</p>
@@ -190,15 +195,16 @@ export function ConnectorModal({
               </div>
 
               <p className="rounded-md bg-slate-50 px-3 py-2 text-2xs leading-relaxed text-slate-500">
-                The connector writes <span className="font-mono">components.yaml</span> to the Atlas
-                imports folder. Open <span className="font-semibold">Import → Review</span> to accept
-                or discard it. Accepting replaces the file; create a scenario first if you want to
-                keep a copy.
+                {t("modals.connector.guidanceStart")}{" "}
+                <span className="font-mono">components.yaml</span>{" "}
+                {t("modals.connector.guidanceMiddle")}{" "}
+                <span className="font-semibold">{t("modals.connector.reviewLabel")}</span>{" "}
+                {t("modals.connector.guidanceEnd")}
               </p>
 
               <Button variant="primary" loading={busy} onClick={() => void run()}>
                 <Play className="h-3.5 w-3.5" />
-                Run local connector
+                {t("modals.connector.run")}
               </Button>
 
               {error && (
@@ -212,7 +218,7 @@ export function ConnectorModal({
                 <div className="space-y-2 rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
                   <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800">
                     <CheckCircle2 className="h-4 w-4" />
-                    Proposal staged for {selected.label}
+                    {t("modals.connector.staged", { label: selected.label })}
                   </div>
                   <code className="block break-all font-mono text-2xs text-emerald-900/80">
                     {result.command}
@@ -223,20 +229,20 @@ export function ConnectorModal({
                     </pre>
                   )}
                   <Button variant="secondary" onClick={onOpenImport}>
-                    Review in Atlas → Import
+                    {t("modals.connector.review")}
                   </Button>
                 </div>
               )}
             </div>
           ) : (
-            <p className="mt-5 text-2xs text-slate-500">Loading connectors…</p>
+            <p className="mt-5 text-2xs text-slate-500">{t("modals.connector.loading")}</p>
           )}
         </div>
 
         <footer className="flex items-center justify-between border-t border-slate-200 px-5 py-3 text-footer text-slate-400">
-          <span>Read-only APIs. No credentials reach the console.</span>
+          <span>{t("modals.connector.footer")}</span>
           <Button variant="ghost" onClick={onClose}>
-            Done
+            {t("modals.done")}
           </Button>
         </footer>
       </div>

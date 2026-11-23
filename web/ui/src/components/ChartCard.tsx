@@ -10,18 +10,20 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import type { ChartSeries } from "../lib/types";
 import { Card, CardTitle } from "./ui";
 
 const COLORS = ["#e11d48", "#f59e0b", "#0ea5e9", "#10b981", "#8b5cf6", "#ec4899", "#64748b"];
 
 export function ChartCard({ chart }: { chart: ChartSeries }) {
+  const { t } = useTranslation();
   const data = chart.data.filter((entry) => entry.value > 0);
-  const display = data.length ? data : [{ name: "None", value: 0 }];
+  const display = data.length ? data : [{ name: t("feedback.chart.none"), value: 0 }];
 
   return (
     <Card>
-      <CardTitle title={chart.label} subtitle="Computed from the model" />
+      <CardTitle title={chart.label} subtitle={t("feedback.chart.subtitle")} />
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           {chart.type === "donut" ? (

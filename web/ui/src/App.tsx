@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Switch from "@radix-ui/react-switch";
+import { useTranslation } from "react-i18next";
 import { Activity, AlertCircle, CheckCircle2, Cloud, Database, Play, RotateCcw, ShieldAlert } from "lucide-react";
 import { api } from "./lib/api";
 import { toolIcon } from "./lib/toolIcons";
@@ -32,24 +33,24 @@ import { ScenarioView } from "./components/ScenarioView";
 import { ToolSidebar } from "./components/ToolSidebar";
 import { Badge, Button, EmptyState } from "./components/ui";
 
-const TAB_ITEMS: { key: TabKey; label: string }[] = [
-  { key: "overview", label: "Overview" },
-  { key: "scenarios", label: "Scenarios" },
-  { key: "model", label: "Model" },
-  { key: "outputs", label: "Outputs" },
-  { key: "import", label: "Import" },
-  { key: "schemas", label: "Schemas" },
+const TAB_ITEMS: { key: TabKey; labelKey: string }[] = [
+  { key: "overview", labelKey: "app.tabs.overview" },
+  { key: "scenarios", labelKey: "app.tabs.scenarios" },
+  { key: "model", labelKey: "app.tabs.model" },
+  { key: "outputs", labelKey: "app.tabs.outputs" },
+  { key: "import", labelKey: "app.tabs.import" },
+  { key: "schemas", labelKey: "app.tabs.schemas" },
 ];
 
 const TAB_KEYS = new Set<string>(TAB_ITEMS.map((item) => item.key));
 
 const TAB_INTRO: Record<TabKey, string> = {
-  overview: "Live KPIs, flow and findings for the active scenario.",
-  scenarios: "Reviewable branches with versions you can restore or compare.",
-  model: "Edit the YAML model with guided fields or directly in source.",
-  outputs: "Reports and status rebuilt from the model by Check.",
-  import: "Stage a local YAML proposal, review the diff, then accept it.",
-  schemas: "The JSON Schemas that validate the model and drive the guided form.",
+  overview: "app.intro.overview",
+  scenarios: "app.intro.scenarios",
+  model: "app.intro.model",
+  outputs: "app.intro.outputs",
+  import: "app.intro.import",
+  schemas: "app.intro.schemas",
 };
 
 type Route =
@@ -71,6 +72,7 @@ function readRoute(): Route {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const [initialRoute] = useState(readRoute);
   const [tools, setTools] = useState<ToolInfo[]>([]);
   const [suiteVersion, setSuiteVersion] = useState("0.1.0");
@@ -334,13 +336,13 @@ export default function App() {
           ? { ...current, files: { ...current.files, [activeFile]: draft[activeFile] ?? "" } }
           : current,
       );
-      await recordSnapshot(`Saved ${activeFile}`);
+      await recordSnapshot(t("app.snapshot.saved", { file: activeFile }));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
       setBusy(null);
     }
-  }, [activeToolId, activeFile, draft, recordSnapshot]);
+  }, [activeToolId, activeFile, draft, recordSnapshot, t]);
 
   const resetModel = useCallback(async () => {
     if (!activeToolId) return;
@@ -388,7 +390,7 @@ export default function App() {
         <div className="text-center">
           <Activity className="mx-auto h-6 w-6 animate-pulse text-slate-400" />
           <p className="mt-3 text-sm text-slate-500">
-            {error || "Loading the FortCloud console…"}
+            {error || t("app.loading")}
           </p>
         </div>
       </div>
@@ -429,7 +431,7 @@ export default function App() {
                       </h1>
                       {result && (
                         <Badge tone={result.exit_code === 0 ? "green" : "rose"}>
-                          exit {result.exit_code}
+                          {t("app.header.exit", { code: result.exit_code })}
                         </Badge>
                       )}
                     </div>
@@ -442,7 +444,7 @@ export default function App() {
                       onClick={() => setConnectorOpen(true)}
                     >
                       <Cloud className="h-3.5 w-3.5" />
-                      Cloud connectors
+                      {t("app.header.connectors")}
                     </Button>
                     <Button
                       variant="ghost"
@@ -450,7 +452,7 @@ export default function App() {
                       onClick={() => setCatalogOpen(true)}
                     >
                       <Database className="h-3.5 w-3.5" />
-                      Reference data
+                      {t("app.header.referenceData")}
                     </Button>
                     <div className="mr-2 flex items-center gap-2 rounded-lg border border-white/30 bg-white/10 px-3 py-2">
                       <Switch.Root
@@ -462,7 +464,7 @@ export default function App() {
                         <Switch.Thumb className="block h-3 w-3 translate-x-0.5 rounded-full bg-white transition-transform group-data-[state=checked]:translate-x-3.5 group-data-[state=checked]:bg-slate-800" />
                       </Switch.Root>
                       <label htmlFor="strict-mode" className="cursor-pointer text-2xs font-semibold text-white/80">
-                        Strict
+                        {t("app.header.strict")}
                       </label>
                     </div>
                     <Button
@@ -471,7 +473,7 @@ export default function App() {
                       loading={busy === "validate"}
                     >
                       <ShieldAlert className="h-3.5 w-3.5" />
-                      Validate
+                      {t("app.header.validate")}
                     </Button>
                     <Button
                       variant="primary"
@@ -480,11 +482,11 @@ export default function App() {
                       loading={busy === "check"}
                     >
                       <Play className="h-3.5 w-3.5" />
-                      Check
+                      {t("app.header.check")}
                     </Button>
                     <Button
-                      aria-label="Reset model"
-                      title="Reset to the bundled example"
+                      aria-label={t("app.header.resetAria")}
+                      title={t("app.header.resetTitle")}
                       className="h-[34px] w-[34px] p-0 border-white/30 bg-white/10 text-white hover:bg-white/20 focus:ring-white/60"
                       onClick={resetModel}
                       loading={busy === "reset"}
@@ -516,12 +518,12 @@ export default function App() {
                     value={item.key}
                     className="content-button text-slate-500 hover:text-slate-800 data-[state=active]:bg-slate-900 data-[state=active]:text-white"
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                   </Tabs.Trigger>
                 ))}
               </Tabs.List>
               <p className="mt-3 max-w-5xl text-2xs leading-relaxed text-slate-500">
-                {TAB_INTRO[tab]}
+                {t(TAB_INTRO[tab])}
               </p>
 
               <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
@@ -531,18 +533,18 @@ export default function App() {
                       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-card">
                         <div>
                           <p className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
-                            Scenario
+                            {t("app.scenario.label")}
                           </p>
                           <p className="mt-0.5 text-sm font-semibold text-slate-800">
                             {activeScenarioInfo.name}
                           </p>
                           <p className="mt-0.5 text-2xs text-slate-500">
-                            {activeScenarioInfo.description || "Bundled example model"}
+                            {activeScenarioInfo.description || t("app.scenario.defaultDescription")}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
                           <select
-                            aria-label="Active scenario"
+                            aria-label={t("app.scenario.activeAria")}
                             disabled={busy === "scenario"}
                             value={activeScenarioInfo.name}
                             onChange={(event) => void selectScenario(event.target.value)}
@@ -558,16 +560,14 @@ export default function App() {
                             ))}
                           </select>
                           <Badge tone="blue">
-                            {activeScenarioInfo.versions.length} version
-                            {activeScenarioInfo.versions.length === 1 ? "" : "s"}
+                            {t("app.scenario.version", { count: activeScenarioInfo.versions.length })}
                           </Badge>
                         </div>
                       </div>
                     )}
 
                     <p className="text-2xs leading-relaxed text-slate-500">
-                      Switching the branch changes every number below. Run Check after a model change
-                      to refresh the charts and tables.
+                      {t("app.scenario.branchHint")}
                     </p>
 
                     <KpiCards kpis={view?.kpis ?? []} />
@@ -604,16 +604,15 @@ export default function App() {
                       </>
                     ) : (
                       <EmptyState
-                        title="No structured tables yet"
-                        hint="Run Check to generate the artifacts, then the tables appear here."
+                        title={t("app.empty.tablesTitle")}
+                        hint={t("app.empty.tablesHint")}
                       />
                     )}
                   </Tabs.Content>
 
                   <Tabs.Content value="scenarios" className="animate-fade-in space-y-5 outline-none">
                     <p className="text-2xs leading-relaxed text-slate-500">
-                      The protected base is the bundled starting point. Named scenarios keep
-                      independent copies; activating one clears stale artifacts until Check runs again.
+                      {t("app.scenario.baseHint")}
                     </p>
                     <ScenarioView
                       toolId={activeToolId}
@@ -642,14 +641,14 @@ export default function App() {
                                 : "text-slate-500 hover:text-slate-800",
                             )}
                           >
-                            {mode === "form" ? "Guided form" : "YAML source"}
+                            {mode === "form" ? t("app.model.guidedForm") : t("app.model.yamlSource")}
                           </button>
                         ))}
                       </div>
                       <p className="max-w-md text-2xs leading-relaxed text-slate-500">
                         {modelMode === "form"
-                          ? "Fields suggest catalog values but accept custom entries. Every save creates a version in the active scenario."
-                          : "Edit the YAML directly, then Save. Every save creates a version; Check regenerates the artifacts."}
+                          ? t("app.model.formHint")
+                          : t("app.model.yamlHint")}
                       </p>
                     </div>
 
@@ -658,17 +657,20 @@ export default function App() {
                         toolId={activeToolId}
                         catalog={catalog}
                         onSaved={async () => {
-                          await recordSnapshot("Guided form save");
+                          await recordSnapshot(t("app.snapshot.guidedForm"));
                           await loadTool(activeToolId, true);
                         }}
                       />
                     ) : (
                       <>
                         <div className="rounded-lg border border-sky-100 bg-sky-50 px-3.5 py-2.5 text-2xs leading-relaxed text-sky-900">
-                          Edit a YAML file below, then select <span className="font-semibold">Save</span>. The
-                          model changes only after <span className="font-semibold">Check</span> regenerates the
-                          artifacts. Use <span className="font-semibold">Reset</span> to restore the bundled
-                          example as a starting template.
+                          {t("app.model.yamlGuide.beforeSave")}
+                          <span className="font-semibold">{t("app.model.yamlGuide.save")}</span>
+                          {t("app.model.yamlGuide.afterSave")}
+                          <span className="font-semibold">{t("app.model.yamlGuide.check")}</span>
+                          {t("app.model.yamlGuide.afterCheck")}
+                          <span className="font-semibold">{t("app.model.yamlGuide.reset")}</span>
+                          {t("app.model.yamlGuide.afterReset")}
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {modelFiles.map((filename) => (
@@ -707,9 +709,7 @@ export default function App() {
                     {artifacts.length ? (
                       <>
                         <p className="text-2xs leading-relaxed text-slate-500">
-                          Greyed-out artifacts have not been produced for this scenario yet — run Check
-                          first. Markdown reports and Mermaid graphs sit alongside machine-readable
-                          JSON status.
+                          {t("app.outputs.hint")}
                         </p>
                         <div className="grid gap-5 lg:grid-cols-[230px_minmax(0,1fr)]">
                           <div className="space-y-1.5">
@@ -735,7 +735,10 @@ export default function App() {
                         </div>
                       </>
                     ) : (
-                      <EmptyState title="No artifacts" hint="Run Check to generate the reports for this tool." />
+                      <EmptyState
+                        title={t("app.empty.artifactsTitle")}
+                        hint={t("app.empty.artifactsHint")}
+                      />
                     )}
                   </Tabs.Content>
 
@@ -749,8 +752,7 @@ export default function App() {
 
                   <Tabs.Content value="schemas" className="animate-fade-in space-y-4 outline-none">
                     <p className="text-2xs leading-relaxed text-slate-500">
-                      Each schema maps to one model file. Required fields, enums and bounds are
-                      defined here; catalog values are suggestions, not limits.
+                      {t("app.schemas.hint")}
                     </p>
                     <div className="mb-4 flex flex-wrap gap-2">
                       {Object.keys(schemas).map((filename) => (
@@ -769,9 +771,9 @@ export default function App() {
                       ))}
                     </div>
                     <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-card">
-                      <h2 className="mb-3 text-sm font-semibold">{activeSchema || "JSON Schema"}</h2>
+                      <h2 className="mb-3 text-sm font-semibold">{activeSchema || t("app.schemas.fallbackTitle")}</h2>
                       <pre className="max-h-[780px] overflow-auto rounded-lg bg-slate-950 p-4 font-mono text-2xs leading-relaxed text-slate-200">
-                        {activeSchema ? schemas[activeSchema] : "No schema available."}
+                        {activeSchema ? schemas[activeSchema] : t("app.schemas.emptyContent")}
                       </pre>
                     </div>
                   </Tabs.Content>

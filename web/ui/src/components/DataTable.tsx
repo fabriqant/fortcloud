@@ -9,11 +9,13 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown, Search } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { DataTableInfo } from "../lib/types";
 import { cn } from "../lib/utils";
 import { Card } from "./ui";
 
 export function DataTable({ table }: { table: DataTableInfo }) {
+  const { t } = useTranslation();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [query, setQuery] = useState("");
 
@@ -52,7 +54,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
         <div>
           <h2 className="text-sm font-semibold text-slate-900">{table.label}</h2>
           <p className="mt-0.5 text-xs text-slate-500">
-            {table.total} rows · click a header to sort
+            {t("forms.datatable.rows", { count: table.total })} · {t("forms.datatable.sortHint")}
           </p>
         </div>
         <label className="relative">
@@ -60,7 +62,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Filter rows"
+            placeholder={t("forms.datatable.filter")}
             className="form-control w-52 bg-slate-50 pl-8 focus:bg-white"
           />
         </label>
@@ -112,7 +114,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
             {!reactTable.getRowModel().rows.length && (
               <tr>
                 <td colSpan={table.columns.length} className="px-5 py-10 text-center text-slate-400">
-                  No matching rows.
+                  {t("forms.datatable.noRows")}
                 </td>
               </tr>
             )}
@@ -122,14 +124,17 @@ export function DataTable({ table }: { table: DataTableInfo }) {
 
       <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3 text-2xs text-slate-500">
         <span>
-          Page {reactTable.getState().pagination.pageIndex + 1} of {reactTable.getPageCount() || 1}
+          {t("forms.datatable.page", {
+            page: reactTable.getState().pagination.pageIndex + 1,
+            pages: reactTable.getPageCount() || 1,
+          })}
         </span>
         <div className="flex gap-2">
           <button
             onClick={() => reactTable.previousPage()}
             disabled={!reactTable.getCanPreviousPage()}
             className="content-icon-button border-slate-200 hover:bg-slate-50 disabled:opacity-40"
-            aria-label="Previous page"
+            aria-label={t("forms.datatable.previousPage")}
           >
             <ChevronLeft className="h-3.5 w-3.5" />
           </button>
@@ -137,7 +142,7 @@ export function DataTable({ table }: { table: DataTableInfo }) {
             onClick={() => reactTable.nextPage()}
             disabled={!reactTable.getCanNextPage()}
             className="content-icon-button border-slate-200 hover:bg-slate-50 disabled:opacity-40"
-            aria-label="Next page"
+            aria-label={t("forms.datatable.nextPage")}
           >
             <ChevronRight className="h-3.5 w-3.5" />
           </button>

@@ -1,0 +1,97 @@
+{
+  "exact": {
+    "Unknown tool": "Outil inconnu",
+    "Artifact not generated": "Artefact non généré",
+    "Unknown model file for": "Fichier de modèle inconnu pour",
+    "Unknown catalog category": "Catégorie de catalogue inconnue",
+    "A catalog value must contain between 1 and 120 characters": "Une valeur de catalogue doit contenir entre 1 et 120 caractères",
+    "Unknown connector": "Connecteur inconnu",
+    "Invalid value for": "Valeur invalide pour",
+    "use letters, digits, . _ - / @ or +": "utilisez des lettres, des chiffres, . _ - / @ ou +",
+    "Expected one of": "Attendu l'un des suivants",
+    "Python executable not found": "Exécutable Python introuvable",
+    "Connector timed out after": "Le connecteur a dépassé le délai de",
+    "connector failed": "échec du connecteur",
+    "A scenario name must be 1-64 letters, digits, dots, underscores or hyphens": "Un nom de scénario doit contenir 1 à 64 lettres, chiffres, points, tirets bas ou tirets",
+    "The base scenario already exists": "Le scénario de base existe déjà",
+    "The base scenario cannot be deleted": "Le scénario de base ne peut pas être supprimé",
+    "Unknown scenario": "Scénario inconnu",
+    "The scenario has no version to activate": "Le scénario n'a aucune version à activer",
+    "Unknown version": "Version inconnue",
+    "No version in scenario": "Aucune version dans le scénario"
+  },
+  "patterns": [
+    {
+      "match": "'?Unknown tool: ([^'\\\"]+)'?",
+      "replace": "Outil inconnu : \\1"
+    },
+    {
+      "match": "Artifact not generated: (.*)$",
+      "replace": "Artefact non généré : \\1"
+    },
+    {
+      "match": "'?Unknown model file for ([^:]+): ([^'\\\"]+)'?",
+      "replace": "Fichier de modèle inconnu pour \\1 : \\2"
+    },
+    {
+      "match": "'?Unknown catalog category: ([^'\\\"]+)'?",
+      "replace": "Catégorie de catalogue inconnue : \\1"
+    },
+    {
+      "match": "'?A catalog value must contain between 1 and 120 characters'?",
+      "replace": "Une valeur de catalogue doit contenir entre 1 et 120 caractères"
+    },
+    {
+      "match": "Unknown connector: ([^.'\\\"]+)\\. Expected one of: (.+)$",
+      "replace": "Connecteur inconnu : \\1. Attendu l'un des suivants : \\2"
+    },
+    {
+      "match": "'?Unknown connector: ([^'\\\"]+)'?",
+      "replace": "Connecteur inconnu : \\1"
+    },
+    {
+      "match": "Invalid value for (\\S+): use letters, digits, \\. _ - / @ or \\+",
+      "replace": "Valeur invalide pour \\1 : utilisez des lettres, des chiffres, . _ - / @ ou +"
+    },
+    {
+      "match": "Python executable not found: (.*)$",
+      "replace": "Exécutable Python introuvable : \\1"
+    },
+    {
+      "match": "Connector timed out after (\\d+)s",
+      "replace": "Le connecteur a dépassé le délai de \\1 s"
+    },
+    {
+      "match": "'?connector failed'?",
+      "replace": "échec du connecteur"
+    },
+    {
+      "match": "'?A scenario name must be 1-64 letters, digits, dots, underscores or hyphens'?",
+      "replace": "Un nom de scénario doit contenir 1 à 64 lettres, chiffres, points, tirets bas ou tirets"
+    },
+    {
+      "match": "'?The base scenario already exists'?",
+      "replace": "Le scénario de base existe déjà"
+    },
+    {
+      "match": "'?The base scenario cannot be deleted'?",
+      "replace": "Le scénario de base ne peut pas être supprimé"
+    },
+    {
+      "match": "'?Unknown scenario: ([^'\\\"]+)'?",
+      "replace": "Scénario inconnu : \\1"
+    },
+    {
+      "match": "'?The scenario has no version to activate'?",
+      "replace": "Le scénario n'a aucune version à activer"
+    },
+    {
+      "match": "'?Unknown version: ([^'\\\"]+)'?",
+      "replace": "Version inconnue : \\1"
+    },
+    {
+      "match": "'?No version in scenario: ([^'\\\"]+)'?",
+      "replace": "Aucune version dans le scénario : \\1"
+    }
+  ]
+}

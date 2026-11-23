@@ -14,3 +14,8 @@ Files:
 - `schemas.json` — schema `title` values (keyed by the exact English title, including punctuation).
 - `scenarios.json` — descriptions of the three tracked starter scenarios (custom scenario descriptions stay as authored).
 - `api.json` — short API-generated guidance shown by the console.
+- `diagnostics.json` — validator findings and common JSON Schema messages.
+- `api_errors.json` — API error details such as missing artifacts and unknown tools.
+- `artifacts.json` — generated Markdown/Mermaid headings, table labels and prose.
+
+`diagnostics.json`, `api_errors.json` and `artifacts.json` use an `exact` map (whole messages or whole lines) plus an ordered `patterns` list. The API applies them at response time; canonical Markdown files on disk stay in English.

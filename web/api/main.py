@@ -12,6 +12,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -31,6 +32,16 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Content-Type"],
 )
+
+
+@app.exception_handler(HTTPException)
+async def translated_http_exception(request: Request, exc: HTTPException) -> JSONResponse:
+    detail = i18n.translate_error(i18n.language_from_request(request), exc.detail)
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": detail},
+        headers=exc.headers,
+    )
 
 
 class ModelFile(BaseModel):
@@ -74,6 +85,18 @@ def _tool(tool_id: str) -> registry.Tool:
         return registry.get_tool(tool_id)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+def _localized_artifacts(tool_id: str, language: str, records: list[dict]) -> list[dict]:
+    labels = {
+        artifact.name: artifact.label
+        for artifact in registry.get_tool(tool_id, language).artifacts
+    }
+    for record in records:
+        label = labels.get(record.get("name"))
+        if label:
+            record["label"] = label
+    return records
 
 
 @app.get("/api/health")
@@ -252,40 +275,61 @@ def delete_import(tool_id: str, filename: str) -> dict:
 
 
 @app.post("/api/{tool_id}/validate")
-def validate_model(tool_id: str, strict: bool = False) -> dict:
+def validate_model(tool_id: str, request: Request, strict: bool = False) -> dict:
+    language = i18n.language_from_request(request)
     result = runner.validate(_tool(tool_id), strict=strict)
     result.pop("model", None)
+    result["errors"] = i18n.translate_messages(language, result["errors"])
+    result["warnings"] = i18n.translate_messages(language, result["warnings"])
     return result
 
 
 @app.post("/api/{tool_id}/check")
-def check_model(tool_id: str, strict: bool = False) -> dict:
-    return runner.check(_tool(tool_id), strict=strict)
+def check_model(tool_id: str, request: Request, strict: bool = False) -> dict:
+    language = i18n.language_from_request(request)
+    result = runner.check(_tool(tool_id), strict=strict)
+    result["errors"] = i18n.translate_messages(language, result["errors"])
+    result["warnings"] = i18n.translate_messages(language, result["warnings"])
+    result["artifacts"] = _localized_artifacts(tool_id, language, result["artifacts"])
+    return result
 
 
 @app.get("/api/{tool_id}/artifacts")
-def list_artifacts(tool_id: str) -> list[dict]:
+def list_artifacts(tool_id: str, request: Request) -> list[dict]:
     tool = _tool(tool_id)
     workspaces.ensure_workspace(tool)
-    return workspaces.artifact_records(tool)
+    language = i18n.language_from_request(request)
+    return _localized_artifacts(tool_id, language, workspaces.artifact_records(tool))
 
 
 @app.get("/api/{tool_id}/artifacts/{name}")
-def get_artifact(tool_id: str, name: str) -> dict:
+def get_artifact(tool_id: str, name: str, request: Request) -> dict:
     tool = _tool(tool_id)
     try:
         content = workspaces.read_artifact(tool, name)
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=f"Artifact not generated: {name}") from exc
-    return {"tool": tool.id, "name": name, "content": content}
+    language = i18n.language_from_request(request)
+    return {
+        "tool": tool.id,
+        "name": name,
+        "content": i18n.translate_artifact(language, name, content),
+    }
 
 
 @app.get("/api/{tool_id}/data")
 def get_data(tool_id: str, request: Request) -> dict:
     tool = _tool(tool_id)
     model, errors, warnings = runner.collect(tool)
-    result = structured.build(tool, model, i18n.language_from_request(request))
-    result.update({"tool": tool.id, "errors": errors, "warnings": warnings})
+    language = i18n.language_from_request(request)
+    result = structured.build(tool, model, language)
+    result.update(
+        {
+            "tool": tool.id,
+            "errors": i18n.translate_messages(language, errors),
+            "warnings": i18n.translate_messages(language, warnings),
+        }
+    )
     return result
 
 

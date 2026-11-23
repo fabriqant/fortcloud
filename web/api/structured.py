@@ -162,14 +162,14 @@ def _charts(summary: dict, language: str = i18n.DEFAULT_LANGUAGE) -> list[dict]:
     ]
 
 
-def _graph(tool: registry.Tool) -> str:
+def _graph(tool: registry.Tool, language: str = i18n.DEFAULT_LANGUAGE) -> str:
     for artifact in tool.artifacts:
         path = tool.artifact_dir / artifact.name
         if not path.is_file():
             continue
         match = _MERMAID.search(path.read_text(encoding="utf-8"))
         if match:
-            return match.group(1).strip()
+            return i18n.translate_artifact(language, artifact.name, match.group(1).strip())
     return ""
 
 
@@ -351,7 +351,7 @@ def _atlas(tool: registry.Tool, model: dict, language: str = i18n.DEFAULT_LANGUA
         "kpis": kpis,
         "charts": charts,
         "tables": tables,
-        "graph": _graph(tool),
+        "graph": _graph(tool, language),
     }
 
 
@@ -365,5 +365,5 @@ def build(tool: registry.Tool, model: dict | None, language: str = i18n.DEFAULT_
         "kpis": _kpis(summary, language),
         "charts": _charts(summary, language),
         "tables": _generic_tables(tool, model, payload, language),
-        "graph": _graph(tool),
+        "graph": _graph(tool, language),
     }

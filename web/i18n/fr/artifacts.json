@@ -1,0 +1,1894 @@
+{
+  "exact": {
+    "# FortCloud Crucible — Scenario Plan": "# FortCloud Crucible — Plan de scénarios",
+    "# FortCloud Crucible — Roles Matrix": "# FortCloud Crucible — Matrice des rôles",
+    "# FortCloud Crucible — Communication Plan": "# FortCloud Crucible — Plan de communication",
+    "# FortCloud Crucible — Verification Report": "# FortCloud Crucible — Rapport de vérification",
+    "# FortCloud Custodian — Access Matrix": "# FortCloud Custodian — Matrice d'accès",
+    "# FortCloud Custodian — Secret Inventory": "# FortCloud Custodian — Inventaire des secrets",
+    "# FortCloud Custodian — Change Control": "# FortCloud Custodian — Contrôle des changements",
+    "# FortCloud Custodian — Audit Trail": "# FortCloud Custodian — Piste d'audit",
+    "# FortCloud Failover — Coverage Matrix": "# FortCloud Failover — Matrice de couverture",
+    "# FortCloud Failover — Remediation Plan": "# FortCloud Failover — Plan de remédiation",
+    "# FortCloud Failover — Drill Scenarios": "# FortCloud Failover — Scénarios d'exercice",
+    "# FortCloud Vitals — SLO Dashboard": "# FortCloud Vitals — Tableau de bord SLO",
+    "# FortCloud Vitals — Signal Catalog": "# FortCloud Vitals — Catalogue des signaux",
+    "# FortCloud Vitals — Quality Plan": "# FortCloud Vitals — Plan de qualité",
+    "# Dependency graph": "# Graphe de dépendances",
+    "## Legend": "## Légende",
+    "## Most depended-upon nodes (blast radius)": "## Nœuds les plus sollicités (rayon d'impact)",
+    "## Single points of failure": "## Points de défaillance uniques",
+    "### P0 components in a single region": "### Composants P0 dans une seule région",
+    "## RTO / RPO matrix": "## Matrice RTO / RPO",
+    "### Recovery strategies": "### Stratégies de récupération",
+    "## Risk register": "## Registre des risques",
+    "### Critical action plans": "### Plans d'action critiques",
+    "## Restore tests to refresh": "## Tests de restauration à actualiser",
+    "## Summary": "## Résumé",
+    "## Assets": "## Actifs",
+    "## Flows": "## Flux",
+    "## Links": "## Liens",
+    "## Environments": "## Environnements",
+    "## Elevated and broad grants": "## Octrois élevés et larges",
+    "## Log sinks": "## Récepteurs de journaux",
+    "## Sensitive operations": "## Opérations sensibles",
+    "## Coverage gaps": "## Lacunes de couverture",
+    "## Plan gaps": "## Lacunes du plan",
+    "## Strategies": "## Stratégies",
+    "## Services and their protection": "## Services et leur protection",
+    "## Roster": "## Effectif",
+    "## Channels": "## Canaux",
+    "## Stakeholders": "## Parties prenantes",
+    "## Checks": "## Vérifications",
+    "## Sign-offs": "## Validations",
+    "## Exercise verdicts": "## Verdicts des exercices",
+    "## Objectives": "## Objectifs",
+    "## Definition of done": "## Définition de la finition",
+    "**Gaps:**": "**Lacunes :**",
+    "**Steps:**": "**Étapes :**",
+    "[Dependency graph](dependency-graph.md)": "[Graphe de dépendances](dependency-graph.md)",
+    "[resilience report](resilience-report.md)": "[rapport de résilience](resilience-report.md)",
+    "[recovery plan](recovery-plan.md)": "[plan de récupération](recovery-plan.md)",
+    "[Restore evidence](restore-evidence.md)": "[Preuves de restauration](restore-evidence.md)",
+    "[Policy matrix](policy-matrix.md)": "[Matrice des politiques](policy-matrix.md)",
+    "[Resilience plan](resilience-plan.md)": "[Plan de résilience](resilience-plan.md)",
+    "[Who does what](roles-matrix.md)": "[Qui fait quoi](roles-matrix.md)",
+    "[Communication](communication-plan.md)": "[Communication](communication-plan.md)",
+    "[Verification](verification-report.md)": "[Vérification](verification-report.md)",
+    "[Secret inventory](secret-inventory.md)": "[Inventaire des secrets](secret-inventory.md)",
+    "[Change control](change-control.md)": "[Contrôle des changements](change-control.md)",
+    "[Remediation plan](failover-plan.md)": "[Plan de remédiation](failover-plan.md)",
+    "[Drill scenarios](drill-scenarios.md)": "[Scénarios d'exercice](drill-scenarios.md)",
+    "[Signal catalog](signal-catalog.md)": "[Catalogue des signaux](signal-catalog.md)",
+    "[Quality plan](quality-plan.md)": "[Plan de qualité](quality-plan.md)",
+    "[Quickstart](../quickstart.md)": "[Démarrage rapide](../quickstart.md)",
+    "| Colour | Criticality | Meaning |": "| Couleur | Criticité | Signification |",
+    "| Red | P0 | Critical - interruption unacceptable |": "| Rouge | P0 | Critique - interruption inacceptable |",
+    "| Amber | P1 | Important - short degradation tolerated |": "| Ambre | P1 | Important - dégradation courte tolérée |",
+    "| Green | P2 | Support - recovery in hours |": "| Vert | P2 | Support - récupération en heures |",
+    "| Component | Category | Criticality | Direct dependents |": "| Composant | Catégorie | Criticité | Dépendants directs |",
+    "| Component | Category | Criticality | Owner | Dependents | Risks | Action |": "| Composant | Catégorie | Criticité | Responsable | Dépendants | Risques | Action |",
+    "| Component | Regions | Provider | Owner |": "| Composant | Régions | Fournisseur | Responsable |",
+    "| Flow | Criticality | Availability | RTO | RPO | Owner | Last restore test |": "| Flux | Criticité | Disponibilité | RTO | RPO | Responsable | Dernier test de restauration |",
+    "| ID | Risk | Components | Score | Severity | Status | Owner | Due |": "| ID | Risque | Composants | Score | Gravité | Statut | Responsable | Échéance |",
+    "| Flow | Criticality | Age of last test |": "| Flux | Criticité | Âge du dernier test |",
+    "| Asset | Crit. | Backup | Type / Schedule | Retention | Immutable | Cross-region | Last backup | Last restore | RTO / RPO | Status |": "| Actif | Crit. | Sauvegarde | Type / Planification | Rétention | Immuable | Inter-régions | Dernière sauvegarde | Dernière restauration | RTO / RPO | Statut |",
+    "| Restore | Asset | Scenario | Date | Age | Meas. RTO | Target RTO | RTO | Meas. RPO | Target RPO | RPO | Result | Evidence |": "| Restauration | Actif | Scénario | Date | Âge | RTO mesuré | RTO cible | RTO | RPO mesuré | RPO cible | RPO | Résultat | Preuve |",
+    "| Flow | Service | Crit. | Steps | Budget | Worst case | Headroom | Usage | Status |": "| Flux | Service | Crit. | Étapes | Budget | Pire cas | Marge | Utilisation | Statut |",
+    "| # | Dependency | Type | Policy | Worst case | Share |": "| # | Dépendance | Type | Politique | Pire cas | Part |",
+    "| Policy | Dependency | Type | Crit. | Timeout | Retries | Worst case | Breaker | Bulkhead | Fallback | Status |": "| Politique | Dépendance | Type | Crit. | Délai | Tentatives | Pire cas | Disjoncteur | Cloison | Repli | Statut |",
+    "| Scenario | Kind | System | Env | Controlled | Scheduled | Status | RTO | RPO | Window | Status |": "| Scénario | Type | Système | Env | Contrôlé | Planifié | Statut | RTO | RPO | Fenêtre | Statut |",
+    "| Scenario | Coordinator | Operator | Communicator | Verifier | Status |": "| Scénario | Coordinateur | Opérateur | Communicateur | Vérificateur | Statut |",
+    "| Participant | Name | Team | Contact |": "| Participant | Nom | Équipe | Contact |",
+    "| Channel | Name | Type | Audience | Owner | Status |": "| Canal | Nom | Type | Public | Responsable | Statut |",
+    "| Stakeholder | Channel | Notified at | Status |": "| Partie prenante | Canal | Informée à | Statut |",
+    "| Check | Scenario | Kind | Metric | Expected | Result | Status |": "| Vérification | Scénario | Type | Métrique | Attendu | Résultat | Statut |",
+    "| Scenario | Verifier | Role | Date | Decision | Status |": "| Scénario | Vérificateur | Rôle | Date | Décision | Statut |",
+    "| Grant | Principal | Type | Environment | Class. | Role | # Perms | Expires | Term | Status |": "| Octroi | Principal | Type | Environnement | Class. | Rôle | # Perms | Expire | Durée | Statut |",
+    "| Environment | Classification | Owner | Principals | Grants | Secrets | Pipelines |": "| Environnement | Classification | Responsable | Principaux | Octrois | Secrets | Pipelines |",
+    "| Secret | Store | Reference | Environments | Last rotated | Age | Policy | Users | Status |": "| Secret | Coffre | Référence | Environnements | Dernière rotation | Âge | Politique | Utilisateurs | Statut |",
+    "| Pipeline | Env | Trigger | Deployer | Review | Approvers | Tests | Rollback | Mode | Status |": "| Pipeline | Env | Déclencheur | Déployeur | Revue | Approbateurs | Tests | Rollback | Mode | Statut |",
+    "| Sink | Type | Destination | Retention | Immutable | Status |": "| Récepteur | Type | Destination | Rétention | Immuable | Statut |",
+    "| Operation | Kind | Environment | Logged | Sink | Last evidence | Status |": "| Opération | Type | Environnement | Journalisé | Récepteur | Dernière preuve | Statut |",
+    "| Strategy | Primary → Standby | Mode | Regions | Replication | Switchover / RTO | Last drill | Status |": "| Stratégie | Primaire → Secours | Mode | Régions | Réplication | Commutation / RTO | Dernier exercice | Statut |",
+    "| Service | Criticality | RTO | RPO | Owner | P0 coverage |": "| Service | Criticité | RTO | RPO | Responsable | Couverture P0 |",
+    "| Strategy | Primary | Standby | Mode | Last drill | Evidence |": "| Stratégie | Primaire | Secours | Mode | Dernier exercice | Preuve |",
+    "| Objective | Service | Crit. | Signal | Kind | Target | Window | Budget | Alert at | Headroom | Interval | Status |": "| Objectif | Service | Crit. | Signal | Type | Cible | Fenêtre | Budget | Alerte à | Marge | Intervalle | Statut |",
+    "| Signal | Kind | Source | Interval | Unit | Objectives | Last check | Status |": "| Signal | Type | Source | Intervalle | Unité | Objectifs | Dernière vérification | Statut |",
+    "**Owner:**": "**Responsable :**",
+    "**Reference:**": "**Référence :**",
+    "**Criticality:**": "**Criticité :**",
+    "**Targets:**": "**Cibles :**",
+    "**Services:**": "**Services :**",
+    "**Status:**": "**Statut :**",
+    "**Service:**": "**Service :**",
+    "**Budget:**": "**Budget :**",
+    "**Worst case:**": "**Pire cas :**",
+    "**Largest step:**": "**Étape la plus longue :**",
+    "**Operation:**": "**Opération :**",
+    "**Backoff:**": "**Backoff :**",
+    "**Breaker:**": "**Disjoncteur :**",
+    "**Note:**": "**Note :**",
+    "**Kind:**": "**Type :**",
+    "**Target / alert:**": "**Cible / alerte :**",
+    "**Window:**": "**Fenêtre :**",
+    "**Error budget:**": "**Budget d'erreur :**",
+    "**Signal:**": "**Signal :**",
+    "**Last check:**": "**Dernière vérification :**",
+    "**Objectives:**": "**Objectifs :**",
+    "**Environment:**": "**Environnement :**",
+    "**Dependency:**": "**Dépendance :**",
+    "**Update cadence:**": "**Cadence de mise à jour :**",
+    "**Escalation:**": "**Escalation :**",
+    "**Go / no-go:**": "**Go / no-go :**",
+    "**Replication:**": "**Réplication :**",
+    "**Mode:**": "**Mode :**",
+    "**Target:**": "**Cible :**",
+    "**Runbook:**": "**Runbook :**",
+    "**Gap:**": "**Lacune :**",
+    "AT RISK": "À RISQUE",
+    "PROVEN": "PROUVÉ",
+    "COVERED": "COUVERT",
+    "PASS": "RÉUSSI",
+    "**FAIL**": "**ÉCHEC**",
+    "VERIFIED": "VÉRIFIÉ",
+    "PENDING": "EN ATTENTE",
+    "**none**": "**aucun**",
+    "**missing**": "**absent**",
+    "missing date": "date absente",
+    "(stale)": "(ancien)",
+    "uncovered": "non couvert",
+    "No P0 component": "aucun composant P0",
+    "no service": "aucun service",
+    "expired": "expiré",
+    "Active/active": "Actif/actif",
+    "Active/passive": "Actif/passif",
+    "Warm": "Tiède",
+    "Cold": "Froid",
+    "manual": "manuel",
+    "External service": "Service externe",
+    "Storage": "Stockage",
+    "Processing": "Traitement",
+    "Network": "Réseau",
+    "Identity": "Identité",
+    "**PROVEN** means the asset has a backup policy and at least one recent,": "**PROUVÉ** signifie que l'actif dispose d'une politique de sauvegarde et d'au moins un test de restauration récent,",
+    "successful restore test compatible with the service targets. See the": "réussi compatible avec les cibles de service. Consultez le",
+    "[recovery plan](recovery-plan.md) for the gaps.": "[plan de récupération](recovery-plan.md) pour les lacunes.",
+    "Measured values come from the drill record and are compared with the tightest": "Les valeurs mesurées proviennent du compte rendu d'exercice et sont comparées à la cible la plus stricte",
+    "target of the services using the restored asset.": "des services utilisant l'actif restauré.",
+    "Ordered by asset criticality, then by tightest RTO. Fix the model, not this file.": "Trié par criticité de l'actif, puis par RTO le plus strict. Corrigez le modèle, pas ce fichier.",
+    "- Every P0 asset has an immutable, encrypted, cross-region backup.": "- Chaque actif P0 dispose d'une sauvegarde immuable, chiffrée et inter-régions.",
+    "- Backup schedule is compatible with the tightest service RPO.": "- La planification de sauvegarde est compatible avec le RPO le plus strict du service.",
+    "- Every P0 asset has a recent restore test with a deletion or ransomware scenario.": "- Chaque actif P0 a un test de restauration récent avec un scénario de suppression ou de ransomware.",
+    "- Measured RTO and RPO are below the service targets.": "- Les RTO et RPO mesurés sont inférieurs aux cibles de service.",
+    "- Every restore result is `passed` and has an evidence link.": "- Chaque résultat de restauration est `passed` et dispose d'un lien de preuve.",
+    "- `fortcloud-ark check --strict` exits with code 0.": "- `fortcloud-ark check --strict` se termine avec le code 0.",
+    "No gap detected. Keep the backup and restore cadence.": "Aucune lacune détectée. Maintenez la cadence des sauvegardes et des restaurations.",
+    "An arrow `A --> B` means **A depends on B**. The more arrows a node receives,": "Une flèche `A --> B` signifie **A dépend de B**. Plus un nœud reçoit de flèches,",
+    "the larger its blast radius. Dotted links are non-critical dependencies (`required: false`).": "plus son rayon d'impact est grand. Les liens en pointillé sont des dépendances non critiques (`required: false`).",
+    "See also: [resilience report](resilience-report.md).": "Voir aussi : [rapport de résilience](resilience-report.md).",
+    "These components have a single instance. Losing one directly impacts every": "Ces composants ont une instance unique. Leur perte impacte directement chaque",
+    "flow that depends on it - or blocks deployments for support components.": "flux qui en dépend - ou bloque les déploiements des composants de support.",
+    "RTO = maximum time to restore service. RPO = maximum acceptable data loss.": "RTO = temps maximal de rétablissement du service. RPO = perte de données maximale acceptable.",
+    "Sorted by descending score (likelihood × impact).": "Trié par score décroissant (probabilité × impact).",
+    "None.": "Aucun.",
+    "All tests are up to date.": "Tous les tests sont à jour.",
+    "Rule: a restore test must be refreshed at least every ": "Règle : un test de restauration doit être actualisé au moins tous les ",
+    "**Worst case** is the sum of every step's timeout × attempts plus exponential": "**Pire cas** est la somme du délai de chaque étape multiplié par les tentatives, plus les délais de",
+    "backoff delays. It must stay below the service latency budget.": "backoff exponentiel. Il doit rester inférieur au budget de latence du service.",
+    "A policy is the guardrail around one outbound dependency: how long to wait,": "Une politique est le garde-fou d'une dépendance sortante : combien de temps attendre,",
+    "how many times to retry, when to open the circuit and where to isolate it.": "combien de fois réessayer, quand ouvrir le disjoncteur et où l'isoler.",
+    "Ordered by criticality, then by the tightest latency budget. Fix the model,": "Trié par criticité, puis par le budget de latence le plus strict. Corrigez le modèle,",
+    "not this file.": "pas ce fichier.",
+    "- Every flow's worst-case chain stays below its service latency budget.": "- La chaîne au pire cas de chaque flux reste inférieure au budget de latence de son service.",
+    "- No step consumes more than 70% of a flow's budget.": "- Aucune étape ne consomme plus de 70 % du budget d'un flux.",
+    "- P0 dependencies have a circuit breaker and an isolated bulkhead.": "- Les dépendances P0 disposent d'un disjoncteur et d'une cloison isolée.",
+    "- Retries use jitter and exponential backoff; non-idempotent writes are never retried.": "- Les tentatives utilisent du jitter et un backoff exponentiel ; les écritures non idempotentes ne sont jamais retentées.",
+    "- Optional dependencies declare a fallback.": "- Les dépendances optionnelles déclarent un repli.",
+    "- `fortcloud-ballast check --strict` exits with code 0.": "- `fortcloud-ballast check --strict` se termine avec le code 0.",
+    "No gap detected. Keep the timeout budgets and policy cadence.": "Aucune lacune détectée. Maintenez les budgets de délai et la cadence des politiques.",
+    "Failure drills always start in a controlled environment: isolated,": "Les exercices de défaillance commencent toujours dans un environnement contrôlé : des données",
+    "non-production data and approved. Production needs a passed rehearsal": "isolées, non de production et approuvées. La production nécessite au préalable une répétition réussie",
+    "of the same kind first.": "du même type.",
+    "Every exercise names a coordinator, an operator, a communicator and a": "Chaque exercice désigne un coordinateur, un opérateur, un communicateur et un",
+    "verifier. The verifier signs off only after service and data checks pass.": "vérificateur. Ce dernier ne valide qu'après la réussite des contrôles de service et de données.",
+    "An exercise without communication looks like an incident. Announce the": "Un exercice sans communication ressemble à un incident. Annoncez le",
+    "start, send periodic updates and close the exercise explicitly.": "début, envoyez des mises à jour périodiques et clôturez explicitement l'exercice.",
+    "A completed exercise is only credible when both the service and the": "Un exercice terminé n'est crédible que si le service et les données",
+    "data were checked, with evidence and an approved verifier sign-off.": "ont été contrôlés, avec des preuves et une validation approuvée du vérificateur.",
+    "Least privilege means explicit permissions, one environment per identity,": "Le moindre privilège signifie des permissions explicites, un environnement par identité,",
+    "a reason for elevated roles and an expiry date on every grant.": "une raison pour les rôles élevés et une date d'expiration pour chaque octroi.",
+    "No elevated or over-broad grant detected.": "Aucun octroi élevé ou trop large détecté.",
+    "Only **references** belong in this model. A secret shared between": "Seules les **références** appartiennent à ce modèle. Un secret partagé entre",
+    "environments, especially with production, breaks isolation.": "environnements, notamment avec la production, rompt l'isolation.",
+    "A restricted environment requires a peer review, unit and integration": "Un environnement restreint exige une revue par les pairs, des tests unitaires et d'intégration,",
+    "tests, an identified deployer and a verified, automated rollback.": "un déployeur identifié et un rollback vérifié et automatisé.",
+    "Every remediation means editing the model and re-running `fortcloud-custodian check`.": "Chaque remédiation implique de modifier le modèle et de relancer `fortcloud-custodian check`.",
+    "Sensitive operations must leave durable evidence. A log that can be": "Les opérations sensibles doivent laisser des preuves durables. Un journal modifiable",
+    "edited is not an audit trail.": "n'est pas une piste d'audit.",
+    "A strategy is **COVERED** when no drift check fires. **AT RISK** means at": "Une stratégie est **COUVERTE** lorsqu'aucun contrôle de dérive ne se déclenche. **À RISQUE** signifie qu'au",
+    "least one gap must be fixed; see the [remediation plan](failover-plan.md).": "moins une lacune doit être corrigée ; voir le [plan de remédiation](failover-plan.md).",
+    "Ordered by service criticality, then by tightest RTO. Each gap below comes": "Trié par criticité du service, puis par RTO le plus strict. Chaque lacune ci-dessous provient",
+    "from a deterministic rule in `validate.py`; fix the model, not this file.": "d'une règle déterministe dans `validate.py` ; corrigez le modèle, pas ce fichier.",
+    "- Every P0 component in a service has a strategy with a standby in another region.": "- Chaque composant P0 d'un service dispose d'une stratégie avec un secours dans une autre région.",
+    "- `detection_time + promotion_time` is below the tightest RTO.": "- `detection_time + promotion_time` est inférieur au RTO le plus strict.",
+    "- Replication is compatible with the declared RPO.": "- La réplication est compatible avec le RPO déclaré.",
+    "- A drill younger than 90 days has `result: passed` and an evidence link.": "- Un exercice de moins de 90 jours a `result: passed` et un lien de preuve.",
+    "- `fortcloud-failover check --strict` exits with code 0.": "- `fortcloud-failover check --strict` se termine avec le code 0.",
+    "Run these scenarios in staging (or in production with an approved change": "Exécutez ces scénarios en préproduction (ou en production avec une fenêtre de",
+    "window). Record the measured time and attach evidence to the pull request.": "changement approuvée). Enregistrez le temps mesuré et joignez la preuve à la demande de tirage.",
+    "No gap detected. Keep the drill cadence and review the runbook after": "Aucune lacune détectée. Maintenez la cadence des exercices et revoyez le runbook après",
+    "every topology change.": "chaque modification de la topologie.",
+    "No failover strategy declared.": "Aucune stratégie de bascule déclarée.",
+    "Recorded drills: **none**. Schedule the first one.": "Exercices enregistrés : **aucun**. Planifiez le premier.",
+    "**Error budget** is the amount of failure a percentile target allows over its": "**Le budget d'erreur** est la part de défaillance autorisée par une cible en percentile sur sa",
+    "window (for example 99.9% over 30 days = 43m12s). The alert must fire before": "fenêtre (par exemple 99,9 % sur 30 jours = 43m12s). L'alerte doit se déclencher avant",
+    "that budget is spent.": "que ce budget soit épuisé.",
+    "Every signal should back at least one objective. Orphan signals cost money": "Chaque signal doit étayer au moins un objectif. Les signaux orphelins coûtent de l'argent",
+    "and produce alerts nobody owns.": "et produisent des alertes dont personne n'est responsable.",
+    "Ordered by service criticality. Fix the model, not this file.": "Trié par criticité du service. Corrigez le modèle, pas ce fichier.",
+    "Every P0 service has an availability objective and a data-quality objective.": "Chaque service P0 a un objectif de disponibilité et un objectif de qualité des données.",
+    "Every signal backs at least one objective.": "Chaque signal étaye au moins un objectif.",
+    "Each alert fires before the target is breached and before 50% of the error budget is spent.": "Chaque alerte se déclenche avant la violation de la cible et avant que 50 % du budget d'erreur ne soit consommé.",
+    "Latency and freshness alerts leave at least 20% margin below the target.": "Les alertes de latence et de fraîcheur laissent au moins 20 % de marge sous la cible.",
+    "Signal intervals are frequent enough to observe the budget.": "Les intervalles des signaux sont assez fréquents pour observer le budget.",
+    "Every objective has a recent check with `result: passed`, evidence and a runbook.": "Chaque objectif a une vérification récente avec `result: passed`, une preuve et un runbook.",
+    "- `fortcloud-vitals check --strict` exits with code 0.": "- `fortcloud-vitals check --strict` se termine avec le code 0.",
+    "No gap detected. Keep the SLO and verification cadence.": "Aucune lacune détectée. Maintenez la cadence des SLO et des vérifications.",
+    "Point-in-time restore": "Restauration ponctuelle",
+    "Full loss": "Perte totale",
+    "Region loss": "Perte de région",
+    "Accidental deletion": "Suppression accidentelle",
+    "Database": "Base de données",
+    "Event queue": "File d'événements",
+    "Search engine": "Moteur de recherche",
+    "None": "Aucun",
+    "Cached data": "Données en cache",
+    "Default value": "Valeur par défaut",
+    "Degraded mode": "Mode dégradé",
+    "Queuing": "Mise en file",
+    "Restore": "Restauration",
+    "Failover": "Bascule",
+    "Recovery": "Récupération",
+    "Planned": "Planifié",
+    "In progress": "En cours",
+    "Passed": "Réussi",
+    "Failed": "Échoué",
+    "Internal": "Interne",
+    "Confidential": "Confidentiel",
+    "Restricted": "Restreint",
+    "Human": "Humain",
+    "Availability": "Disponibilité",
+    "Latency": "Latence",
+    "Freshness": "Fraîcheur",
+    "Completeness": "Complétude",
+    "Validity": "Validité",
+    "SQL query": "Requête SQL",
+    "Custom": "Personnalisé",
+    "**uncovered**": "**non couvert**",
+    "**no**": "**non**",
+    "no P0 component": "aucun composant P0",
+    "missing": "absent",
+    "none": "aucun",
+    "active": "actif",
+    "never": "jamais",
+    "yes": "oui",
+    "no": "non",
+    "Prioritise this item": "Prioriser cet élément",
+    "1. Announce the drill and confirm the change window with the service owner.": "1. Annoncez l'exercice et confirmez la fenêtre de changement avec le responsable du service.",
+    "6. Run a smoke test for every covered service and verify data loss against the RPO.": "6. Exécutez un test de fumée pour chaque service couvert et vérifiez la perte de données par rapport au RPO.",
+    "Recorded drills:": "Exercices enregistrés :",
+    "Schedule the first one.": "Planifiez le premier.",
+    "no circuit breaker": "aucun disjoncteur",
+    "no bulkhead isolation": "aucune isolation par cloison",
+    "no fallback": "aucun repli",
+    "no data asset declared": "aucun actif de données déclaré",
+    "no declared dependency": "aucune dépendance déclarée",
+    "no drill recorded": "aucun exercice enregistré",
+    "no evidence link": "aucun lien de preuve",
+    "no runbook": "aucun runbook",
+    "no valid test date": "aucune date de test valide",
+    "no security test in the pipeline": "aucun test de sécurité dans le pipeline",
+    "rollback is not enabled": "le rollback n'est pas activé",
+    "rollback has no verified date": "le rollback n'a aucune date vérifiée",
+    "rollback is not automated for a restricted environment": "le rollback n'est pas automatisé pour un environnement restreint",
+    "log sink is mutable": "le récepteur de journaux est modifiable",
+    "sensitive operation is not logged": "l'opération sensible n'est pas journalisée",
+    "switchover is manual": "la commutation est manuelle",
+    "P0 component without a failover strategy": "composant P0 sans stratégie de bascule",
+    "P0 service has no availability objective": "le service P0 n'a aucun objectif de disponibilité",
+    "P0 service has no data-quality objective": "le service P0 n'a aucun objectif de qualité des données",
+    "failed check on a P0 service": "vérification échouée sur un service P0",
+    "invalid target or alert_threshold duration": "durée de target ou alert_threshold invalide",
+    "invalid target or alert_threshold": "target ou alert_threshold invalide",
+    "invalid dns_ttl": "dns_ttl invalide",
+    "invalid circuit breaker reset_timeout": "reset_timeout du disjoncteur invalide",
+    "environment is not approved for exercises": "l'environnement n'est pas approuvé pour les exercices",
+    "exercise failed": "exercice échoué",
+    "no approved verifier sign-off": "aucune validation approuvée du vérificateur",
+    "external channel without communication approval": "canal externe sans approbation de communication",
+    "no expiry date — standing access": "aucune date d'expiration — accès permanent",
+    "restricted environment grant without approval": "octroi sur un environnement restreint sans approbation",
+    "review is not required for a restricted environment": "la revue n'est pas obligatoire pour un environnement restreint",
+    "audit control failed": "échec du contrôle d'audit",
+    "strategy covers no service": "la stratégie ne couvre aucun service",
+    "# FortCloud Ark — Backup Coverage": "# FortCloud Ark — Couverture des sauvegardes",
+    "# FortCloud Ark — Restore Evidence": "# FortCloud Ark — Preuves de restauration",
+    "# FortCloud Ark — Recovery Plan": "# FortCloud Ark — Plan de récupération",
+    "# FortCloud Atlas — Resilience Report": "# FortCloud Atlas — Rapport de résilience",
+    "# FortCloud Ballast — Resilience Policy Matrix": "# FortCloud Ballast — Matrice des politiques de résilience",
+    "# FortCloud Ballast — Resilience Plan": "# FortCloud Ballast — Plan de résilience",
+    "# FortCloud Ballast — Timeout Budget": "# FortCloud Ballast — Budget de délai d'attente",
+    "> Generated by `fortcloud-atlas graph`. Edit `dependencies.yaml` instead.": "> Généré par `fortcloud-atlas graph`. Modifiez plutôt `dependencies.yaml`.",
+    "flow that depends on it — or blocks deployments for support components.": "flux qui en dépend — ou bloque les déploiements des composants de support.",
+    "| Red | P0 | Critical — interruption unacceptable |": "| Rouge | P0 | Critique — interruption inacceptable |",
+    "| Amber | P1 | Important — short degradation tolerated |": "| Ambre | P1 | Important — dégradation courte tolérée |",
+    "| Green | P2 | Support — recovery in hours |": "| Vert | P2 | Support — récupération en heures |"
+  },
+  "patterns": [
+    {
+      "match": "\\#\\ FortCloud\\ Crucible\\ —\\ Scenario\\ Plan",
+      "replace": "# FortCloud Crucible — Plan de scénarios"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Crucible\\ —\\ Roles\\ Matrix",
+      "replace": "# FortCloud Crucible — Matrice des rôles"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Crucible\\ —\\ Communication\\ Plan",
+      "replace": "# FortCloud Crucible — Plan de communication"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Crucible\\ —\\ Verification\\ Report",
+      "replace": "# FortCloud Crucible — Rapport de vérification"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Custodian\\ —\\ Access\\ Matrix",
+      "replace": "# FortCloud Custodian — Matrice d'accès"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Custodian\\ —\\ Secret\\ Inventory",
+      "replace": "# FortCloud Custodian — Inventaire des secrets"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Custodian\\ —\\ Change\\ Control",
+      "replace": "# FortCloud Custodian — Contrôle des changements"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Custodian\\ —\\ Audit\\ Trail",
+      "replace": "# FortCloud Custodian — Piste d'audit"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Failover\\ —\\ Coverage\\ Matrix",
+      "replace": "# FortCloud Failover — Matrice de couverture"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Failover\\ —\\ Remediation\\ Plan",
+      "replace": "# FortCloud Failover — Plan de remédiation"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Failover\\ —\\ Drill\\ Scenarios",
+      "replace": "# FortCloud Failover — Scénarios d'exercice"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Vitals\\ —\\ SLO\\ Dashboard",
+      "replace": "# FortCloud Vitals — Tableau de bord SLO"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Vitals\\ —\\ Signal\\ Catalog",
+      "replace": "# FortCloud Vitals — Catalogue des signaux"
+    },
+    {
+      "match": "\\#\\ FortCloud\\ Vitals\\ —\\ Quality\\ Plan",
+      "replace": "# FortCloud Vitals — Plan de qualité"
+    },
+    {
+      "match": "\\#\\ Dependency\\ graph",
+      "replace": "# Graphe de dépendances"
+    },
+    {
+      "match": "\\#\\#\\ Legend",
+      "replace": "## Légende"
+    },
+    {
+      "match": "\\#\\#\\ Most\\ depended\\-upon\\ nodes\\ \\(blast\\ radius\\)",
+      "replace": "## Nœuds les plus sollicités (rayon d'impact)"
+    },
+    {
+      "match": "\\#\\#\\ Single\\ points\\ of\\ failure",
+      "replace": "## Points de défaillance uniques"
+    },
+    {
+      "match": "\\#\\#\\#\\ P0\\ components\\ in\\ a\\ single\\ region",
+      "replace": "### Composants P0 dans une seule région"
+    },
+    {
+      "match": "\\#\\#\\ RTO\\ /\\ RPO\\ matrix",
+      "replace": "## Matrice RTO / RPO"
+    },
+    {
+      "match": "\\#\\#\\#\\ Recovery\\ strategies",
+      "replace": "### Stratégies de récupération"
+    },
+    {
+      "match": "\\#\\#\\ Risk\\ register",
+      "replace": "## Registre des risques"
+    },
+    {
+      "match": "\\#\\#\\#\\ Critical\\ action\\ plans",
+      "replace": "### Plans d'action critiques"
+    },
+    {
+      "match": "\\#\\#\\ Restore\\ tests\\ to\\ refresh",
+      "replace": "## Tests de restauration à actualiser"
+    },
+    {
+      "match": "\\#\\#\\ Summary",
+      "replace": "## Résumé"
+    },
+    {
+      "match": "\\#\\#\\ Assets",
+      "replace": "## Actifs"
+    },
+    {
+      "match": "\\#\\#\\ Flows",
+      "replace": "## Flux"
+    },
+    {
+      "match": "\\#\\#\\ Links",
+      "replace": "## Liens"
+    },
+    {
+      "match": "\\#\\#\\ Environments",
+      "replace": "## Environnements"
+    },
+    {
+      "match": "\\#\\#\\ Elevated\\ and\\ broad\\ grants",
+      "replace": "## Octrois élevés et larges"
+    },
+    {
+      "match": "\\#\\#\\ Log\\ sinks",
+      "replace": "## Récepteurs de journaux"
+    },
+    {
+      "match": "\\#\\#\\ Sensitive\\ operations",
+      "replace": "## Opérations sensibles"
+    },
+    {
+      "match": "\\#\\#\\ Coverage\\ gaps",
+      "replace": "## Lacunes de couverture"
+    },
+    {
+      "match": "\\#\\#\\ Plan\\ gaps",
+      "replace": "## Lacunes du plan"
+    },
+    {
+      "match": "\\#\\#\\ Strategies",
+      "replace": "## Stratégies"
+    },
+    {
+      "match": "\\#\\#\\ Services\\ and\\ their\\ protection",
+      "replace": "## Services et leur protection"
+    },
+    {
+      "match": "\\#\\#\\ Roster",
+      "replace": "## Effectif"
+    },
+    {
+      "match": "\\#\\#\\ Channels",
+      "replace": "## Canaux"
+    },
+    {
+      "match": "\\#\\#\\ Stakeholders",
+      "replace": "## Parties prenantes"
+    },
+    {
+      "match": "\\#\\#\\ Checks",
+      "replace": "## Vérifications"
+    },
+    {
+      "match": "\\#\\#\\ Sign\\-offs",
+      "replace": "## Validations"
+    },
+    {
+      "match": "\\#\\#\\ Exercise\\ verdicts",
+      "replace": "## Verdicts des exercices"
+    },
+    {
+      "match": "\\#\\#\\ Objectives",
+      "replace": "## Objectifs"
+    },
+    {
+      "match": "\\#\\#\\ Definition\\ of\\ done",
+      "replace": "## Définition de la finition"
+    },
+    {
+      "match": "\\*\\*Gaps:\\*\\*",
+      "replace": "**Lacunes :**"
+    },
+    {
+      "match": "\\*\\*Steps:\\*\\*",
+      "replace": "**Étapes :**"
+    },
+    {
+      "match": "\\[Dependency\\ graph\\]\\(dependency\\-graph\\.md\\)",
+      "replace": "[Graphe de dépendances](dependency-graph.md)"
+    },
+    {
+      "match": "\\[resilience\\ report\\]\\(resilience\\-report\\.md\\)",
+      "replace": "[rapport de résilience](resilience-report.md)"
+    },
+    {
+      "match": "\\[recovery\\ plan\\]\\(recovery\\-plan\\.md\\)",
+      "replace": "[plan de récupération](recovery-plan.md)"
+    },
+    {
+      "match": "\\[Restore\\ evidence\\]\\(restore\\-evidence\\.md\\)",
+      "replace": "[Preuves de restauration](restore-evidence.md)"
+    },
+    {
+      "match": "\\[Policy\\ matrix\\]\\(policy\\-matrix\\.md\\)",
+      "replace": "[Matrice des politiques](policy-matrix.md)"
+    },
+    {
+      "match": "\\[Resilience\\ plan\\]\\(resilience\\-plan\\.md\\)",
+      "replace": "[Plan de résilience](resilience-plan.md)"
+    },
+    {
+      "match": "\\[Who\\ does\\ what\\]\\(roles\\-matrix\\.md\\)",
+      "replace": "[Qui fait quoi](roles-matrix.md)"
+    },
+    {
+      "match": "\\[Communication\\]\\(communication\\-plan\\.md\\)",
+      "replace": "[Communication](communication-plan.md)"
+    },
+    {
+      "match": "\\[Verification\\]\\(verification\\-report\\.md\\)",
+      "replace": "[Vérification](verification-report.md)"
+    },
+    {
+      "match": "\\[Secret\\ inventory\\]\\(secret\\-inventory\\.md\\)",
+      "replace": "[Inventaire des secrets](secret-inventory.md)"
+    },
+    {
+      "match": "\\[Change\\ control\\]\\(change\\-control\\.md\\)",
+      "replace": "[Contrôle des changements](change-control.md)"
+    },
+    {
+      "match": "\\[Remediation\\ plan\\]\\(failover\\-plan\\.md\\)",
+      "replace": "[Plan de remédiation](failover-plan.md)"
+    },
+    {
+      "match": "\\[Drill\\ scenarios\\]\\(drill\\-scenarios\\.md\\)",
+      "replace": "[Scénarios d'exercice](drill-scenarios.md)"
+    },
+    {
+      "match": "\\[Signal\\ catalog\\]\\(signal\\-catalog\\.md\\)",
+      "replace": "[Catalogue des signaux](signal-catalog.md)"
+    },
+    {
+      "match": "\\[Quality\\ plan\\]\\(quality\\-plan\\.md\\)",
+      "replace": "[Plan de qualité](quality-plan.md)"
+    },
+    {
+      "match": "\\[Quickstart\\]\\(\\.\\./quickstart\\.md\\)",
+      "replace": "[Démarrage rapide](../quickstart.md)"
+    },
+    {
+      "match": "\\[Machine-readable status\\]\\(([^)]+)\\)",
+      "replace": "[Statut lisible par machine](\\1)"
+    },
+    {
+      "match": "\\|\\ Colour\\ \\|\\ Criticality\\ \\|\\ Meaning\\ \\|",
+      "replace": "| Couleur | Criticité | Signification |"
+    },
+    {
+      "match": "\\|\\ Red\\ \\|\\ P0\\ \\|\\ Critical\\ \\-\\ interruption\\ unacceptable\\ \\|",
+      "replace": "| Rouge | P0 | Critique - interruption inacceptable |"
+    },
+    {
+      "match": "\\|\\ Amber\\ \\|\\ P1\\ \\|\\ Important\\ \\-\\ short\\ degradation\\ tolerated\\ \\|",
+      "replace": "| Ambre | P1 | Important - dégradation courte tolérée |"
+    },
+    {
+      "match": "\\|\\ Green\\ \\|\\ P2\\ \\|\\ Support\\ \\-\\ recovery\\ in\\ hours\\ \\|",
+      "replace": "| Vert | P2 | Support - récupération en heures |"
+    },
+    {
+      "match": "\\|\\ Component\\ \\|\\ Category\\ \\|\\ Criticality\\ \\|\\ Direct\\ dependents\\ \\|",
+      "replace": "| Composant | Catégorie | Criticité | Dépendants directs |"
+    },
+    {
+      "match": "\\|\\ Component\\ \\|\\ Category\\ \\|\\ Criticality\\ \\|\\ Owner\\ \\|\\ Dependents\\ \\|\\ Risks\\ \\|\\ Action\\ \\|",
+      "replace": "| Composant | Catégorie | Criticité | Responsable | Dépendants | Risques | Action |"
+    },
+    {
+      "match": "\\|\\ Component\\ \\|\\ Regions\\ \\|\\ Provider\\ \\|\\ Owner\\ \\|",
+      "replace": "| Composant | Régions | Fournisseur | Responsable |"
+    },
+    {
+      "match": "\\|\\ Flow\\ \\|\\ Criticality\\ \\|\\ Availability\\ \\|\\ RTO\\ \\|\\ RPO\\ \\|\\ Owner\\ \\|\\ Last\\ restore\\ test\\ \\|",
+      "replace": "| Flux | Criticité | Disponibilité | RTO | RPO | Responsable | Dernier test de restauration |"
+    },
+    {
+      "match": "\\|\\ ID\\ \\|\\ Risk\\ \\|\\ Components\\ \\|\\ Score\\ \\|\\ Severity\\ \\|\\ Status\\ \\|\\ Owner\\ \\|\\ Due\\ \\|",
+      "replace": "| ID | Risque | Composants | Score | Gravité | Statut | Responsable | Échéance |"
+    },
+    {
+      "match": "\\|\\ Flow\\ \\|\\ Criticality\\ \\|\\ Age\\ of\\ last\\ test\\ \\|",
+      "replace": "| Flux | Criticité | Âge du dernier test |"
+    },
+    {
+      "match": "\\|\\ Asset\\ \\|\\ Crit\\.\\ \\|\\ Backup\\ \\|\\ Type\\ /\\ Schedule\\ \\|\\ Retention\\ \\|\\ Immutable\\ \\|\\ Cross\\-region\\ \\|\\ Last\\ backup\\ \\|\\ Last\\ restore\\ \\|\\ RTO\\ /\\ RPO\\ \\|\\ Status\\ \\|",
+      "replace": "| Actif | Crit. | Sauvegarde | Type / Planification | Rétention | Immuable | Inter-régions | Dernière sauvegarde | Dernière restauration | RTO / RPO | Statut |"
+    },
+    {
+      "match": "\\|\\ Restore\\ \\|\\ Asset\\ \\|\\ Scenario\\ \\|\\ Date\\ \\|\\ Age\\ \\|\\ Meas\\.\\ RTO\\ \\|\\ Target\\ RTO\\ \\|\\ RTO\\ \\|\\ Meas\\.\\ RPO\\ \\|\\ Target\\ RPO\\ \\|\\ RPO\\ \\|\\ Result\\ \\|\\ Evidence\\ \\|",
+      "replace": "| Restauration | Actif | Scénario | Date | Âge | RTO mesuré | RTO cible | RTO | RPO mesuré | RPO cible | RPO | Résultat | Preuve |"
+    },
+    {
+      "match": "\\|\\ Flow\\ \\|\\ Service\\ \\|\\ Crit\\.\\ \\|\\ Steps\\ \\|\\ Budget\\ \\|\\ Worst\\ case\\ \\|\\ Headroom\\ \\|\\ Usage\\ \\|\\ Status\\ \\|",
+      "replace": "| Flux | Service | Crit. | Étapes | Budget | Pire cas | Marge | Utilisation | Statut |"
+    },
+    {
+      "match": "\\|\\ \\#\\ \\|\\ Dependency\\ \\|\\ Type\\ \\|\\ Policy\\ \\|\\ Worst\\ case\\ \\|\\ Share\\ \\|",
+      "replace": "| # | Dépendance | Type | Politique | Pire cas | Part |"
+    },
+    {
+      "match": "\\|\\ Policy\\ \\|\\ Dependency\\ \\|\\ Type\\ \\|\\ Crit\\.\\ \\|\\ Timeout\\ \\|\\ Retries\\ \\|\\ Worst\\ case\\ \\|\\ Breaker\\ \\|\\ Bulkhead\\ \\|\\ Fallback\\ \\|\\ Status\\ \\|",
+      "replace": "| Politique | Dépendance | Type | Crit. | Délai | Tentatives | Pire cas | Disjoncteur | Cloison | Repli | Statut |"
+    },
+    {
+      "match": "\\|\\ Scenario\\ \\|\\ Kind\\ \\|\\ System\\ \\|\\ Env\\ \\|\\ Controlled\\ \\|\\ Scheduled\\ \\|\\ Status\\ \\|\\ RTO\\ \\|\\ RPO\\ \\|\\ Window\\ \\|\\ Status\\ \\|",
+      "replace": "| Scénario | Type | Système | Env | Contrôlé | Planifié | Statut | RTO | RPO | Fenêtre | Statut |"
+    },
+    {
+      "match": "\\|\\ Scenario\\ \\|\\ Coordinator\\ \\|\\ Operator\\ \\|\\ Communicator\\ \\|\\ Verifier\\ \\|\\ Status\\ \\|",
+      "replace": "| Scénario | Coordinateur | Opérateur | Communicateur | Vérificateur | Statut |"
+    },
+    {
+      "match": "\\|\\ Participant\\ \\|\\ Name\\ \\|\\ Team\\ \\|\\ Contact\\ \\|",
+      "replace": "| Participant | Nom | Équipe | Contact |"
+    },
+    {
+      "match": "\\|\\ Channel\\ \\|\\ Name\\ \\|\\ Type\\ \\|\\ Audience\\ \\|\\ Owner\\ \\|\\ Status\\ \\|",
+      "replace": "| Canal | Nom | Type | Public | Responsable | Statut |"
+    },
+    {
+      "match": "\\|\\ Stakeholder\\ \\|\\ Channel\\ \\|\\ Notified\\ at\\ \\|\\ Status\\ \\|",
+      "replace": "| Partie prenante | Canal | Informée à | Statut |"
+    },
+    {
+      "match": "\\|\\ Check\\ \\|\\ Scenario\\ \\|\\ Kind\\ \\|\\ Metric\\ \\|\\ Expected\\ \\|\\ Result\\ \\|\\ Status\\ \\|",
+      "replace": "| Vérification | Scénario | Type | Métrique | Attendu | Résultat | Statut |"
+    },
+    {
+      "match": "\\|\\ Scenario\\ \\|\\ Verifier\\ \\|\\ Role\\ \\|\\ Date\\ \\|\\ Decision\\ \\|\\ Status\\ \\|",
+      "replace": "| Scénario | Vérificateur | Rôle | Date | Décision | Statut |"
+    },
+    {
+      "match": "\\|\\ Grant\\ \\|\\ Principal\\ \\|\\ Type\\ \\|\\ Environment\\ \\|\\ Class\\.\\ \\|\\ Role\\ \\|\\ \\#\\ Perms\\ \\|\\ Expires\\ \\|\\ Term\\ \\|\\ Status\\ \\|",
+      "replace": "| Octroi | Principal | Type | Environnement | Class. | Rôle | # Perms | Expire | Durée | Statut |"
+    },
+    {
+      "match": "\\|\\ Environment\\ \\|\\ Classification\\ \\|\\ Owner\\ \\|\\ Principals\\ \\|\\ Grants\\ \\|\\ Secrets\\ \\|\\ Pipelines\\ \\|",
+      "replace": "| Environnement | Classification | Responsable | Principaux | Octrois | Secrets | Pipelines |"
+    },
+    {
+      "match": "\\|\\ Secret\\ \\|\\ Store\\ \\|\\ Reference\\ \\|\\ Environments\\ \\|\\ Last\\ rotated\\ \\|\\ Age\\ \\|\\ Policy\\ \\|\\ Users\\ \\|\\ Status\\ \\|",
+      "replace": "| Secret | Coffre | Référence | Environnements | Dernière rotation | Âge | Politique | Utilisateurs | Statut |"
+    },
+    {
+      "match": "\\|\\ Pipeline\\ \\|\\ Env\\ \\|\\ Trigger\\ \\|\\ Deployer\\ \\|\\ Review\\ \\|\\ Approvers\\ \\|\\ Tests\\ \\|\\ Rollback\\ \\|\\ Mode\\ \\|\\ Status\\ \\|",
+      "replace": "| Pipeline | Env | Déclencheur | Déployeur | Revue | Approbateurs | Tests | Rollback | Mode | Statut |"
+    },
+    {
+      "match": "\\|\\ Sink\\ \\|\\ Type\\ \\|\\ Destination\\ \\|\\ Retention\\ \\|\\ Immutable\\ \\|\\ Status\\ \\|",
+      "replace": "| Récepteur | Type | Destination | Rétention | Immuable | Statut |"
+    },
+    {
+      "match": "\\|\\ Operation\\ \\|\\ Kind\\ \\|\\ Environment\\ \\|\\ Logged\\ \\|\\ Sink\\ \\|\\ Last\\ evidence\\ \\|\\ Status\\ \\|",
+      "replace": "| Opération | Type | Environnement | Journalisé | Récepteur | Dernière preuve | Statut |"
+    },
+    {
+      "match": "\\|\\ Strategy\\ \\|\\ Primary\\ →\\ Standby\\ \\|\\ Mode\\ \\|\\ Regions\\ \\|\\ Replication\\ \\|\\ Switchover\\ /\\ RTO\\ \\|\\ Last\\ drill\\ \\|\\ Status\\ \\|",
+      "replace": "| Stratégie | Primaire → Secours | Mode | Régions | Réplication | Commutation / RTO | Dernier exercice | Statut |"
+    },
+    {
+      "match": "\\|\\ Service\\ \\|\\ Criticality\\ \\|\\ RTO\\ \\|\\ RPO\\ \\|\\ Owner\\ \\|\\ P0\\ coverage\\ \\|",
+      "replace": "| Service | Criticité | RTO | RPO | Responsable | Couverture P0 |"
+    },
+    {
+      "match": "\\|\\ Strategy\\ \\|\\ Primary\\ \\|\\ Standby\\ \\|\\ Mode\\ \\|\\ Last\\ drill\\ \\|\\ Evidence\\ \\|",
+      "replace": "| Stratégie | Primaire | Secours | Mode | Dernier exercice | Preuve |"
+    },
+    {
+      "match": "\\|\\ Objective\\ \\|\\ Service\\ \\|\\ Crit\\.\\ \\|\\ Signal\\ \\|\\ Kind\\ \\|\\ Target\\ \\|\\ Window\\ \\|\\ Budget\\ \\|\\ Alert\\ at\\ \\|\\ Headroom\\ \\|\\ Interval\\ \\|\\ Status\\ \\|",
+      "replace": "| Objectif | Service | Crit. | Signal | Type | Cible | Fenêtre | Budget | Alerte à | Marge | Intervalle | Statut |"
+    },
+    {
+      "match": "\\|\\ Signal\\ \\|\\ Kind\\ \\|\\ Source\\ \\|\\ Interval\\ \\|\\ Unit\\ \\|\\ Objectives\\ \\|\\ Last\\ check\\ \\|\\ Status\\ \\|",
+      "replace": "| Signal | Type | Source | Intervalle | Unité | Objectifs | Dernière vérification | Statut |"
+    },
+    {
+      "match": "\\*\\*Owner:\\*\\*",
+      "replace": "**Responsable :**"
+    },
+    {
+      "match": "\\*\\*Reference:\\*\\*",
+      "replace": "**Référence :**"
+    },
+    {
+      "match": "\\*\\*Criticality:\\*\\*",
+      "replace": "**Criticité :**"
+    },
+    {
+      "match": "\\*\\*Targets:\\*\\*",
+      "replace": "**Cibles :**"
+    },
+    {
+      "match": "\\*\\*Services:\\*\\*",
+      "replace": "**Services :**"
+    },
+    {
+      "match": "\\*\\*Status:\\*\\*",
+      "replace": "**Statut :**"
+    },
+    {
+      "match": "\\*\\*Service:\\*\\*",
+      "replace": "**Service :**"
+    },
+    {
+      "match": "\\*\\*Budget:\\*\\*",
+      "replace": "**Budget :**"
+    },
+    {
+      "match": "\\*\\*Worst\\ case:\\*\\*",
+      "replace": "**Pire cas :**"
+    },
+    {
+      "match": "\\*\\*Largest\\ step:\\*\\*",
+      "replace": "**Étape la plus longue :**"
+    },
+    {
+      "match": "\\*\\*Operation:\\*\\*",
+      "replace": "**Opération :**"
+    },
+    {
+      "match": "\\*\\*Backoff:\\*\\*",
+      "replace": "**Backoff :**"
+    },
+    {
+      "match": "\\*\\*Breaker:\\*\\*",
+      "replace": "**Disjoncteur :**"
+    },
+    {
+      "match": "\\*\\*Note:\\*\\*",
+      "replace": "**Note :**"
+    },
+    {
+      "match": "\\*\\*Kind:\\*\\*",
+      "replace": "**Type :**"
+    },
+    {
+      "match": "\\*\\*Target\\ /\\ alert:\\*\\*",
+      "replace": "**Cible / alerte :**"
+    },
+    {
+      "match": "\\*\\*Window:\\*\\*",
+      "replace": "**Fenêtre :**"
+    },
+    {
+      "match": "\\*\\*Error\\ budget:\\*\\*",
+      "replace": "**Budget d'erreur :**"
+    },
+    {
+      "match": "\\*\\*Signal:\\*\\*",
+      "replace": "**Signal :**"
+    },
+    {
+      "match": "\\*\\*Last\\ check:\\*\\*",
+      "replace": "**Dernière vérification :**"
+    },
+    {
+      "match": "\\*\\*Objectives:\\*\\*",
+      "replace": "**Objectifs :**"
+    },
+    {
+      "match": "\\*\\*Environment:\\*\\*",
+      "replace": "**Environnement :**"
+    },
+    {
+      "match": "\\*\\*Dependency:\\*\\*",
+      "replace": "**Dépendance :**"
+    },
+    {
+      "match": "\\*\\*Update\\ cadence:\\*\\*",
+      "replace": "**Cadence de mise à jour :**"
+    },
+    {
+      "match": "\\*\\*Escalation:\\*\\*",
+      "replace": "**Escalation :**"
+    },
+    {
+      "match": "\\*\\*Go\\ /\\ no\\-go:\\*\\*",
+      "replace": "**Go / no-go :**"
+    },
+    {
+      "match": "\\*\\*Replication:\\*\\*",
+      "replace": "**Réplication :**"
+    },
+    {
+      "match": "\\*\\*Mode:\\*\\*",
+      "replace": "**Mode :**"
+    },
+    {
+      "match": "\\*\\*Target:\\*\\*",
+      "replace": "**Cible :**"
+    },
+    {
+      "match": "\\*\\*Runbook:\\*\\*",
+      "replace": "**Runbook :**"
+    },
+    {
+      "match": "\\*\\*Gap:\\*\\*",
+      "replace": "**Lacune :**"
+    },
+    {
+      "match": "AT\\ RISK",
+      "replace": "À RISQUE"
+    },
+    {
+      "match": "PROVEN",
+      "replace": "PROUVÉ"
+    },
+    {
+      "match": "COVERED",
+      "replace": "COUVERT"
+    },
+    {
+      "match": "PASS",
+      "replace": "RÉUSSI"
+    },
+    {
+      "match": "\\*\\*FAIL\\*\\*",
+      "replace": "**ÉCHEC**"
+    },
+    {
+      "match": "VERIFIED",
+      "replace": "VÉRIFIÉ"
+    },
+    {
+      "match": "PENDING",
+      "replace": "EN ATTENTE"
+    },
+    {
+      "match": "\\*\\*none\\*\\*",
+      "replace": "**aucun**"
+    },
+    {
+      "match": "\\*\\*missing\\*\\*",
+      "replace": "**absent**"
+    },
+    {
+      "match": "missing\\ date",
+      "replace": "date absente"
+    },
+    {
+      "match": "\\(stale\\)",
+      "replace": "(ancien)"
+    },
+    {
+      "match": "uncovered",
+      "replace": "non couvert"
+    },
+    {
+      "match": "No\\ P0\\ component",
+      "replace": "aucun composant P0"
+    },
+    {
+      "match": "no\\ service",
+      "replace": "aucun service"
+    },
+    {
+      "match": "expired",
+      "replace": "expiré"
+    },
+    {
+      "match": "Active/active",
+      "replace": "Actif/actif"
+    },
+    {
+      "match": "Active/passive",
+      "replace": "Actif/passif"
+    },
+    {
+      "match": "Warm",
+      "replace": "Tiède"
+    },
+    {
+      "match": "Cold",
+      "replace": "Froid"
+    },
+    {
+      "match": "manual",
+      "replace": "manuel"
+    },
+    {
+      "match": "\\*\\*PROVEN\\*\\*\\ means\\ the\\ asset\\ has\\ a\\ backup\\ policy\\ and\\ at\\ least\\ one\\ recent,",
+      "replace": "**PROUVÉ** signifie que l'actif dispose d'une politique de sauvegarde et d'au moins un test de restauration récent,"
+    },
+    {
+      "match": "successful\\ restore\\ test\\ compatible\\ with\\ the\\ service\\ targets\\.\\ See\\ the",
+      "replace": "réussi compatible avec les cibles de service. Consultez le"
+    },
+    {
+      "match": "\\[recovery\\ plan\\]\\(recovery\\-plan\\.md\\)\\ for\\ the\\ gaps\\.",
+      "replace": "[plan de récupération](recovery-plan.md) pour les lacunes."
+    },
+    {
+      "match": "Measured\\ values\\ come\\ from\\ the\\ drill\\ record\\ and\\ are\\ compared\\ with\\ the\\ tightest",
+      "replace": "Les valeurs mesurées proviennent du compte rendu d'exercice et sont comparées à la cible la plus stricte"
+    },
+    {
+      "match": "target\\ of\\ the\\ services\\ using\\ the\\ restored\\ asset\\.",
+      "replace": "des services utilisant l'actif restauré."
+    },
+    {
+      "match": "Ordered\\ by\\ asset\\ criticality,\\ then\\ by\\ tightest\\ RTO\\.\\ Fix\\ the\\ model,\\ not\\ this\\ file\\.",
+      "replace": "Trié par criticité de l'actif, puis par RTO le plus strict. Corrigez le modèle, pas ce fichier."
+    },
+    {
+      "match": "\\-\\ Every\\ P0\\ asset\\ has\\ an\\ immutable,\\ encrypted,\\ cross\\-region\\ backup\\.",
+      "replace": "- Chaque actif P0 dispose d'une sauvegarde immuable, chiffrée et inter-régions."
+    },
+    {
+      "match": "\\-\\ Backup\\ schedule\\ is\\ compatible\\ with\\ the\\ tightest\\ service\\ RPO\\.",
+      "replace": "- La planification de sauvegarde est compatible avec le RPO le plus strict du service."
+    },
+    {
+      "match": "\\-\\ Every\\ P0\\ asset\\ has\\ a\\ recent\\ restore\\ test\\ with\\ a\\ deletion\\ or\\ ransomware\\ scenario\\.",
+      "replace": "- Chaque actif P0 a un test de restauration récent avec un scénario de suppression ou de ransomware."
+    },
+    {
+      "match": "\\-\\ Measured\\ RTO\\ and\\ RPO\\ are\\ below\\ the\\ service\\ targets\\.",
+      "replace": "- Les RTO et RPO mesurés sont inférieurs aux cibles de service."
+    },
+    {
+      "match": "\\-\\ Every\\ restore\\ result\\ is\\ `passed`\\ and\\ has\\ an\\ evidence\\ link\\.",
+      "replace": "- Chaque résultat de restauration est `passed` et dispose d'un lien de preuve."
+    },
+    {
+      "match": "\\-\\ `fortcloud\\-ark\\ check\\ \\-\\-strict`\\ exits\\ with\\ code\\ 0\\.",
+      "replace": "- `fortcloud-ark check --strict` se termine avec le code 0."
+    },
+    {
+      "match": "No\\ gap\\ detected\\.\\ Keep\\ the\\ backup\\ and\\ restore\\ cadence\\.",
+      "replace": "Aucune lacune détectée. Maintenez la cadence des sauvegardes et des restaurations."
+    },
+    {
+      "match": "An\\ arrow\\ `A\\ \\-\\->\\ B`\\ means\\ \\*\\*A\\ depends\\ on\\ B\\*\\*\\.\\ The\\ more\\ arrows\\ a\\ node\\ receives,",
+      "replace": "Une flèche `A --> B` signifie **A dépend de B**. Plus un nœud reçoit de flèches,"
+    },
+    {
+      "match": "the\\ larger\\ its\\ blast\\ radius\\.\\ Dotted\\ links\\ are\\ non\\-critical\\ dependencies\\ \\(`required:\\ false`\\)\\.",
+      "replace": "plus son rayon d'impact est grand. Les liens en pointillé sont des dépendances non critiques (`required: false`)."
+    },
+    {
+      "match": "See\\ also:\\ \\[resilience\\ report\\]\\(resilience\\-report\\.md\\)\\.",
+      "replace": "Voir aussi : [rapport de résilience](resilience-report.md)."
+    },
+    {
+      "match": "These\\ components\\ have\\ a\\ single\\ instance\\.\\ Losing\\ one\\ directly\\ impacts\\ every",
+      "replace": "Ces composants ont une instance unique. Leur perte impacte directement chaque"
+    },
+    {
+      "match": "flow\\ that\\ depends\\ on\\ it\\ \\-\\ or\\ blocks\\ deployments\\ for\\ support\\ components\\.",
+      "replace": "flux qui en dépend - ou bloque les déploiements des composants de support."
+    },
+    {
+      "match": "RTO\\ =\\ maximum\\ time\\ to\\ restore\\ service\\.\\ RPO\\ =\\ maximum\\ acceptable\\ data\\ loss\\.",
+      "replace": "RTO = temps maximal de rétablissement du service. RPO = perte de données maximale acceptable."
+    },
+    {
+      "match": "Sorted\\ by\\ descending\\ score\\ \\(likelihood\\ ×\\ impact\\)\\.",
+      "replace": "Trié par score décroissant (probabilité × impact)."
+    },
+    {
+      "match": "None\\.",
+      "replace": "Aucun."
+    },
+    {
+      "match": "All\\ tests\\ are\\ up\\ to\\ date\\.",
+      "replace": "Tous les tests sont à jour."
+    },
+    {
+      "match": "Rule:\\ a\\ restore\\ test\\ must\\ be\\ refreshed\\ at\\ least\\ every\\ ",
+      "replace": "Règle : un test de restauration doit être actualisé au moins tous les "
+    },
+    {
+      "match": "\\*\\*Worst\\ case\\*\\*\\ is\\ the\\ sum\\ of\\ every\\ step's\\ timeout\\ ×\\ attempts\\ plus\\ exponential",
+      "replace": "**Pire cas** est la somme du délai de chaque étape multiplié par les tentatives, plus les délais de"
+    },
+    {
+      "match": "backoff\\ delays\\.\\ It\\ must\\ stay\\ below\\ the\\ service\\ latency\\ budget\\.",
+      "replace": "backoff exponentiel. Il doit rester inférieur au budget de latence du service."
+    },
+    {
+      "match": "A\\ policy\\ is\\ the\\ guardrail\\ around\\ one\\ outbound\\ dependency:\\ how\\ long\\ to\\ wait,",
+      "replace": "Une politique est le garde-fou d'une dépendance sortante : combien de temps attendre,"
+    },
+    {
+      "match": "how\\ many\\ times\\ to\\ retry,\\ when\\ to\\ open\\ the\\ circuit\\ and\\ where\\ to\\ isolate\\ it\\.",
+      "replace": "combien de fois réessayer, quand ouvrir le disjoncteur et où l'isoler."
+    },
+    {
+      "match": "Ordered\\ by\\ criticality,\\ then\\ by\\ the\\ tightest\\ latency\\ budget\\.\\ Fix\\ the\\ model,",
+      "replace": "Trié par criticité, puis par le budget de latence le plus strict. Corrigez le modèle,"
+    },
+    {
+      "match": "not\\ this\\ file\\.",
+      "replace": "pas ce fichier."
+    },
+    {
+      "match": "\\-\\ Every\\ flow's\\ worst\\-case\\ chain\\ stays\\ below\\ its\\ service\\ latency\\ budget\\.",
+      "replace": "- La chaîne au pire cas de chaque flux reste inférieure au budget de latence de son service."
+    },
+    {
+      "match": "\\-\\ No\\ step\\ consumes\\ more\\ than\\ 70%\\ of\\ a\\ flow's\\ budget\\.",
+      "replace": "- Aucune étape ne consomme plus de 70 % du budget d'un flux."
+    },
+    {
+      "match": "\\-\\ P0\\ dependencies\\ have\\ a\\ circuit\\ breaker\\ and\\ an\\ isolated\\ bulkhead\\.",
+      "replace": "- Les dépendances P0 disposent d'un disjoncteur et d'une cloison isolée."
+    },
+    {
+      "match": "\\-\\ Retries\\ use\\ jitter\\ and\\ exponential\\ backoff;\\ non\\-idempotent\\ writes\\ are\\ never\\ retried\\.",
+      "replace": "- Les tentatives utilisent du jitter et un backoff exponentiel ; les écritures non idempotentes ne sont jamais retentées."
+    },
+    {
+      "match": "\\-\\ Optional\\ dependencies\\ declare\\ a\\ fallback\\.",
+      "replace": "- Les dépendances optionnelles déclarent un repli."
+    },
+    {
+      "match": "\\-\\ `fortcloud\\-ballast\\ check\\ \\-\\-strict`\\ exits\\ with\\ code\\ 0\\.",
+      "replace": "- `fortcloud-ballast check --strict` se termine avec le code 0."
+    },
+    {
+      "match": "No\\ gap\\ detected\\.\\ Keep\\ the\\ timeout\\ budgets\\ and\\ policy\\ cadence\\.",
+      "replace": "Aucune lacune détectée. Maintenez les budgets de délai et la cadence des politiques."
+    },
+    {
+      "match": "Failure\\ drills\\ always\\ start\\ in\\ a\\ controlled\\ environment:\\ isolated,",
+      "replace": "Les exercices de défaillance commencent toujours dans un environnement contrôlé : des données"
+    },
+    {
+      "match": "non\\-production\\ data\\ and\\ approved\\.\\ Production\\ needs\\ a\\ passed\\ rehearsal",
+      "replace": "isolées, non de production et approuvées. La production nécessite au préalable une répétition réussie"
+    },
+    {
+      "match": "of\\ the\\ same\\ kind\\ first\\.",
+      "replace": "du même type."
+    },
+    {
+      "match": "Every\\ exercise\\ names\\ a\\ coordinator,\\ an\\ operator,\\ a\\ communicator\\ and\\ a",
+      "replace": "Chaque exercice désigne un coordinateur, un opérateur, un communicateur et un"
+    },
+    {
+      "match": "verifier\\.\\ The\\ verifier\\ signs\\ off\\ only\\ after\\ service\\ and\\ data\\ checks\\ pass\\.",
+      "replace": "vérificateur. Ce dernier ne valide qu'après la réussite des contrôles de service et de données."
+    },
+    {
+      "match": "An\\ exercise\\ without\\ communication\\ looks\\ like\\ an\\ incident\\.\\ Announce\\ the",
+      "replace": "Un exercice sans communication ressemble à un incident. Annoncez le"
+    },
+    {
+      "match": "start,\\ send\\ periodic\\ updates\\ and\\ close\\ the\\ exercise\\ explicitly\\.",
+      "replace": "début, envoyez des mises à jour périodiques et clôturez explicitement l'exercice."
+    },
+    {
+      "match": "A\\ completed\\ exercise\\ is\\ only\\ credible\\ when\\ both\\ the\\ service\\ and\\ the",
+      "replace": "Un exercice terminé n'est crédible que si le service et les données"
+    },
+    {
+      "match": "data\\ were\\ checked,\\ with\\ evidence\\ and\\ an\\ approved\\ verifier\\ sign\\-off\\.",
+      "replace": "ont été contrôlés, avec des preuves et une validation approuvée du vérificateur."
+    },
+    {
+      "match": "Least\\ privilege\\ means\\ explicit\\ permissions,\\ one\\ environment\\ per\\ identity,",
+      "replace": "Le moindre privilège signifie des permissions explicites, un environnement par identité,"
+    },
+    {
+      "match": "a\\ reason\\ for\\ elevated\\ roles\\ and\\ an\\ expiry\\ date\\ on\\ every\\ grant\\.",
+      "replace": "une raison pour les rôles élevés et une date d'expiration pour chaque octroi."
+    },
+    {
+      "match": "No\\ elevated\\ or\\ over\\-broad\\ grant\\ detected\\.",
+      "replace": "Aucun octroi élevé ou trop large détecté."
+    },
+    {
+      "match": "Only\\ \\*\\*references\\*\\*\\ belong\\ in\\ this\\ model\\.\\ A\\ secret\\ shared\\ between",
+      "replace": "Seules les **références** appartiennent à ce modèle. Un secret partagé entre"
+    },
+    {
+      "match": "environments,\\ especially\\ with\\ production,\\ breaks\\ isolation\\.",
+      "replace": "environnements, notamment avec la production, rompt l'isolation."
+    },
+    {
+      "match": "A\\ restricted\\ environment\\ requires\\ a\\ peer\\ review,\\ unit\\ and\\ integration",
+      "replace": "Un environnement restreint exige une revue par les pairs, des tests unitaires et d'intégration,"
+    },
+    {
+      "match": "tests,\\ an\\ identified\\ deployer\\ and\\ a\\ verified,\\ automated\\ rollback\\.",
+      "replace": "un déployeur identifié et un rollback vérifié et automatisé."
+    },
+    {
+      "match": "Every\\ remediation\\ means\\ editing\\ the\\ model\\ and\\ re\\-running\\ `fortcloud\\-custodian\\ check`\\.",
+      "replace": "Chaque remédiation implique de modifier le modèle et de relancer `fortcloud-custodian check`."
+    },
+    {
+      "match": "Sensitive\\ operations\\ must\\ leave\\ durable\\ evidence\\.\\ A\\ log\\ that\\ can\\ be",
+      "replace": "Les opérations sensibles doivent laisser des preuves durables. Un journal modifiable"
+    },
+    {
+      "match": "edited\\ is\\ not\\ an\\ audit\\ trail\\.",
+      "replace": "n'est pas une piste d'audit."
+    },
+    {
+      "match": "A\\ strategy\\ is\\ \\*\\*COVERED\\*\\*\\ when\\ no\\ drift\\ check\\ fires\\.\\ \\*\\*AT\\ RISK\\*\\*\\ means\\ at",
+      "replace": "Une stratégie est **COUVERTE** lorsqu'aucun contrôle de dérive ne se déclenche. **À RISQUE** signifie qu'au"
+    },
+    {
+      "match": "least\\ one\\ gap\\ must\\ be\\ fixed;\\ see\\ the\\ \\[remediation\\ plan\\]\\(failover\\-plan\\.md\\)\\.",
+      "replace": "moins une lacune doit être corrigée ; voir le [plan de remédiation](failover-plan.md)."
+    },
+    {
+      "match": "Ordered\\ by\\ service\\ criticality,\\ then\\ by\\ tightest\\ RTO\\.\\ Each\\ gap\\ below\\ comes",
+      "replace": "Trié par criticité du service, puis par RTO le plus strict. Chaque lacune ci-dessous provient"
+    },
+    {
+      "match": "from\\ a\\ deterministic\\ rule\\ in\\ `validate\\.py`;\\ fix\\ the\\ model,\\ not\\ this\\ file\\.",
+      "replace": "d'une règle déterministe dans `validate.py` ; corrigez le modèle, pas ce fichier."
+    },
+    {
+      "match": "\\-\\ Every\\ P0\\ component\\ in\\ a\\ service\\ has\\ a\\ strategy\\ with\\ a\\ standby\\ in\\ another\\ region\\.",
+      "replace": "- Chaque composant P0 d'un service dispose d'une stratégie avec un secours dans une autre région."
+    },
+    {
+      "match": "\\-\\ `detection_time\\ \\+\\ promotion_time`\\ is\\ below\\ the\\ tightest\\ RTO\\.",
+      "replace": "- `detection_time + promotion_time` est inférieur au RTO le plus strict."
+    },
+    {
+      "match": "\\-\\ Replication\\ is\\ compatible\\ with\\ the\\ declared\\ RPO\\.",
+      "replace": "- La réplication est compatible avec le RPO déclaré."
+    },
+    {
+      "match": "\\-\\ A\\ drill\\ younger\\ than\\ 90\\ days\\ has\\ `result:\\ passed`\\ and\\ an\\ evidence\\ link\\.",
+      "replace": "- Un exercice de moins de 90 jours a `result: passed` et un lien de preuve."
+    },
+    {
+      "match": "\\-\\ `fortcloud\\-failover\\ check\\ \\-\\-strict`\\ exits\\ with\\ code\\ 0\\.",
+      "replace": "- `fortcloud-failover check --strict` se termine avec le code 0."
+    },
+    {
+      "match": "Run\\ these\\ scenarios\\ in\\ staging\\ \\(or\\ in\\ production\\ with\\ an\\ approved\\ change",
+      "replace": "Exécutez ces scénarios en préproduction (ou en production avec une fenêtre de"
+    },
+    {
+      "match": "window\\)\\.\\ Record\\ the\\ measured\\ time\\ and\\ attach\\ evidence\\ to\\ the\\ pull\\ request\\.",
+      "replace": "changement approuvée). Enregistrez le temps mesuré et joignez la preuve à la demande de tirage."
+    },
+    {
+      "match": "No\\ gap\\ detected\\.\\ Keep\\ the\\ drill\\ cadence\\ and\\ review\\ the\\ runbook\\ after",
+      "replace": "Aucune lacune détectée. Maintenez la cadence des exercices et revoyez le runbook après"
+    },
+    {
+      "match": "every\\ topology\\ change\\.",
+      "replace": "chaque modification de la topologie."
+    },
+    {
+      "match": "No\\ failover\\ strategy\\ declared\\.",
+      "replace": "Aucune stratégie de bascule déclarée."
+    },
+    {
+      "match": "Recorded\\ drills:\\ \\*\\*none\\*\\*\\.\\ Schedule\\ the\\ first\\ one\\.",
+      "replace": "Exercices enregistrés : **aucun**. Planifiez le premier."
+    },
+    {
+      "match": "\\*\\*Error\\ budget\\*\\*\\ is\\ the\\ amount\\ of\\ failure\\ a\\ percentile\\ target\\ allows\\ over\\ its",
+      "replace": "**Le budget d'erreur** est la part de défaillance autorisée par une cible en percentile sur sa"
+    },
+    {
+      "match": "window\\ \\(for\\ example\\ 99\\.9%\\ over\\ 30\\ days\\ =\\ 43m12s\\)\\.\\ The\\ alert\\ must\\ fire\\ before",
+      "replace": "fenêtre (par exemple 99,9 % sur 30 jours = 43m12s). L'alerte doit se déclencher avant"
+    },
+    {
+      "match": "that\\ budget\\ is\\ spent\\.",
+      "replace": "que ce budget soit épuisé."
+    },
+    {
+      "match": "Every\\ signal\\ should\\ back\\ at\\ least\\ one\\ objective\\.\\ Orphan\\ signals\\ cost\\ money",
+      "replace": "Chaque signal doit étayer au moins un objectif. Les signaux orphelins coûtent de l'argent"
+    },
+    {
+      "match": "and\\ produce\\ alerts\\ nobody\\ owns\\.",
+      "replace": "et produisent des alertes dont personne n'est responsable."
+    },
+    {
+      "match": "Ordered\\ by\\ service\\ criticality\\.\\ Fix\\ the\\ model,\\ not\\ this\\ file\\.",
+      "replace": "Trié par criticité du service. Corrigez le modèle, pas ce fichier."
+    },
+    {
+      "match": "Every\\ P0\\ service\\ has\\ an\\ availability\\ objective\\ and\\ a\\ data\\-quality\\ objective\\.",
+      "replace": "Chaque service P0 a un objectif de disponibilité et un objectif de qualité des données."
+    },
+    {
+      "match": "Every\\ signal\\ backs\\ at\\ least\\ one\\ objective\\.",
+      "replace": "Chaque signal étaye au moins un objectif."
+    },
+    {
+      "match": "Each\\ alert\\ fires\\ before\\ the\\ target\\ is\\ breached\\ and\\ before\\ 50%\\ of\\ the\\ error\\ budget\\ is\\ spent\\.",
+      "replace": "Chaque alerte se déclenche avant la violation de la cible et avant que 50 % du budget d'erreur ne soit consommé."
+    },
+    {
+      "match": "Latency\\ and\\ freshness\\ alerts\\ leave\\ at\\ least\\ 20%\\ margin\\ below\\ the\\ target\\.",
+      "replace": "Les alertes de latence et de fraîcheur laissent au moins 20 % de marge sous la cible."
+    },
+    {
+      "match": "Signal\\ intervals\\ are\\ frequent\\ enough\\ to\\ observe\\ the\\ budget\\.",
+      "replace": "Les intervalles des signaux sont assez fréquents pour observer le budget."
+    },
+    {
+      "match": "Every\\ objective\\ has\\ a\\ recent\\ check\\ with\\ `result:\\ passed`,\\ evidence\\ and\\ a\\ runbook\\.",
+      "replace": "Chaque objectif a une vérification récente avec `result: passed`, une preuve et un runbook."
+    },
+    {
+      "match": "\\-\\ `fortcloud\\-vitals\\ check\\ \\-\\-strict`\\ exits\\ with\\ code\\ 0\\.",
+      "replace": "- `fortcloud-vitals check --strict` se termine avec le code 0."
+    },
+    {
+      "match": "No\\ gap\\ detected\\.\\ Keep\\ the\\ SLO\\ and\\ verification\\ cadence\\.",
+      "replace": "Aucune lacune détectée. Maintenez la cadence des SLO et des vérifications."
+    },
+    {
+      "match": "> Generated on (.+) by (`[^`]+`)\\. Do not edit by hand\\.",
+      "replace": "> Généré le \\1 par \\2. Ne pas modifier manuellement."
+    },
+    {
+      "match": "> Generated by (`[^`]+`)\\. Do not edit by hand\\.",
+      "replace": "> Généré par \\1. Ne pas modifier manuellement."
+    },
+    {
+      "match": "## flow:(\\S+)",
+      "replace": "## flux : \\1"
+    },
+    {
+      "match": "## policy:(\\S+)",
+      "replace": "## politique : \\1"
+    },
+    {
+      "match": "## objective:(\\S+)",
+      "replace": "## objectif : \\1"
+    },
+    {
+      "match": "\\*\\* data assets",
+      "replace": "** actifs de données"
+    },
+    {
+      "match": "\\*\\* backup policies",
+      "replace": "** politiques de sauvegarde"
+    },
+    {
+      "match": "\\*\\* restore tests",
+      "replace": "** tests de restauration"
+    },
+    {
+      "match": "\\*\\* business services",
+      "replace": "** services métier"
+    },
+    {
+      "match": "\\*\\* P0 assets fully proven",
+      "replace": "** actifs P0 entièrement prouvés"
+    },
+    {
+      "match": "\\*\\* assets at risk",
+      "replace": "** actifs à risque"
+    },
+    {
+      "match": "\\*\\* components \\(P0: ",
+      "replace": "** composants (P0 : "
+    },
+    {
+      "match": ", P1: ",
+      "replace": ", P1 : "
+    },
+    {
+      "match": ", P2: ",
+      "replace": ", P2 : "
+    },
+    {
+      "match": "\\*\\* business flows",
+      "replace": "** flux métier"
+    },
+    {
+      "match": "\\*\\* dependencies",
+      "replace": "** dépendances"
+    },
+    {
+      "match": "\\*\\* single points of failure \\(single instance\\)",
+      "replace": "** points de défaillance uniques (instance unique)"
+    },
+    {
+      "match": "\\*\\* P0 components in a single region",
+      "replace": "** composants P0 dans une seule région"
+    },
+    {
+      "match": "\\*\\* critical risks \\(score >= 15\\)",
+      "replace": "** risques critiques (score >= 15)"
+    },
+    {
+      "match": "\\*\\* components in the topology",
+      "replace": "** composants dans la topologie"
+    },
+    {
+      "match": "\\*\\* failover strategies",
+      "replace": "** stratégies de bascule"
+    },
+    {
+      "match": "\\*\\* P0 components covered by a strategy",
+      "replace": "** composants P0 couverts par une stratégie"
+    },
+    {
+      "match": "\\*\\* strategies at risk",
+      "replace": "** stratégies à risque"
+    },
+    {
+      "match": "\\*\\* recorded drills",
+      "replace": "** exercices enregistrés"
+    },
+    {
+      "match": ": RTO ",
+      "replace": " : RTO "
+    },
+    {
+      "match": ", result \\*\\*",
+      "replace": ", résultat **"
+    },
+    {
+      "match": "\\*\\*, evidence ",
+      "replace": "**, preuve "
+    },
+    {
+      "match": "on (\\d{4}-\\d{2}-\\d{2})",
+      "replace": "le \\1"
+    },
+    {
+      "match": " — jitter: ",
+      "replace": " — jitter : "
+    },
+    {
+      "match": " failures, reset ",
+      "replace": " échecs, réinitialisation "
+    },
+    {
+      "match": " — role `",
+      "replace": " — rôle `"
+    },
+    {
+      "match": " permissions, expires ",
+      "replace": " permissions, expire le "
+    },
+    {
+      "match": "Fix: ",
+      "replace": "Correction : "
+    },
+    {
+      "match": "Owner: ",
+      "replace": "Responsable : "
+    },
+    {
+      "match": "Note: ",
+      "replace": "Note : "
+    },
+    {
+      "match": "Re-run (`[^`]+`) and attach (`[^`]+`) to the pull request\\.",
+      "replace": "Relancez \\1 et joignez \\2 à la demande de tirage (pull request)."
+    },
+    {
+      "match": "Re-run (`[^`]+`)\\.",
+      "replace": "Relancez \\1."
+    },
+    {
+      "match": "restore service in ≤ ",
+      "replace": "rétablir le service en ≤ "
+    },
+    {
+      "match": "` every ",
+      "replace": "` toutes les "
+    },
+    {
+      "match": " — loss of `",
+      "replace": " — perte de `"
+    },
+    {
+      "match": " \\(expected switchover ",
+      "replace": " (commutation prévue "
+    },
+    {
+      "match": " — verify the RPO before promoting `",
+      "replace": " — vérifiez le RPO avant de promouvoir `"
+    },
+    {
+      "match": "2\\. Check that the health probe on `",
+      "replace": "2. Vérifiez que la sonde de santé sur `"
+    },
+    {
+      "match": "` is green and alerting is active\\.",
+      "replace": "` est verte et l'alerte est active."
+    },
+    {
+      "match": "3\\. Simulate the failure of `",
+      "replace": "3. Simulez la panne de `"
+    },
+    {
+      "match": "` \\(stop the endpoint or isolate the region\\)\\.",
+      "replace": "` (arrêtez le point d'accès ou isolez la région)."
+    },
+    {
+      "match": "4\\. Measure detection time against ",
+      "replace": "4. Mesurez le temps de détection par rapport à "
+    },
+    {
+      "match": "5\\. Promote `",
+      "replace": "5. Promouvez `"
+    },
+    {
+      "match": "` and measure the time against ",
+      "replace": "` et mesurez le temps par rapport à "
+    },
+    {
+      "match": "7\\. Fail back to `",
+      "replace": "7. Rebasculez vers `"
+    },
+    {
+      "match": "`, then record duration, result and evidence in `drills\\.yaml`\\.",
+      "replace": "`, puis enregistrez la durée, le résultat et la preuve dans `drills.yaml`."
+    },
+    {
+      "match": " used at alert",
+      "replace": " utilisé à l'alerte"
+    },
+    {
+      "match": "(\\d+) d ago",
+      "replace": "il y a \\1 j"
+    },
+    {
+      "match": " days\\.",
+      "replace": " jours."
+    },
+    {
+      "match": "(\\d+) days old",
+      "replace": "\\1 jours"
+    },
+    {
+      "match": "(\\d+) days ago",
+      "replace": "il y a \\1 jours"
+    },
+    {
+      "match": "1 day\\(s\\)",
+      "replace": "1 jour"
+    },
+    {
+      "match": "(\\d+) day\\(s\\)",
+      "replace": "\\1 jours"
+    },
+    {
+      "match": "(\\d+) days\\b",
+      "replace": "\\1 jours"
+    },
+    {
+      "match": "1 day\\b",
+      "replace": "1 jour"
+    },
+    {
+      "match": "(\\d+) day\\b",
+      "replace": "\\1 jours"
+    },
+    {
+      "match": "Point\\-in\\-time\\ restore",
+      "replace": "Restauration ponctuelle"
+    },
+    {
+      "match": "Full\\ loss",
+      "replace": "Perte totale"
+    },
+    {
+      "match": "Region\\ loss",
+      "replace": "Perte de région"
+    },
+    {
+      "match": "Accidental\\ deletion",
+      "replace": "Suppression accidentelle"
+    },
+    {
+      "match": "Search\\ engine",
+      "replace": "Moteur de recherche"
+    },
+    {
+      "match": "None",
+      "replace": "Aucun"
+    },
+    {
+      "match": "Cached\\ data",
+      "replace": "Données en cache"
+    },
+    {
+      "match": "Default\\ value",
+      "replace": "Valeur par défaut"
+    },
+    {
+      "match": "Degraded\\ mode",
+      "replace": "Mode dégradé"
+    },
+    {
+      "match": "Queuing",
+      "replace": "Mise en file"
+    },
+    {
+      "match": "(?<=\\| )Failover(?= \\|)",
+      "replace": "Bascule"
+    },
+    {
+      "match": "(?<=\\*\\*Type :\\*\\* )Failover",
+      "replace": "Bascule"
+    },
+    {
+      "match": "Planned",
+      "replace": "Planifié"
+    },
+    {
+      "match": "In\\ progress",
+      "replace": "En cours"
+    },
+    {
+      "match": "Passed",
+      "replace": "Réussi"
+    },
+    {
+      "match": "Failed",
+      "replace": "Échoué"
+    },
+    {
+      "match": "Internal",
+      "replace": "Interne"
+    },
+    {
+      "match": "Confidential",
+      "replace": "Confidentiel"
+    },
+    {
+      "match": "Restricted",
+      "replace": "Restreint"
+    },
+    {
+      "match": "Human",
+      "replace": "Humain"
+    },
+    {
+      "match": "Availability",
+      "replace": "Disponibilité"
+    },
+    {
+      "match": "Latency",
+      "replace": "Latence"
+    },
+    {
+      "match": "Freshness",
+      "replace": "Fraîcheur"
+    },
+    {
+      "match": "Completeness",
+      "replace": "Complétude"
+    },
+    {
+      "match": "Validity",
+      "replace": "Validité"
+    },
+    {
+      "match": "SQL\\ query",
+      "replace": "Requête SQL"
+    },
+    {
+      "match": "\\*\\*uncovered\\*\\*",
+      "replace": "**non couvert**"
+    },
+    {
+      "match": "\\*\\*no\\*\\*",
+      "replace": "**non**"
+    },
+    {
+      "match": "no\\ P0\\ component",
+      "replace": "aucun composant P0"
+    },
+    {
+      "match": "missing",
+      "replace": "absent"
+    },
+    {
+      "match": "none",
+      "replace": "aucun"
+    },
+    {
+      "match": "expired",
+      "replace": "expiré"
+    },
+    {
+      "match": "manual",
+      "replace": "manuel"
+    },
+    {
+      "match": "never",
+      "replace": "jamais"
+    },
+    {
+      "match": "(?<=\\| )yes(?= \\|)",
+      "replace": "oui"
+    },
+    {
+      "match": "(?<=\\| )no(?= \\|)",
+      "replace": "non"
+    },
+    {
+      "match": "Prioritise\\ this\\ item",
+      "replace": "Prioriser cet élément"
+    },
+    {
+      "match": "1\\.\\ Announce\\ the\\ drill\\ and\\ confirm\\ the\\ change\\ window\\ with\\ the\\ service\\ owner\\.",
+      "replace": "1. Annoncez l'exercice et confirmez la fenêtre de changement avec le responsable du service."
+    },
+    {
+      "match": "6\\.\\ Run\\ a\\ smoke\\ test\\ for\\ every\\ covered\\ service\\ and\\ verify\\ data\\ loss\\ against\\ the\\ RPO\\.",
+      "replace": "6. Exécutez un test de fumée pour chaque service couvert et vérifiez la perte de données par rapport au RPO."
+    },
+    {
+      "match": "Recorded\\ drills:",
+      "replace": "Exercices enregistrés :"
+    },
+    {
+      "match": "Schedule\\ the\\ first\\ one\\.",
+      "replace": "Planifiez le premier."
+    },
+    {
+      "match": "no\\ circuit\\ breaker",
+      "replace": "aucun disjoncteur"
+    },
+    {
+      "match": "no\\ bulkhead\\ isolation",
+      "replace": "aucune isolation par cloison"
+    },
+    {
+      "match": "no\\ fallback",
+      "replace": "aucun repli"
+    },
+    {
+      "match": "no\\ data\\ asset\\ declared",
+      "replace": "aucun actif de données déclaré"
+    },
+    {
+      "match": "no\\ declared\\ dependency",
+      "replace": "aucune dépendance déclarée"
+    },
+    {
+      "match": "no\\ drill\\ recorded",
+      "replace": "aucun exercice enregistré"
+    },
+    {
+      "match": "no\\ evidence\\ link",
+      "replace": "aucun lien de preuve"
+    },
+    {
+      "match": "no\\ runbook",
+      "replace": "aucun runbook"
+    },
+    {
+      "match": "no\\ valid\\ test\\ date",
+      "replace": "aucune date de test valide"
+    },
+    {
+      "match": "no\\ security\\ test\\ in\\ the\\ pipeline",
+      "replace": "aucun test de sécurité dans le pipeline"
+    },
+    {
+      "match": "rollback\\ is\\ not\\ enabled",
+      "replace": "le rollback n'est pas activé"
+    },
+    {
+      "match": "rollback\\ has\\ no\\ verified\\ date",
+      "replace": "le rollback n'a aucune date vérifiée"
+    },
+    {
+      "match": "rollback\\ is\\ not\\ automated\\ for\\ a\\ restricted\\ environment",
+      "replace": "le rollback n'est pas automatisé pour un environnement restreint"
+    },
+    {
+      "match": "log\\ sink\\ is\\ mutable",
+      "replace": "le récepteur de journaux est modifiable"
+    },
+    {
+      "match": "sensitive\\ operation\\ is\\ not\\ logged",
+      "replace": "l'opération sensible n'est pas journalisée"
+    },
+    {
+      "match": "switchover\\ is\\ manual",
+      "replace": "la commutation est manuelle"
+    },
+    {
+      "match": "P0\\ component\\ without\\ a\\ failover\\ strategy",
+      "replace": "composant P0 sans stratégie de bascule"
+    },
+    {
+      "match": "P0\\ service\\ has\\ no\\ availability\\ objective",
+      "replace": "le service P0 n'a aucun objectif de disponibilité"
+    },
+    {
+      "match": "P0\\ service\\ has\\ no\\ data\\-quality\\ objective",
+      "replace": "le service P0 n'a aucun objectif de qualité des données"
+    },
+    {
+      "match": "failed\\ check\\ on\\ a\\ P0\\ service",
+      "replace": "vérification échouée sur un service P0"
+    },
+    {
+      "match": "invalid\\ target\\ or\\ alert_threshold\\ duration",
+      "replace": "durée de target ou alert_threshold invalide"
+    },
+    {
+      "match": "invalid\\ target\\ or\\ alert_threshold",
+      "replace": "target ou alert_threshold invalide"
+    },
+    {
+      "match": "invalid\\ dns_ttl",
+      "replace": "dns_ttl invalide"
+    },
+    {
+      "match": "invalid\\ circuit\\ breaker\\ reset_timeout",
+      "replace": "reset_timeout du disjoncteur invalide"
+    },
+    {
+      "match": "environment\\ is\\ not\\ approved\\ for\\ exercises",
+      "replace": "l'environnement n'est pas approuvé pour les exercices"
+    },
+    {
+      "match": "exercise\\ failed",
+      "replace": "exercice échoué"
+    },
+    {
+      "match": "no\\ approved\\ verifier\\ sign\\-off",
+      "replace": "aucune validation approuvée du vérificateur"
+    },
+    {
+      "match": "external\\ channel\\ without\\ communication\\ approval",
+      "replace": "canal externe sans approbation de communication"
+    },
+    {
+      "match": "no\\ expiry\\ date\\ —\\ standing\\ access",
+      "replace": "aucune date d'expiration — accès permanent"
+    },
+    {
+      "match": "restricted\\ environment\\ grant\\ without\\ approval",
+      "replace": "octroi sur un environnement restreint sans approbation"
+    },
+    {
+      "match": "review\\ is\\ not\\ required\\ for\\ a\\ restricted\\ environment",
+      "replace": "la revue n'est pas obligatoire pour un environnement restreint"
+    },
+    {
+      "match": "audit\\ control\\ failed",
+      "replace": "échec du contrôle d'audit"
+    },
+    {
+      "match": "strategy\\ covers\\ no\\ service",
+      "replace": "la stratégie ne couvre aucun service"
+    },
+    {
+      "match": "(?<=<br/>)Network",
+      "replace": "Réseau"
+    },
+    {
+      "match": "(?<=\\| )([^|]+?) \\| Network \\|",
+      "replace": "\\1 | Réseau |"
+    },
+    {
+      "match": "(?<=<br/>)Storage",
+      "replace": "Stockage"
+    },
+    {
+      "match": "(?<=\\| )([^|]+?) \\| Storage \\|",
+      "replace": "\\1 | Stockage |"
+    },
+    {
+      "match": "(?<=<br/>)Processing",
+      "replace": "Traitement"
+    },
+    {
+      "match": "(?<=\\| )([^|]+?) \\| Processing \\|",
+      "replace": "\\1 | Traitement |"
+    },
+    {
+      "match": "(?<=<br/>)Identity",
+      "replace": "Identité"
+    },
+    {
+      "match": "(?<=\\| )([^|]+?) \\| Identity \\|",
+      "replace": "\\1 | Identité |"
+    },
+    {
+      "match": "(?<=<br/>)External service",
+      "replace": "Service externe"
+    },
+    {
+      "match": "(?<=\\| )([^|]+?) \\| External service \\|",
+      "replace": "\\1 | Service externe |"
+    },
+    {
+      "match": "(?<=\\| )Database(?= \\| `)",
+      "replace": "Base de données"
+    },
+    {
+      "match": "(?<=\\| )Event queue(?= \\| `)",
+      "replace": "File d'événements"
+    },
+    {
+      "match": "(?<=\\| )Search engine(?= \\| `)",
+      "replace": "Moteur de recherche"
+    },
+    {
+      "match": "\\[Recovery plan\\]\\(recovery-plan\\.md\\)",
+      "replace": "[Plan de récupération](recovery-plan.md)"
+    },
+    {
+      "match": "(?<=\\| )Recovery(?= \\|)",
+      "replace": "Récupération"
+    },
+    {
+      "match": "(?<=\\*\\*Type :\\*\\* )Recovery",
+      "replace": "Récupération"
+    },
+    {
+      "match": "(?<=\\| )Restore(?= \\|)",
+      "replace": "Restauration"
+    },
+    {
+      "match": "(?<=Fix: )Restore (?=\\S+)",
+      "replace": "Restauration "
+    },
+    {
+      "match": "after (\\d+) failures, reset ",
+      "replace": "après \\1 échecs, réinitialisation "
+    },
+    {
+      "match": " — jitter: no",
+      "replace": " — jitter : non"
+    },
+    {
+      "match": " — jitter: yes",
+      "replace": " — jitter : oui"
+    },
+    {
+      "match": " — worst case ",
+      "replace": " — pire cas "
+    },
+    {
+      "match": "(\\d+)% of budget",
+      "replace": "\\1 % du budget"
+    },
+    {
+      "match": "(\\d+)% margin",
+      "replace": "\\1 % de marge"
+    },
+    {
+      "match": "margin (\\d+(?:ms|s|m|h|d))",
+      "replace": "marge de \\1"
+    }
+  ]
+}

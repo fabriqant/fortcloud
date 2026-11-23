@@ -16,9 +16,9 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 - KPI cards, Mermaid dependency graph, Recharts charts and sortable/filterable TanStack tables.
 - Generated Markdown, Mermaid and JSON artifacts rendered read-only, with download.
 - JSON Schemas served to the browser and displayed in a dedicated tab.
-- Error and warning panel with the exact diagnostics returned by the tool.
+- Error and warning panel with the tool diagnostics in the selected display language.
 - Optional local read-only AWS, Azure and GCP connectors that write an Atlas proposal for review.
-- English and French display languages. The browser stores the choice in `localStorage["fortcloud.locale"]`, sends `Accept-Language` with each API call, and only translates labels and prose: model files, identifiers, enum values, catalog values and generated artifacts stay in English.
+- English and French display languages. The browser stores the choice in `localStorage["fortcloud.locale"]` and sends `Accept-Language` with each API call. UI labels, metadata, diagnostics, API errors and generated Markdown/Mermaid prose are translated; model files, identifiers, enum values and catalog values stay in English.
 - API, connector and display-metadata tests plus a production UI build in CI.
 
 Not included: direct cloud access from the browser or API, Monaco-based YAML completion, authentication and multi-user hosting.
@@ -80,7 +80,9 @@ For a single-process setup, build the UI (`cd web/ui && npm run build`) and star
 
 ## Display language
 
-The console starts in English. Use the **EN / FR** control in the sidebar footer to switch; the choice is stored in `localStorage["fortcloud.locale"]` and the page reloads so both UI strings and server-provided metadata stay consistent. The browser sends `Accept-Language` on every API request; `?lang=fr` is also accepted on GET endpoints for testing. Translation resources live in `web/i18n/fr/` and `web/ui/src/locales/fr/`. English is the fallback when a key is missing. Only display labels and prose are translated: model files, IDs, enum values, catalog values, validation messages and generated artifacts remain English in this phase.
+The console starts in English. Use the **EN / FR** control in the sidebar footer to switch; the choice is stored in `localStorage["fortcloud.locale"]` and the page reloads so UI strings and server-provided metadata stay consistent. The browser sends `Accept-Language` on every API request; `?lang=fr` is also accepted for testing. Translation resources live in `web/i18n/fr/` and `web/ui/src/locales/fr/`. English is the fallback when a key is missing.
+
+Translation covers interface strings, tool and connector metadata, schema titles, validation findings, API error details, and prose, headings, table labels and Mermaid display labels in generated Markdown artifacts. Files under `web/workspaces/<tool>/artifacts/` and each tool's `docs/generated/` directory stay in English as the canonical CLI output; the API translates responses at read time. Raw identifiers, file names, enum values, catalog values, model data, commands (`check`, `validate`), product names and technical acronyms are never translated.
 
 ## Local cloud connectors (optional)
 

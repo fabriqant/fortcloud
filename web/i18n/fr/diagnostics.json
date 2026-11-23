@@ -1,0 +1,882 @@
+{
+  "exact": {
+    "file missing": "fichier absent",
+    "yaml error": "erreur YAML",
+    "Model file not found": "Fichier de modèle introuvable",
+    "Schema not found": "Schéma introuvable",
+    "no dated successful backup": "aucune sauvegarde réussie datée",
+    "invalid backup schedule": "planification de sauvegarde invalide",
+    "no backup policy": "aucune politique de sauvegarde",
+    "no restore test": "aucun test de restauration",
+    "no valid test date": "aucune date de test valide",
+    "no data asset declared": "aucun actif de données déclaré",
+    "P0 backup is not immutable": "la sauvegarde P0 n'est pas immuable",
+    "sensitive asset without encryption at rest on source and backup": "actif sensible sans chiffrement au repos sur la source et la sauvegarde",
+    "no cross-region copy for a P0 asset": "aucune copie inter-régions pour un actif P0",
+    "no ransomware or deletion restore scenario for a P0 asset": "aucun scénario de restauration ransomware ou suppression pour un actif P0",
+    "P0 single instance without an active risk, owner and corrective action": "instance unique P0 sans risque actif, responsable ni action corrective",
+    "P0 in a single region — a regional outage is enough to lose it": "P0 dans une seule région — une panne régionale suffit à le perdre",
+    "P0 storage without an immutable backup": "stockage P0 sans sauvegarde immuable",
+    "no recent restore test": "aucun test de restauration récent",
+    "no declared dependency": "aucune dépendance déclarée",
+    "P0 flow without an associated risk": "flux P0 sans risque associé",
+    "retries on a non-idempotent write can duplicate effects": "les tentatives sur une écriture non idempotente peuvent dupliquer les effets",
+    "no circuit breaker on a P0 dependency": "aucun disjoncteur sur une dépendance P0",
+    "no bulkhead isolation for this dependency": "aucune isolation par cloison pour cette dépendance",
+    "invalid circuit breaker reset_timeout": "reset_timeout du disjoncteur invalide",
+    "environment is not approved for exercises": "l'environnement n'est pas approuvé pour les exercices",
+    "exercise failed — schedule a retest and record the finding": "exercice échoué — planifiez un nouveau test et consignez la constatation",
+    "no approved verifier sign-off for a completed exercise": "aucune validation approuvée du vérificateur pour un exercice terminé",
+    "external channel without communication approval": "canal externe sans approbation de communication",
+    "no evidence link": "aucun lien de preuve",
+    "invalid sign-off date": "date de validation invalide",
+    "no expiry date — standing access": "aucune date d'expiration — accès permanent",
+    "restricted environment grant without approval": "octroi sur un environnement restreint sans approbation",
+    "invalid rotation date": "date de rotation invalide",
+    "Kubernetes Secret in a restricted environment": "Secret Kubernetes dans un environnement restreint",
+    "review is not required for a restricted environment": "la revue n'est pas obligatoire pour un environnement restreint",
+    "no security test in the pipeline": "aucun test de sécurité dans le pipeline",
+    "rollback is not enabled for a restricted environment": "le rollback n'est pas activé pour un environnement restreint",
+    "rollback has no verified date": "le rollback n'a aucune date vérifiée",
+    "rollback is not automated for a restricted environment": "le rollback n'est pas automatisé pour un environnement restreint",
+    "log sink is mutable — records can be altered": "le récepteur de journaux est modifiable — les enregistrements peuvent être altérés",
+    "sensitive operation is not logged": "l'opération sensible n'est pas journalisée",
+    "no valid evidence date": "aucune date de preuve valide",
+    "audit control failed": "échec du contrôle d'audit",
+    "invalid detection_time or promotion_time": "detection_time ou promotion_time invalide",
+    "invalid dns_ttl": "dns_ttl invalide",
+    "switchover is manual for a P0 service": "la commutation est manuelle pour un service P0",
+    "no drill recorded": "aucun exercice enregistré",
+    "strategy covers no service": "la stratégie ne couvre aucun service",
+    "P0 component without a failover strategy": "composant P0 sans stratégie de bascule",
+    "invalid target or alert_threshold": "target ou alert_threshold invalide",
+    "invalid target or alert_threshold duration": "durée de target ou alert_threshold invalide",
+    "invalid window": "fenêtre invalide",
+    "P0 service has no availability objective": "le service P0 n'a aucun objectif de disponibilité",
+    "P0 service has no data-quality objective": "le service P0 n'a aucun objectif de qualité des données",
+    "no valid check date": "aucune date de vérification valide",
+    "failed check on a P0 service": "vérification échouée sur un service P0",
+    "no runbook": "aucun runbook",
+    "is a required property": "est une propriété requise",
+    "Additional properties are not allowed": "Les propriétés supplémentaires ne sont pas autorisées",
+    "is less than the minimum": "est inférieur au minimum",
+    "is greater than the maximum": "est supérieur au maximum",
+    "is too long": "est trop long",
+    "is too short": "est trop court",
+    "should be non-empty": "ne doit pas être vide"
+  },
+  "patterns": [
+    {
+      "match": "(?i): file missing$",
+      "replace": " : fichier absent"
+    },
+    {
+      "match": "(?i)Model file not found: ",
+      "replace": "Fichier de modèle introuvable : "
+    },
+    {
+      "match": "(?i)Schema not found: ",
+      "replace": "Schéma introuvable : "
+    },
+    {
+      "match": "(?i): key '([^']+)' missing",
+      "replace": " : clé '\\1' absente"
+    },
+    {
+      "match": "(?i): identifier '([^']+)' used (\\d+) times",
+      "replace": " : identifiant '\\1' utilisé \\2 fois"
+    },
+    {
+      "match": "(?i)Additional properties are not allowed",
+      "replace": "Les propriétés supplémentaires ne sont pas autorisées"
+    },
+    {
+      "match": "(?i)'([^']+)' was unexpected",
+      "replace": "'\\1' était inattendu"
+    },
+    {
+      "match": "(?i)is a required property",
+      "replace": "est une propriété requise"
+    },
+    {
+      "match": "(?i)is not of type '([^']+)'",
+      "replace": "n'est pas de type '\\1'"
+    },
+    {
+      "match": "(?i)is not one of ",
+      "replace": "ne fait pas partie de "
+    },
+    {
+      "match": "(?i)does not match ",
+      "replace": "ne correspond pas à "
+    },
+    {
+      "match": "(?i)is less than the minimum of",
+      "replace": "est inférieur au minimum de"
+    },
+    {
+      "match": "(?i)is greater than the maximum of",
+      "replace": "est supérieur au maximum de"
+    },
+    {
+      "match": "(?i)is less than the minimum",
+      "replace": "est inférieur au minimum"
+    },
+    {
+      "match": "(?i)is greater than the maximum",
+      "replace": "est supérieur au maximum"
+    },
+    {
+      "match": "(?i)is not a valid '([^']+)'",
+      "replace": "n'est pas une valeur valide pour '\\1'"
+    },
+    {
+      "match": "(?i)is too long",
+      "replace": "est trop long"
+    },
+    {
+      "match": "(?i)is too short",
+      "replace": "est trop court"
+    },
+    {
+      "match": "(?i)should be non-empty",
+      "replace": "ne doit pas être vide"
+    },
+    {
+      "match": "(?i)restore (\\S+) measured RTO (\\S+) exceeds target (\\S+)",
+      "replace": "RTO mesuré \\2 de la restauration \\1 dépasse la cible \\3"
+    },
+    {
+      "match": "(?i)restore (\\S+) measured RPO (\\S+) exceeds target (\\S+)",
+      "replace": "RPO mesuré \\2 de la restauration \\1 dépasse la cible \\3"
+    },
+    {
+      "match": "(?i)restore (\\S+): invalid measured_rto or measured_rpo",
+      "replace": "restauration \\1 : measured_rto ou measured_rpo invalide"
+    },
+    {
+      "match": "(?i)restore (\\S+): no valid test date",
+      "replace": "restauration \\1 : aucune date de test valide"
+    },
+    {
+      "match": "(?i)restore (\\S+) result is '([^']+)'",
+      "replace": "le résultat de la restauration \\1 est '\\2'"
+    },
+    {
+      "match": "(?i)restore (\\S+) has no evidence",
+      "replace": "la restauration \\1 n'a aucune preuve"
+    },
+    {
+      "match": "(?i)restore (\\S+) is (\\d+) days old \\(max (\\d+)\\)",
+      "replace": "la restauration \\1 date de \\2 jours (max \\3)"
+    },
+    {
+      "match": "(?i)backup schedule (\\S+) cannot satisfy RPO (\\S+)",
+      "replace": "la planification de sauvegarde \\1 ne peut pas respecter le RPO \\2"
+    },
+    {
+      "match": "(?i)retention (\\d+) d is below (\\d+) d for a P0 asset",
+      "replace": "la rétention de \\1 jours est inférieure à \\2 jours pour un actif P0"
+    },
+    {
+      "match": "(?i)last successful backup is (\\d+) days old \\(max (\\d+)\\)",
+      "replace": "la dernière sauvegarde réussie date de \\1 jours (max \\2)"
+    },
+    {
+      "match": "(?i)backup '([^']+)' not found",
+      "replace": "sauvegarde '\\1' introuvable"
+    },
+    {
+      "match": "(?i)component '([^']+)' not found \\((from|to)\\)",
+      "replace": "composant '\\1' introuvable (\\2)"
+    },
+    {
+      "match": "(?i)last restore test (\\d+) days ago \\(max (\\d+)\\)",
+      "replace": "dernier test de restauration il y a \\1 jours (max \\2)"
+    },
+    {
+      "match": "(?i)score (\\d+) \\(critical\\) and status '([^']+)'",
+      "replace": "score \\1 (critique) et statut '\\2'"
+    },
+    {
+      "match": "(?i)step (\\d+): policy '([^']+)' targets '([^']+)' but the step uses '([^']+)'",
+      "replace": "étape \\1 : la politique '\\2' cible '\\3' mais l'étape utilise '\\4'"
+    },
+    {
+      "match": "(?i)step (\\d+): dependency '([^']+)' not found",
+      "replace": "étape \\1 : dépendance '\\2' introuvable"
+    },
+    {
+      "match": "(?i)step (\\d+): policy '([^']+)' not found",
+      "replace": "étape \\1 : politique '\\2' introuvable"
+    },
+    {
+      "match": "(?i)step '([^']+)' consumes (\\S+) of the latency budget",
+      "replace": "l'étape '\\1' consomme \\2 du budget de latence"
+    },
+    {
+      "match": "(?i)worst case (\\S+) exceeds the (\\S+) latency budget",
+      "replace": "le pire cas \\1 dépasse le budget de latence \\2"
+    },
+    {
+      "match": "(?i)backoff multiplier (\\S+) is below 2 \\(insufficient backoff\\)",
+      "replace": "le multiplicateur de backoff \\1 est inférieur à 2 (backoff insuffisant)"
+    },
+    {
+      "match": "(?i)circuit breaker reset_timeout (\\S+) exceeds (\\S+)",
+      "replace": "le reset_timeout du disjoncteur \\1 dépasse \\2"
+    },
+    {
+      "match": "(?i)circuit breaker opens after (\\d+) failures \\(max (\\d+)\\)",
+      "replace": "le disjoncteur s'ouvre après \\1 échecs (max \\2)"
+    },
+    {
+      "match": "(?i)optional dependency '([^']+)' has no fallback",
+      "replace": "la dépendance optionnelle '\\1' n'a aucun repli"
+    },
+    {
+      "match": "(?i)(\\d+) retries exceed the maximum of (\\d+)",
+      "replace": "\\1 tentatives dépassent le maximum de \\2"
+    },
+    {
+      "match": "(?i)service '([^']+)' has an invalid latency_budget",
+      "replace": "le service '\\1' a un latency_budget invalide"
+    },
+    {
+      "match": "(?i)dependency '([^']+)' is not used in any flow",
+      "replace": "la dépendance '\\1' n'est utilisée dans aucun flux"
+    },
+    {
+      "match": "(?i)service '([^']+)' has no flow",
+      "replace": "le service '\\1' n'a aucun flux"
+    },
+    {
+      "match": "(?i)no passed '([^']+)' exercise in a controlled environment — rehearse there first",
+      "replace": "aucun exercice '\\1' réussi dans un environnement contrôlé — répétez d'abord là-bas"
+    },
+    {
+      "match": "(?i)no passed '([^']+)' verification for a completed exercise",
+      "replace": "aucune vérification '\\1' réussie pour un exercice terminé"
+    },
+    {
+      "match": "(?i)communication channel '([^']+)' not found",
+      "replace": "canal de communication '\\1' introuvable"
+    },
+    {
+      "match": "(?i)scheduled (\\d+) days ago and still '([^']+)'",
+      "replace": "planifié il y a \\1 jours et toujours '\\2'"
+    },
+    {
+      "match": "(?i)exercise window (\\S+) exceeds (\\S+)",
+      "replace": "la fenêtre d'exercice \\1 dépasse \\2"
+    },
+    {
+      "match": "(?i)invalid duration '([^']+)' in (\\S+)",
+      "replace": "durée invalide '\\1' dans \\2"
+    },
+    {
+      "match": "(?i)no '([^']+)' assigned to this exercise",
+      "replace": "aucun '\\1' affecté à cet exercice"
+    },
+    {
+      "match": "(?i)no stakeholder is notified at '([^']+)' of an exercise",
+      "replace": "aucune partie prenante n'est informée à '\\1' d'un exercice"
+    },
+    {
+      "match": "(?i)invalid update cadence '([^']+)'",
+      "replace": "cadence de mise à jour invalide '\\1'"
+    },
+    {
+      "match": "(?i)status updates every (\\S+) exceed (\\S+)",
+      "replace": "les mises à jour de statut toutes les \\1 dépassent \\2"
+    },
+    {
+      "match": "(?i)verification failed on '([^']+)'",
+      "replace": "vérification échouée sur '\\1'"
+    },
+    {
+      "match": "(?i)decision is '([^']+)'",
+      "replace": "la décision est '\\1'"
+    },
+    {
+      "match": "(?i)signed 1 day\\(s\\) before the scheduled exercise",
+      "replace": "signé 1 jour avant l'exercice prévu"
+    },
+    {
+      "match": "(?i)signed (\\d+) day\\(s\\) before the scheduled exercise",
+      "replace": "signé \\1 jours avant l'exercice prévu"
+    },
+    {
+      "match": "(?i)CI principal spans (\\d+) environments — use one identity per environment",
+      "replace": "le principal CI couvre \\1 environnements — utilisez une identité par environnement"
+    },
+    {
+      "match": "(?i)environment '([^']+)' is outside the principal scope",
+      "replace": "l'environnement '\\1' est hors du périmètre du principal"
+    },
+    {
+      "match": "(?i)resource '([^']+)' targets another environment",
+      "replace": "la ressource '\\1' cible un autre environnement"
+    },
+    {
+      "match": "(?i)wildcard permission '([^']+)' violates least privilege",
+      "replace": "la permission générique '\\1' viole le moindre privilège"
+    },
+    {
+      "match": "(?i)(\\d+) permissions exceed the maximum of (\\d+)",
+      "replace": "\\1 permissions dépassent le maximum de \\2"
+    },
+    {
+      "match": "(?i)expired (\\d+) days ago",
+      "replace": "expiré il y a \\1 jours"
+    },
+    {
+      "match": "(?i)expires in (\\d+) days \\(max (\\d+)\\)",
+      "replace": "expire dans \\1 jours (max \\2)"
+    },
+    {
+      "match": "(?i)elevated role '([^']+)' without expiry",
+      "replace": "rôle élevé '\\1' sans expiration"
+    },
+    {
+      "match": "(?i)secret shared across (\\d+) environments",
+      "replace": "secret partagé entre \\1 environnements"
+    },
+    {
+      "match": "(?i)last rotated (\\d+) days ago \\(policy: (\\d+) days\\)",
+      "replace": "dernière rotation il y a \\1 jours (politique : \\2 jours)"
+    },
+    {
+      "match": "(?i)rotation policy of (\\d+) days exceeds (\\d+) days",
+      "replace": "la politique de rotation de \\1 jours dépasse \\2 jours"
+    },
+    {
+      "match": "(?i)consumer '([^']+)' has no access to the secret environments",
+      "replace": "le consommateur '\\1' n'a accès à aucun environnement du secret"
+    },
+    {
+      "match": "(?i)1 approver\\(s\\) for a restricted environment \\(minimum (\\d+)\\)",
+      "replace": "1 approbateur pour un environnement restreint (minimum \\1)"
+    },
+    {
+      "match": "(?i)(\\d+) approver\\(s\\) for a restricted environment \\(minimum (\\d+)\\)",
+      "replace": "\\1 approbateurs pour un environnement restreint (minimum \\2)"
+    },
+    {
+      "match": "(?i)missing mandatory test\\(s\\): (.+)$",
+      "replace": "tests obligatoires manquants : \\1"
+    },
+    {
+      "match": "(?i)deployer '([^']+)' is not scoped to '([^']+)'",
+      "replace": "le déployeur '\\1' n'est pas limité à '\\2'"
+    },
+    {
+      "match": "(?i)rollback verification is (\\d+) days old \\(max (\\d+)\\)",
+      "replace": "la vérification du rollback date de \\1 jours (max \\2)"
+    },
+    {
+      "match": "(?i)retention of (\\d+) days is below (\\d+) days",
+      "replace": "une rétention de \\1 jours est inférieure à \\2 jours"
+    },
+    {
+      "match": "(?i)no audited operation for sensitive kind '([^']+)'",
+      "replace": "aucune opération auditée pour le type sensible '\\1'"
+    },
+    {
+      "match": "(?i)(primary|standby) component '([^']+)' not found",
+      "replace": "composant \\1 '\\2' introuvable"
+    },
+    {
+      "match": "(?i)(primary|standby) '([^']+)' has role '([^']+)'",
+      "replace": "\\1 '\\2' a le rôle '\\3'"
+    },
+    {
+      "match": "(?i)primary and standby do not share the same pair \\('([^']+)' vs '([^']+)'\\)",
+      "replace": "le primaire et le secours ne partagent pas la même paire ('\\1' contre '\\2')"
+    },
+    {
+      "match": "(?i)false redundancy: both instances are in '([^']+)'",
+      "replace": "fausse redondance : les deux instances sont dans '\\1'"
+    },
+    {
+      "match": "(?i)both instances use the same provider '([^']+)'",
+      "replace": "les deux instances utilisent le même fournisseur '\\1'"
+    },
+    {
+      "match": "(?i)standby capacity (\\S+) is lower than primary capacity (\\S+)",
+      "replace": "la capacité du secours \\1 est inférieure à celle du primaire \\2"
+    },
+    {
+      "match": "(?i)switchover (\\S+) exceeds the tightest RTO (\\S+)",
+      "replace": "la commutation \\1 dépasse le RTO le plus strict \\2"
+    },
+    {
+      "match": "(?i)DNS TTL (\\S+) exceeds RTO (\\S+)",
+      "replace": "le TTL DNS \\1 dépasse le RTO \\2"
+    },
+    {
+      "match": "(?i)'([^']+)' replication cannot satisfy RPO 0 for (.+)$",
+      "replace": "la réplication '\\1' ne peut pas respecter le RPO 0 pour \\2"
+    },
+    {
+      "match": "(?i)drill (\\S+): no valid drill date",
+      "replace": "exercice \\1 : aucune date d'exercice valide"
+    },
+    {
+      "match": "(?i)drill (\\S+) is (\\d+) days old \\(max (\\d+)\\)",
+      "replace": "l'exercice \\1 date de \\2 jours (max \\3)"
+    },
+    {
+      "match": "(?i)drill (\\S+) result is '([^']+)'",
+      "replace": "le résultat de l'exercice \\1 est '\\2'"
+    },
+    {
+      "match": "(?i)drill (\\S+) has no evidence",
+      "replace": "l'exercice \\1 n'a aucune preuve"
+    },
+    {
+      "match": "(?i)signal kind '([^']+)' does not match objective kind '([^']+)'",
+      "replace": "le type de signal '\\1' ne correspond pas au type d'objectif '\\2'"
+    },
+    {
+      "match": "(?i)alert threshold (\\S+)% is not tighter than target (\\S+)%",
+      "replace": "le seuil d'alerte \\1 % n'est pas plus strict que la cible \\2 %"
+    },
+    {
+      "match": "(?i)alert threshold (\\S+) is looser than target (\\S+)",
+      "replace": "le seuil d'alerte \\1 est moins strict que la cible \\2"
+    },
+    {
+      "match": "(?i)alert fires after (\\S+)% of the error budget is spent \\(max (\\S+)%\\)",
+      "replace": "l'alerte se déclenche après \\1 % du budget d'erreur consommé (max \\2 %)"
+    },
+    {
+      "match": "(?i)alert margin (\\S+)% is below the (\\S+)% minimum",
+      "replace": "la marge d'alerte \\1 % est inférieure au minimum de \\2 %"
+    },
+    {
+      "match": "(?i)signal interval (\\S+) is too coarse \\(max (\\S+)\\)",
+      "replace": "l'intervalle du signal \\1 est trop grossier (max \\2)"
+    },
+    {
+      "match": "(?i)window (\\S+) is shorter than (\\S+)",
+      "replace": "la fenêtre \\1 est plus courte que \\2"
+    },
+    {
+      "match": "(?i)signal '([^']+)' is not used by any objective",
+      "replace": "le signal '\\1' n'est utilisé par aucun objectif"
+    },
+    {
+      "match": "(?i)objective '([^']+)' has no verification check",
+      "replace": "l'objectif '\\1' n'a aucune vérification"
+    },
+    {
+      "match": "(?i)last check is (\\d+) days old \\(max (\\d+)\\)",
+      "replace": "la dernière vérification date de \\1 jours (max \\2)"
+    },
+    {
+      "match": "(?i)result is '([^']+)'",
+      "replace": "le résultat est '\\1'"
+    },
+    {
+      "match": "(?i)no backup policy",
+      "replace": "aucune politique de sauvegarde"
+    },
+    {
+      "match": "(?i)no restore test",
+      "replace": "aucun test de restauration"
+    },
+    {
+      "match": "(?i)no dated successful backup",
+      "replace": "aucune sauvegarde réussie datée"
+    },
+    {
+      "match": "(?i)invalid backup schedule",
+      "replace": "planification de sauvegarde invalide"
+    },
+    {
+      "match": "(?i)no data asset declared",
+      "replace": "aucun actif de données déclaré"
+    },
+    {
+      "match": "(?i)no valid test date",
+      "replace": "aucune date de test valide"
+    },
+    {
+      "match": "(?i)no evidence link",
+      "replace": "aucun lien de preuve"
+    },
+    {
+      "match": "(?i)no recent restore test",
+      "replace": "aucun test de restauration récent"
+    },
+    {
+      "match": "(?i)no declared dependency",
+      "replace": "aucune dépendance déclarée"
+    },
+    {
+      "match": "(?i)P0 flow without an associated risk",
+      "replace": "flux P0 sans risque associé"
+    },
+    {
+      "match": "(?i)P0 backup is not immutable",
+      "replace": "la sauvegarde P0 n'est pas immuable"
+    },
+    {
+      "match": "(?i)no cross-region copy for a P0 asset",
+      "replace": "aucune copie inter-régions pour un actif P0"
+    },
+    {
+      "match": "(?i)sensitive asset without encryption at rest on source and backup",
+      "replace": "actif sensible sans chiffrement au repos sur la source et la sauvegarde"
+    },
+    {
+      "match": "(?i)no ransomware or deletion restore scenario for a P0 asset",
+      "replace": "aucun scénario de restauration ransomware ou suppression pour un actif P0"
+    },
+    {
+      "match": "(?i)P0 single instance without an active risk, owner and corrective action",
+      "replace": "instance unique P0 sans risque actif, responsable ni action corrective"
+    },
+    {
+      "match": "(?i)P0 in a single region — a regional outage is enough to lose it",
+      "replace": "P0 dans une seule région — une panne régionale suffit à le perdre"
+    },
+    {
+      "match": "(?i)P0 storage without an immutable backup",
+      "replace": "stockage P0 sans sauvegarde immuable"
+    },
+    {
+      "match": "(?i)retries on a non-idempotent write can duplicate effects",
+      "replace": "les tentatives sur une écriture non idempotente peuvent dupliquer les effets"
+    },
+    {
+      "match": "(?i)no circuit breaker on a P0 dependency",
+      "replace": "aucun disjoncteur sur une dépendance P0"
+    },
+    {
+      "match": "(?i)no bulkhead isolation for this dependency",
+      "replace": "aucune isolation par cloison pour cette dépendance"
+    },
+    {
+      "match": "(?i)invalid circuit breaker reset_timeout",
+      "replace": "reset_timeout du disjoncteur invalide"
+    },
+    {
+      "match": "(?i)environment is not approved for exercises",
+      "replace": "l'environnement n'est pas approuvé pour les exercices"
+    },
+    {
+      "match": "(?i)exercise failed — schedule a retest and record the finding",
+      "replace": "exercice échoué — planifiez un nouveau test et consignez la constatation"
+    },
+    {
+      "match": "(?i)no approved verifier sign-off for a completed exercise",
+      "replace": "aucune validation approuvée du vérificateur pour un exercice terminé"
+    },
+    {
+      "match": "(?i)external channel without communication approval",
+      "replace": "canal externe sans approbation de communication"
+    },
+    {
+      "match": "(?i)invalid sign-off date",
+      "replace": "date de validation invalide"
+    },
+    {
+      "match": "(?i)no expiry date — standing access",
+      "replace": "aucune date d'expiration — accès permanent"
+    },
+    {
+      "match": "(?i)restricted environment grant without approval",
+      "replace": "octroi sur un environnement restreint sans approbation"
+    },
+    {
+      "match": "(?i)invalid rotation date",
+      "replace": "date de rotation invalide"
+    },
+    {
+      "match": "(?i)review is not required for a restricted environment",
+      "replace": "la revue n'est pas obligatoire pour un environnement restreint"
+    },
+    {
+      "match": "(?i)no security test in the pipeline",
+      "replace": "aucun test de sécurité dans le pipeline"
+    },
+    {
+      "match": "(?i)rollback is not enabled for a restricted environment",
+      "replace": "le rollback n'est pas activé pour un environnement restreint"
+    },
+    {
+      "match": "(?i)rollback has no verified date",
+      "replace": "le rollback n'a aucune date vérifiée"
+    },
+    {
+      "match": "(?i)rollback is not automated for a restricted environment",
+      "replace": "le rollback n'est pas automatisé pour un environnement restreint"
+    },
+    {
+      "match": "(?i)log sink is mutable — records can be altered",
+      "replace": "le récepteur de journaux est modifiable — les enregistrements peuvent être altérés"
+    },
+    {
+      "match": "(?i)sensitive operation is not logged",
+      "replace": "l'opération sensible n'est pas journalisée"
+    },
+    {
+      "match": "(?i)no valid evidence date",
+      "replace": "aucune date de preuve valide"
+    },
+    {
+      "match": "(?i)audit control failed",
+      "replace": "échec du contrôle d'audit"
+    },
+    {
+      "match": "(?i)invalid detection_time or promotion_time",
+      "replace": "detection_time ou promotion_time invalide"
+    },
+    {
+      "match": "(?i)invalid dns_ttl",
+      "replace": "dns_ttl invalide"
+    },
+    {
+      "match": "(?i)switchover is manual for a P0 service",
+      "replace": "la commutation est manuelle pour un service P0"
+    },
+    {
+      "match": "(?i)no drill recorded",
+      "replace": "aucun exercice enregistré"
+    },
+    {
+      "match": "(?i)strategy covers no service",
+      "replace": "la stratégie ne couvre aucun service"
+    },
+    {
+      "match": "(?i)P0 component without a failover strategy",
+      "replace": "composant P0 sans stratégie de bascule"
+    },
+    {
+      "match": "(?i)invalid target or alert_threshold duration",
+      "replace": "durée de target ou alert_threshold invalide"
+    },
+    {
+      "match": "(?i)invalid target or alert_threshold",
+      "replace": "target ou alert_threshold invalide"
+    },
+    {
+      "match": "(?i)invalid window",
+      "replace": "fenêtre invalide"
+    },
+    {
+      "match": "(?i)P0 service has no availability objective",
+      "replace": "le service P0 n'a aucun objectif de disponibilité"
+    },
+    {
+      "match": "(?i)P0 service has no data-quality objective",
+      "replace": "le service P0 n'a aucun objectif de qualité des données"
+    },
+    {
+      "match": "(?i)no valid check date",
+      "replace": "aucune date de vérification valide"
+    },
+    {
+      "match": "(?i)failed check on a P0 service",
+      "replace": "vérification échouée sur un service P0"
+    },
+    {
+      "match": "(?i)no runbook",
+      "replace": "aucun runbook"
+    },
+    {
+      "match": "(?i)unknown environment '([^']+)'",
+      "replace": "environnement inconnu '\\1'"
+    },
+    {
+      "match": "(?i)scenario '([^']+)' not found",
+      "replace": "scénario '\\1' introuvable"
+    },
+    {
+      "match": "(?i)participant '([^']+)' not found",
+      "replace": "participant '\\1' introuvable"
+    },
+    {
+      "match": "(?i)principal '([^']+)' not found",
+      "replace": "principal '\\1' introuvable"
+    },
+    {
+      "match": "(?i)consumer '([^']+)' not found",
+      "replace": "consommateur '\\1' introuvable"
+    },
+    {
+      "match": "(?i)deployer '([^']+)' not found",
+      "replace": "déployeur '\\1' introuvable"
+    },
+    {
+      "match": "(?i)log sink '([^']+)' not found",
+      "replace": "récepteur de journaux '\\1' introuvable"
+    },
+    {
+      "match": "(?i)service '([^']+)' not found",
+      "replace": "service '\\1' introuvable"
+    },
+    {
+      "match": "(?i)component '([^']+)' not found",
+      "replace": "composant '\\1' introuvable"
+    },
+    {
+      "match": "(?i)flow '([^']+)' not found",
+      "replace": "flux '\\1' introuvable"
+    },
+    {
+      "match": "(?i)dependency '([^']+)' not found",
+      "replace": "dépendance '\\1' introuvable"
+    },
+    {
+      "match": "(?i)channel '([^']+)' not found",
+      "replace": "canal '\\1' introuvable"
+    },
+    {
+      "match": "(?i)objective '([^']+)' not found",
+      "replace": "objectif '\\1' introuvable"
+    },
+    {
+      "match": "(?i)signal '([^']+)' not found",
+      "replace": "signal '\\1' introuvable"
+    },
+    {
+      "match": "(?i)\\bbackup (\\S+): ",
+      "replace": "sauvegarde \\1 : "
+    },
+    {
+      "match": "(?i)\\basset (\\S+): ",
+      "replace": "actif \\1 : "
+    },
+    {
+      "match": "(?i)\\brestore (\\S+): ",
+      "replace": "restauration \\1 : "
+    },
+    {
+      "match": "(?i)\\bcomponent (\\S+): ",
+      "replace": "composant \\1 : "
+    },
+    {
+      "match": "(?i)\\bdependency (\\S+): ",
+      "replace": "dépendance \\1 : "
+    },
+    {
+      "match": "(?i)\\bflow (\\S+): ",
+      "replace": "flux \\1 : "
+    },
+    {
+      "match": "(?i)\\bpolicy (\\S+): ",
+      "replace": "politique \\1 : "
+    },
+    {
+      "match": "(?i)\\brisk (\\S+): ",
+      "replace": "risque \\1 : "
+    },
+    {
+      "match": "(?i)\\bscenario (\\S+): ",
+      "replace": "scénario \\1 : "
+    },
+    {
+      "match": "(?i)\\bstrategy (\\S+): ",
+      "replace": "stratégie \\1 : "
+    },
+    {
+      "match": "(?i)\\bobjective (\\S+): ",
+      "replace": "objectif \\1 : "
+    },
+    {
+      "match": "(?i)\\bgrant (\\S+): ",
+      "replace": "octroi \\1 : "
+    },
+    {
+      "match": "(?i)\\bsink (\\S+): ",
+      "replace": "récepteur \\1 : "
+    },
+    {
+      "match": "(?i)\\boperation (\\S+): ",
+      "replace": "opération \\1 : "
+    },
+    {
+      "match": "(?i)\\bsignoff (\\S+): ",
+      "replace": "validation \\1 : "
+    },
+    {
+      "match": "(?i)\\bstakeholder (\\S+): ",
+      "replace": "partie prenante \\1 : "
+    },
+    {
+      "match": "(?i)\\bchannel (\\S+): ",
+      "replace": "canal \\1 : "
+    },
+    {
+      "match": "(?i)\\benvironment (\\S+): ",
+      "replace": "environnement \\1 : "
+    },
+    {
+      "match": "(?i)communication plan: ",
+      "replace": "plan de communication : "
+    },
+    {
+      "match": "(?i)drill (\\S+): ",
+      "replace": "exercice \\1 : "
+    },
+    {
+      "match": "(?i)\\b1 days old\\b",
+      "replace": "1 jour"
+    },
+    {
+      "match": "(?i)\\b(\\d+) days old\\b",
+      "replace": "\\1 jours"
+    },
+    {
+      "match": "(?i)\\b1 days ago\\b",
+      "replace": "il y a 1 jour"
+    },
+    {
+      "match": "(?i)\\b(\\d+) days ago\\b",
+      "replace": "il y a \\1 jours"
+    },
+    {
+      "match": "(?i)\\b1 days\\b",
+      "replace": "1 jour"
+    },
+    {
+      "match": "(?i)\\b(\\d+) days\\b",
+      "replace": "\\1 jours"
+    },
+    {
+      "match": "(?i)\\b1 day\\b",
+      "replace": "1 jour"
+    },
+    {
+      "match": "(?i)\\b(\\d+) day\\b",
+      "replace": "\\1 jours"
+    },
+    {
+      "match": "(?i)\\b(\\d+) times\\b",
+      "replace": "\\1 fois"
+    },
+    {
+      "match": "(?i)\\bprincipal (\\S+): ",
+      "replace": "principal \\1 : "
+    },
+    {
+      "match": "(?i)\\bcheck (\\S+): ",
+      "replace": "vérification \\1 : "
+    },
+    {
+      "match": "(?i)\\bsecret (\\S+): ",
+      "replace": "secret \\1 : "
+    },
+    {
+      "match": "(?i)\\bpipeline (\\S+): ",
+      "replace": "pipeline \\1 : "
+    },
+    {
+      "match": "(?i)\\bcommunication (\\S+): ",
+      "replace": "communication \\1 : "
+    }
+  ]
+}

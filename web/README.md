@@ -19,7 +19,7 @@ The API imports the Python packages directly in-process. It does not spawn CLIs 
 - Error and warning panel with the tool diagnostics in the selected display language.
 - Optional local read-only AWS, Azure and GCP connectors that write an Atlas proposal for review.
 - English and French display languages. The browser stores the choice in `localStorage["fortcloud.locale"]` and sends `Accept-Language` with each API call. UI labels, metadata, diagnostics, API errors and generated Markdown/Mermaid prose are translated; model files, identifiers, enum values and catalog values stay in English.
-- API, connector and display-metadata tests plus a production UI build in CI.
+- API, connector, display-metadata and UI tests plus a production UI build in CI.
 
 Not included: direct cloud access from the browser or API, Monaco-based YAML completion, authentication and multi-user hosting.
 
@@ -71,6 +71,7 @@ Terminal 2 — UI:
 ```bash
 cd web/ui
 npm install
+npm test
 npm run dev
 ```
 
@@ -173,12 +174,16 @@ web/
 │   ├── structured.json   French KPI, chart, table and category labels
 │   ├── schemas.json      French JSON Schema titles
 │   ├── scenarios.json    French starter scenario descriptions
-│   └── api.json          French inventory message
+│   ├── api.json          French inventory message
+│   ├── diagnostics.json  French validator and schema findings
+│   ├── api_errors.json   French API error details
+│   └── artifacts.json    French artifact headings, labels and prose
 ├── ui/
 │   ├── src/App.tsx       routes, layout, actions and state
 │   ├── src/i18n.ts       react-i18next setup and locale bundles
 │   ├── src/locales/      English and French UI strings
-│   └── src/components/   home page, sidebar, forms, cards, graph, tables, editor, outputs
+│   ├── src/components/   home page, sidebar, forms, cards, graph, tables, editor, outputs
+│   └── src/test/         Vitest/Testing Library UI coverage
 ├── connectors/
 │   ├── common.py         shared component mapping and slugging
 │   ├── aws/

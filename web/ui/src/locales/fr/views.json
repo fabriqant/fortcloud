@@ -34,7 +34,7 @@
   "views.import.guidance.stage": "Les imports ne sont jamais appliqués automatiquement. Déposez le YAML, examinez le diff, puis acceptez-le. La console ne reçoit jamais d'identifiants cloud.",
   "views.import.guidance.connectors": "Utilisez les <strong>connecteurs cloud</strong> dans l'en-tête pour AWS, Azure et Google Cloud, ou exécutez un connecteur en local :",
   "views.import.notice.staged": "{{name}} déposé. Examinez le diff avant de l'accepter.",
-  "views.import.notice.accepted": "{{name}} appliqué au modèle de l'espace de travail. Exécutez Check pour régénérer les artefacts.",
+  "views.import.notice.accepted": "{{name}} appliqué au modèle de l'espace de travail. Exécutez « Vérifier » pour régénérer les artefacts.",
   "views.import.notice.discarded": "{{name}} rejeté.",
   "views.import.stage.title": "Déposer une proposition YAML",
   "views.import.stage.subtitle": "Collez du YAML ou choisissez un fichier. La cible doit correspondre à l'un des fichiers du modèle de cet outil.",

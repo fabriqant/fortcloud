@@ -1,3 +1,5 @@
+import { reloadPage } from "./page";
+
 export type Locale = "en" | "fr";
 
 const LOCALE_KEY = "fortcloud.locale";
@@ -18,5 +20,5 @@ export function setLocale(locale: Locale): void {
     // The page still switches language for this session.
   }
   // Metadata is translated server-side, so a reload keeps every view consistent.
-  window.location.reload();
+  reloadPage();
 }
